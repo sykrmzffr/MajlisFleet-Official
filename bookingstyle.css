@@ -131,3 +131,9 @@ main{
     background-color: #2d4fad;
     cursor: pointer;
 }
+form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
