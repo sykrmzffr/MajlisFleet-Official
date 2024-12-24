@@ -1,0 +1,107 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['user_id'])) {
+    // Redirect to login page if user is not logged in
+    header("Location: index.html");
+    exit();
+}
+
+include('dbconn.php');
+
+// Fetch all vehicles
+$sql = "SELECT * FROM vehicles";
+$result = mysqli_query($dbconn, $sql);
+
+$kereta = [];
+$van = [];
+
+if ($result && mysqli_num_rows($result) > 0) {
+    while ($row = mysqli_fetch_assoc($result)) {
+        if ($row['vehicles_type'] === 'car') {
+            $kereta[] = $row;
+        } elseif ($row['vehicles_type'] === 'van') {
+            $van[] = $row;
+        }
+    }
+} else {
+    echo "No vehicle data found.";
+    exit();
+}
+?>
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Layout</title>
+    <link rel="stylesheet" href="bookingliststyle.css">
+</head>
+<body>
+    <div class="container">
+        <div class="navbar">
+            <div class="nav-items">
+                <div class="nav-logo">
+                    <img src="image/logo.png" alt="">
+                    <a href="homepage.php">MajlisFleet</a>
+                </div>
+                <div class="nav-content">
+                    <ul>
+                        <li><a href="profile.php">Profile</a></li>
+                        <li><a href="logout.php">Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <main>
+            <div class="welcome-text">
+                TEST
+            </div>
+
+            <section class="list-cars">
+                <p>Kereta</p>
+                <div class="card-cars">
+                    <?php foreach ($kereta as $car): ?>
+                    <div class="card">
+                        <a href="booking.php?vehicle_id=<?php echo $car['vehicles_id']; ?>">
+                            <img src="<?php echo $car['vehicles_img']; ?>" alt="Car Image">
+                            <p><?php echo strtoupper ($car['vehicles_model']); ?></p> <!-- VEHICLES MODEL -->
+                            <p><?php echo strtoupper ($car['vehicles_plate']); ?></p> <!-- VEHICLES PLATE -->
+                            <p><?php echo strtoupper ($car['vehicles_driver']); ?></p><!-- DRIVER -->
+
+                        </a>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+            </section>
+            
+            <section class="list-vans">
+                <p>Van</p>
+                <div class="card-vans">
+                    <?php foreach ($van as $v): ?>
+                    <div class="card">
+                        <a href="booking.php?vehicle_id=<?php echo $v['vehicles_id']; ?>">
+                            <img src="<?php echo $v['vehicles_img']; ?>" alt="Van Image">
+                            <p><?php echo strtoupper ($v['vehicles_model']); ?></p> <!-- VEHICLES MODEL -->
+                            <p><?php echo strtoupper ($v['vehicles_plate']); ?></p> <!-- VEHICLES PLATE -->
+                            <p><?php echo strtoupper ($v['vehicles_driver']); ?></p><!-- DRIVER -->
+                        </a>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+            </section>
+        </main>
+        
+        <footer>
+            <p>Footer Content</p>
+        </footer>
+    </div>
+</body>
+</html>
+
+

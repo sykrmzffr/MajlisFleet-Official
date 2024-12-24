@@ -1,0 +1,107 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
+*{
+    font-family: "Poppins", sans-serif;
+}
+body{
+    margin: 0;
+    background-color: #e7f2fd;
+    padding-top: 60px; 
+}
+.login{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-container{
+    background: #fff;
+    width: 60%;
+    height: 500px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border-radius: 20px;
+    margin-top: 50px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+.login-container-left{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+}
+.login-container-logo img{
+    width: 100px;
+}
+.login-container-header{
+    font-size: 150%;
+    
+}
+form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+}
+.login-container-form{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.login-container-input{
+    margin: 10px;
+    width: 100%;
+    
+}
+.login-container-input input{
+    padding: 5px;
+    background-color: #F4F4FB;
+    border: none;
+    border-radius: 10px;
+    width: 80%;
+    height: 30px;
+    display: block;
+    margin : 0 auto;
+    text-align: center;
+}
+.login-container-submit button{
+    width: 70%;
+    height: 50px;
+    font-size: 15px;
+    border-radius: 50px;
+    background:  #4070f4 ;
+    color: white;
+    
+}
+.login-container-submit{
+    width: 100%;
+    height: 50px;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.login-container-submit button:hover{
+    cursor: pointer;
+    background: #3050d4;
+    opacity: 1;
+    transition: opacity 5s ease 0s;
+}
+.login-container-right{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 50%;
+    height: 100%;
+    /*background-image: url(/image/blue.jpg); */
+    
+}

@@ -1,0 +1,37 @@
+@import url('reset.css');
+
+body{
+    background: rgb(167, 166, 166);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 98vh;
+}
+.login-container{
+   width: 25%;
+   background: rgb(97, 97, 97, 0.5);
+   border-radius: 10px;
+   padding: 2rem;
+   position: relative;
+   text-align: center;
+}
+.login-container-logo img{
+    width: 50%;
+}
+.login-container-header{
+    margin-top: 0px ;
+}
+
+.login-container-input input{
+    box-sizing: border-box;
+    margin-bottom: 20px;
+    width: 75%;
+    display: inline-block;
+    padding: 5px;
+    font-size: 16px;
+}
+.login-container-submit button{
+    width: 50%;
+    height: 30px;
+    font-size: 15px;
+}
