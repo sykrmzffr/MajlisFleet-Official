@@ -77,7 +77,7 @@ if (isset($_GET['vehicle_id']) && is_numeric($_GET['vehicle_id'])) {
                 </div>
 
                 <div class="booking-form-container">
-                    <h2><b> Booking Details</b></h2>
+                    <h2><b>Booking Details</b></h2>
                     <p>Date Start</p>
                     <input type="date" required>
                     <p>Time Start</p>
