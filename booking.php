@@ -77,22 +77,6 @@ if (isset($_GET['vehicle_id']) && is_numeric($_GET['vehicle_id'])) {
                 </div>
 
                 <div class="booking-form-container">
-                    <!--
-                    <h2><b>Booking Details</b></h2>
-                    <p>Date Start</p>
-                    <input type="date" required>
-                    <p>Time Start</p>
-                    <input type="time" required>
-                    <p>Date End</p>
-                    <input type="date" required>
-                    <p>Time End</p>
-                    <input type="time" required>
-                    <p>Destination</p>
-                    <input type="text" required style="height: 50px;">
-                    <p>Purpose</p>
-                    <input type="text" required style="height: 50px;">
-                    <button type="submit"> SUBMIT</button> 
-                    -->
 
                     <form action="bookingprocess.php" method="POST">
                         <h2><b>Booking Details</b></h2>
