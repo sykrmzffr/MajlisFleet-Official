@@ -9,8 +9,12 @@ if (!isset($_SESSION['user_id'])) {
 
 include('dbconn.php');
 
-// Fetch all vehicles
-$sql = "SELECT * FROM vehicles";
+// Fetch all vehicles along with the driver's full name
+$sql = "
+    SELECT vehicles.*, driver.driver_fullname 
+    FROM vehicles
+    LEFT JOIN driver ON vehicles.driver_id = driver.driver_id
+";
 $result = mysqli_query($dbconn, $sql);
 
 $kereta = [];
@@ -29,6 +33,7 @@ if ($result && mysqli_num_rows($result) > 0) {
     exit();
 }
 ?>
+
 
 
 
@@ -72,7 +77,7 @@ if ($result && mysqli_num_rows($result) > 0) {
                             <img src="<?php echo $car['vehicles_img']; ?>" alt="Car Image">
                             <p><?php echo strtoupper ($car['vehicles_model']); ?></p> <!-- VEHICLES MODEL -->
                             <p><?php echo strtoupper ($car['vehicles_plate']); ?></p> <!-- VEHICLES PLATE -->
-                            <p><?php echo strtoupper ($car['vehicles_driver']); ?></p><!-- DRIVER -->
+                            <p><?php echo strtoupper($car['driver_fullname']); ?></p> <!-- DRIVER -->
 
                         </a>
                     </div>
@@ -89,7 +94,7 @@ if ($result && mysqli_num_rows($result) > 0) {
                             <img src="<?php echo $v['vehicles_img']; ?>" alt="Van Image">
                             <p><?php echo strtoupper ($v['vehicles_model']); ?></p> <!-- VEHICLES MODEL -->
                             <p><?php echo strtoupper ($v['vehicles_plate']); ?></p> <!-- VEHICLES PLATE -->
-                            <p><?php echo strtoupper ($v['vehicles_driver']); ?></p><!-- DRIVER -->
+                            <p><?php echo strtoupper($v['driver_fullname']); ?></p> <!-- DRIVER -->
                         </a>
                     </div>
                     <?php endforeach; ?>
