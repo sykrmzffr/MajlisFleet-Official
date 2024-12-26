@@ -1,0 +1,95 @@
+<?php
+session_start();
+
+// Ensure only admin has access
+if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'admin') {
+    header("Location: index.html");
+    exit();
+}
+
+include('dbconn.php');
+
+// Fetch all users
+$query = "SELECT * FROM user";
+$result = mysqli_query($dbconn, $query);
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Users</title>
+    <link rel="stylesheet" href="viewuserstyle.css">
+</head>
+<body>
+    <div class="navbar">
+        <div class="nav-items">
+            <div class="nav-logo">
+                <img src="image/logo.png" alt="">
+                <a href="homepageadmin.php">MajlisFleet</a>
+            </div>
+            <div class="nav-content">
+                <ul>
+                    <li><a href="profile.php">Profile</a></li>
+                    <li><a href="logout.php">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <main>
+        <div class="view-container">
+            <div class="view-btn">
+                <a href="adduser.php">
+                    <button>Add New User</button>
+                </a>
+                <form method="GET" action="searchuser.php" style="display: inline;">
+                    <input type="text" name="search-bar" placeholder="Search">
+                    <button type="submit">Search</button>
+                </form>
+            </div>
+            <div class="list-table">
+                <table>
+                    <tr id="row-first">
+                        <th style="width:15%">User ID</th>
+                        <th style="width:35%">Full Name</th>
+                        <th style="width:15%">Password</th>
+                        <th style="width:15%">User Type</th>
+                        <th style="width:25%">Unit</th>
+                        <th style="width:10%">Action</th>
+                    </tr>
+                    <?php if ($result && mysqli_num_rows($result) > 0): ?>
+                        <?php while ($row = mysqli_fetch_assoc($result)): ?>
+                            <tr>
+                                <td><?php echo htmlspecialchars($row['user_id']); ?></td>
+                                <td><?php echo htmlspecialchars($row['user_fullname']); ?></td>
+                                <td><?php echo htmlspecialchars($row['user_password']); ?></td>
+                                <td><?php echo htmlspecialchars($row['user_type']); ?></td>
+                                <td><?php echo htmlspecialchars($row['user_unit']); ?></td>
+                                <td>
+                                    <a href="edituser.php?user_id=<?php echo urlencode($row['user_id']); ?>">
+                                        <button>Edit</button>
+                                    </a>
+                                </td>
+                            </tr>
+                        <?php endwhile; ?>
+                    <?php else: ?>
+                        <tr>
+                            <td colspan="6">No users found.</td>
+                        </tr>
+                    <?php endif; ?>
+                </table>
+            </div>
+        </div>
+    </main>
+    
+    <footer>
+        <p>Footer Content</p>
+    </footer>
+</body>
+</html>
+
+<?php
+mysqli_close($dbconn);
+?>

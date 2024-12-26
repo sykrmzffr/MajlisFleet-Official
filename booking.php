@@ -14,7 +14,9 @@ if (isset($_GET['vehicle_id']) && is_numeric($_GET['vehicle_id'])) {
     $vehicle_id = $_GET['vehicle_id'];
 
     // Fetch vehicle details based on the vehicle ID
-    $sql = "SELECT * FROM vehicles WHERE vehicles_id = ?";
+    $sql = "SELECT vehicles.*, driver.driver_fullname FROM vehicles
+            JOIN driver ON vehicles.driver_id = driver.driver_id
+            WHERE vehicles.vehicles_id = ?";
     $stmt = $dbconn->prepare($sql);
     $stmt->bind_param("i", $vehicle_id);
     $stmt->execute();
@@ -31,6 +33,7 @@ if (isset($_GET['vehicle_id']) && is_numeric($_GET['vehicle_id'])) {
     exit();
 }
 ?>
+
 
 
 
@@ -72,7 +75,7 @@ if (isset($_GET['vehicle_id']) && is_numeric($_GET['vehicle_id'])) {
                     <div class="img-driver">
                         <h4><b>DRIVER DETAILS</b></h4>
                         <img src="image/driver.jpg" alt="Driver Image">
-                        <p><?php echo strtoupper($vehicle['vehicles_driver']); ?></p>
+                        <p><?php echo strtoupper($vehicle['driver_fullname']); ?></p>
                     </div>
                 </div>
 
