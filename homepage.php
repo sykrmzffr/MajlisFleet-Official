@@ -10,7 +10,7 @@ if (!isset($_SESSION['user_id'])) {
 include('dbconn.php');
 
 $user_id = $_SESSION['user_id'];
-//$user_type = $_SESSION['user_privilege'];
+$user_type = $_SESSION['user_type']; // Get user type from session
 
 // User profile container
 // Fetch user information from the database
@@ -26,7 +26,6 @@ if ($result && mysqli_num_rows($result) > 0) {
 }
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -36,30 +35,30 @@ if ($result && mysqli_num_rows($result) > 0) {
     <link rel="stylesheet" href="homepagestyle.css">
 </head>
 <body>
-    
     <div class="navbar">
         <div class="nav-items">
-        <div class="nav-logo">
-            <img src="image/logo.png" alt="">
-            <a href="homepage.php">MajlisFleet</a>
+            <div class="nav-logo">
+                <img src="image/logo.png" alt="">
+                <a href="homepage.php">MajlisFleet</a>
+            </div>
+            <div class="nav-content">
+                <ul>
+                    <li><a href="profile.php">Profile</a></li>
+                    <li><a href="logout.php">Logout</a></li>
+                </ul>
+            </div>
         </div>
-        <div class="nav-content">
-            <ul>
-                <li><a href="profile.php">Profile</a></li>
-                <li><a href="logout.php">Logout</a></li>
-            </ul>
-        </div>
-    </div>
     </div>
     
     <main>
-        <a href="booking.php">Booking page</a>
+        <?php if ($user_type === 'admin'): ?>
+            <a href="booking.php">Booking page</a>
+        <?php endif; ?>
         <a href="bookinglist.php">Booking list page</a>
     </main>
     
     <footer>
         <p>Footer Content</p>
     </footer>
-
 </body>
 </html>
