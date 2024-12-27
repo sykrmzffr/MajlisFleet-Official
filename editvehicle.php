@@ -1,9 +1,88 @@
+<?php
+session_start();
+
+// Redirect if not logged in as admin
+if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'admin') {
+    header("Location: index.html");
+    exit();
+}
+
+include('dbconn.php');
+
+// Fetch vehicle details based on vehicle ID from the query string
+if (isset($_GET['vehicle_id'])) { // Ensure this matches the parameter name in the URL
+    $vehicle_id = $_GET['vehicle_id'];
+
+    $sql = "SELECT vehicles.*, driver.driver_fullname FROM vehicles
+            LEFT JOIN driver ON vehicles.driver_id = driver.driver_id
+            WHERE vehicles.vehicles_id = ?";
+    $stmt = $dbconn->prepare($sql);
+    $stmt->bind_param("s", $vehicle_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result && $result->num_rows > 0) {
+        $vehicle = $result->fetch_assoc();
+    } else {
+        echo "Vehicle not found.";
+        exit();
+    }
+} else {
+    echo "Invalid vehicle ID.";
+    exit();
+}
+
+// Handle form submission
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if (isset($_POST['update'])) {
+        $vehicle_type = $_POST['vehicle_type'];
+        $vehicle_model = $_POST['vehicle_model'];
+        $vehicle_plate = $_POST['vehicle_plate'];
+        $vehicle_capacity = $_POST['vehicle_capacity'];
+        $vehicle_img = $_POST['vehicle_img'];
+        $driver_id = $_POST['vehicle_driver'];
+
+        $update_sql = "UPDATE vehicles SET vehicles_type = ?, vehicles_model = ?, vehicles_plate = ?, 
+                       vehicles_capacity = ?, vehicles_img = ?, driver_id = ? WHERE vehicles_id = ?";
+        $update_stmt = $dbconn->prepare($update_sql);
+        $update_stmt->bind_param(
+            "sssssss",
+            $vehicle_type,
+            $vehicle_model,
+            $vehicle_plate,
+            $vehicle_capacity,
+            $vehicle_img,
+            $driver_id,
+            $vehicle_id
+        );
+
+        if ($update_stmt->execute()) {
+            echo "Vehicle updated successfully.";
+        } else {
+            echo "Error updating vehicle.";
+        }
+    } elseif (isset($_POST['delete'])) {
+        $delete_sql = "DELETE FROM vehicles WHERE vehicles_id = ?";
+        $delete_stmt = $dbconn->prepare($delete_sql);
+        $delete_stmt->bind_param("s", $vehicle_id);
+
+        if ($delete_stmt->execute()) {
+            echo "Vehicle deleted successfully.";
+            header("Location: viewvehicles.php");
+            exit();
+        } else {
+            echo "Error deleting vehicle.";
+        }
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View Users</title>
+    <title>Edit Vehicle</title>
     <link rel="stylesheet" href="editvehiclestyle.css">
 </head>
 <body>
@@ -24,59 +103,57 @@
     
     <main>
         <div class="edit-container">
-            <div class="form-container">
+            <form action="" method="POST" class="form-container">
                 <div class="upper-half">
                     <div class="upper-left">
                         <p><b>Vehicle ID</b></p>
-                        <input type="text" disabled>
+                        <input type="text" value="<?php echo htmlspecialchars($vehicle['vehicles_id']); ?>" disabled>
                         <br>
                         <p><b>Model</b></p>
-                        <input type="text">
+                        <input type="text" name="vehicle_model" value="<?php echo htmlspecialchars($vehicle['vehicles_model']); ?>" required>
                         <br>
                         <p><b>Capacity</b></p>
                         <select name="vehicle_capacity" id="vehicle-capacity">
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
-                            <option value="11">11</option>
-                            <option value="12">12</option>
+                            <?php for ($i = 1; $i <= 12; $i++): ?>
+                                <option value="<?php echo $i; ?>" <?php echo $vehicle['vehicles_capacity'] == $i ? 'selected' : ''; ?>><?php echo $i; ?></option>
+                            <?php endfor; ?>
                         </select>
                         <br>
                     </div>
                     <div class="upper-right">
                         <p><b>Vehicle Type</b></p>
                         <select name="vehicle_type" id="vehicle-type">
-                            <option value="car">Car</option>
-                            <option value="van">Van</option>
+                            <option value="CAR" <?php echo $vehicle['vehicles_type'] === 'CAR' ? 'selected' : ''; ?>>Car</option>
+                            <option value="VAN" <?php echo $vehicle['vehicles_type'] === 'VAN' ? 'selected' : ''; ?>>Van</option>
                         </select>
                         <br>
                         <p><b>Plate Number</b></p>
-                        <input type="text">
+                        <input type="text" name="vehicle_plate" value="<?php echo htmlspecialchars($vehicle['vehicles_plate']); ?>" required>
                         <br>
                         <p><b>Choose Driver</b></p>
                         <select name="vehicle_driver" id="vehicle-driver">
-                            <option value="driver_id">test</option>
-                            <option value="driver_id">test</option>
+                            <?php
+                            $driver_sql = "SELECT driver_id, driver_fullname FROM driver";
+                            $driver_result = mysqli_query($dbconn, $driver_sql);
+                            while ($driver = mysqli_fetch_assoc($driver_result)):
+                            ?>
+                                <option value="<?php echo $driver['driver_id']; ?>" <?php echo $vehicle['driver_id'] === $driver['driver_id'] ? 'selected' : ''; ?>>
+                                    <?php echo htmlspecialchars($driver['driver_fullname']); ?>
+                                </option>
+                            <?php endwhile; ?>
                         </select>
                         <br>
                     </div>
                 </div>
                 <div class="lower-half">
                     <p><b>Image Link (Optional)</b></p>
-                    <input type="text" id="img-link">
+                    <input type="text" name="vehicle_img" id="img-link" value="<?php echo htmlspecialchars($vehicle['vehicles_img']); ?>">
                 </div>
-            </div>
-            <div class="button-container">
-                <button id="update">UPDATE</button>
-                <button id="delete">DELETE</button>
-            </div>
+                <div class="button-container">
+                    <button type="submit" name="update">UPDATE</button>
+                    <button type="submit" name="delete" onclick="return confirm('Are you sure you want to delete this vehicle?');">DELETE</button>
+                </div>
+            </form>
         </div>
     </main>
     

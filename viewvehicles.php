@@ -80,7 +80,7 @@ if (!$result) {
                             <td><?php echo htmlspecialchars($row['vehicles_capacity']); ?></td>
                             <td><?php echo htmlspecialchars($row['driver_name'] ?? 'No Driver Assigned'); ?></td>
                             <td>
-                                <a href="editvehicle.php?vehicles_id=<?php echo $row['vehicles_id']; ?>">
+                                <a href="editvehicle.php?vehicle_id=<?php echo $row['vehicles_id']; ?>">
                                     <button>Edit</button>
                                 </a>
                             </td>
