@@ -22,9 +22,9 @@ $van = [];
 
 if ($result && mysqli_num_rows($result) > 0) {
     while ($row = mysqli_fetch_assoc($result)) {
-        if ($row['vehicles_type'] === 'car') {
+        if ($row['vehicles_type'] === 'CAR') {
             $kereta[] = $row;
-        } elseif ($row['vehicles_type'] === 'van') {
+        } elseif ($row['vehicles_type'] === 'VAN') {
             $van[] = $row;
         }
     }

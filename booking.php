@@ -10,15 +10,15 @@ if (!isset($_SESSION['user_id'])) {
 include('dbconn.php');
 
 // Get the vehicle ID from the query string
-if (isset($_GET['vehicle_id']) && is_numeric($_GET['vehicle_id'])) {
+if (isset($_GET['vehicle_id']) && !empty($_GET['vehicle_id'])) {
     $vehicle_id = $_GET['vehicle_id'];
 
     // Fetch vehicle details based on the vehicle ID
     $sql = "SELECT vehicles.*, driver.driver_fullname FROM vehicles
-            JOIN driver ON vehicles.driver_id = driver.driver_id
+            LEFT JOIN driver ON vehicles.driver_id = driver.driver_id
             WHERE vehicles.vehicles_id = ?";
     $stmt = $dbconn->prepare($sql);
-    $stmt->bind_param("i", $vehicle_id);
+    $stmt->bind_param("s", $vehicle_id); // Use "s" for string type
     $stmt->execute();
     $result = $stmt->get_result();
 
@@ -33,6 +33,7 @@ if (isset($_GET['vehicle_id']) && is_numeric($_GET['vehicle_id'])) {
     exit();
 }
 ?>
+
 
 
 

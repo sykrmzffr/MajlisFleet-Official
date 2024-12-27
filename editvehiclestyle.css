@@ -91,3 +91,23 @@ main{
     border-radius: 25px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
+.edit-container .form-container .upper-half{
+    display: flex;
+    flex-direction: row;
+}
+.edit-container .form-container .upper-half .upper-left{
+    width: 50%;
+    text-align: left;
+}
+.edit-container .form-container .upper-half .upper-left input{
+    width: 90%;
+    text-align: left;
+}
+.edit-container .form-container .upper-half .upper-right{
+    width: 50%;
+    text-align: left;
+}
+.edit-container .form-container .upper-half .upper-right input{
+    width: 90%;
+    text-align: left;
+}
