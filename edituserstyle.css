@@ -2,9 +2,15 @@
 *{
     font-family: "Poppins", sans-serif;
 }
+html, body {
+    height: 100%; /* Ensures the viewport is always fully used */
+    margin: 0; /* Remove default margin */
+}
 body{
     margin: 0;
-    background-color: #e7f2fd; 
+    background-color: #e7f2fd;
+    display: flex; /* Enables flexbox on the body */
+    flex-direction: column; /* Stacks child elements vertically */
 }
 a{
     text-decoration: none;
@@ -50,9 +56,8 @@ a:hover{
 
 
 footer{
-    position: relative;
-    bottom: 0;
-    width: 100%;
+    position: relative; /* Remove absolute or fixed positioning */
+    width: 100%; /* Ensure footer spans the full width */
     background:grey;
     background-color: hsla(216, 50%, 27%, 0.861);
     text-align: center;
@@ -62,6 +67,7 @@ footer{
     margin-top: 2rem;
 }
 main{
+    flex-grow: 1; /* Allows the main content to stretch and fill available space */
     display: flex;
     flex-direction: column;
     align-items: center;

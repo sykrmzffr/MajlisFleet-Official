@@ -2,9 +2,15 @@
 *{
     font-family: "Poppins", sans-serif;
 }
+html, body {
+    height: 100%; /* Ensures the viewport is always fully used */
+    margin: 0; /* Remove default margin */
+}
 body{
     margin: 0;
-    background-color: #e7f2fd; 
+    background-color: #e7f2fd;
+    display: flex; /* Enables flexbox on the body */
+    flex-direction: column; /* Stacks child elements vertically */
 }
 a{
     text-decoration: none;
@@ -50,9 +56,8 @@ a:hover{
 
 
 footer{
-    position: relative;
-    bottom: 0;
-    width: 100%;
+    position: relative; /* Remove absolute or fixed positioning */
+    width: 100%; /* Ensure footer spans the full width */
     background:grey;
     background-color: hsla(216, 50%, 27%, 0.861);
     text-align: center;
@@ -62,6 +67,7 @@ footer{
     margin-top: 2rem;
 }
 main{
+    flex-grow: 1; /* Allows the main content to stretch and fill available space */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -73,8 +79,8 @@ main{
     flex-direction: column;
     justify-content: center;
     text-align: center;
+    width: 80%;
     
-    width: 60%;
 }
 .view-btn{
     text-align: right;
@@ -83,21 +89,31 @@ main{
 .list-table{
     background-color: #fff;
     border-radius: 25px;
-    padding: 15px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 .list-table table{
-    margin-left: auto;
-    margin-right: auto;
-    width: 90%;
+    margin-bottom: auto;
+    width: 100%;
+    height: 100%;
     text-align: left;
     border-collapse: collapse;
+}
+th, td {
+    padding: 15px;
 }
 #row-first{
     background-color: #4070f4;
     color: #fff;
+    width: 100%;
+    border-radius: 25px;
+    
 }
 .list-table button{
     width: 100%;
 }
-
+.list-table tr{
+    border-bottom: #aaa solid 1px;
+    margin-bottom: 5px;
+}
 
