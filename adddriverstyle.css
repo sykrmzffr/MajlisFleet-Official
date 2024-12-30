@@ -1,0 +1,113 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
+*{
+    font-family: "Poppins", sans-serif;
+}
+html, body {
+    height: 100%; /* Ensures the viewport is always fully used */
+    margin: 0; /* Remove default margin */
+}
+body{
+    margin: 0;
+    background-color: #e7f2fd;
+    display: flex; /* Enables flexbox on the body */
+    flex-direction: column; /* Stacks child elements vertically */
+}
+a{
+    text-decoration: none;
+}
+a:hover{
+    text-decoration: underline;
+}
+.navbar{
+    background-color: #fff;
+    width: 100%;
+    display: flex;
+    box-shadow: 0 0 2px #aaa;
+    top: 0;
+}
+.nav-items{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.navbar .nav-logo{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-size: 20px;
+}
+.navbar img{
+    width: 55px;
+    height: 55px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+.navbar ul{
+    display: flex;
+    list-style-type: none;
+}
+.navbar li{
+    margin: 10px;
+}
+
+
+footer{
+    position: relative; /* Remove absolute or fixed positioning */
+    width: 100%; /* Ensure footer spans the full width */
+    background:grey;
+    background-color: hsla(216, 50%, 27%, 0.861);
+    text-align: center;
+    border-top: 1px solid #e0e0e0;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    margin-top: 2rem;
+}
+main{
+    flex-grow: 1; /* Allows the main content to stretch and fill available space */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 5%;
+}
+.edit-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    width: 60%;
+}
+.edit-container .form-container{
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    padding: 10px;
+    border-radius: 25px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.edit-container .form-container .upper-half{
+    display: flex;
+    flex-direction: row;
+}
+.edit-container .form-container .upper-half .upper-left{
+    width: 50%;
+    text-align: left;
+}
+.edit-container .form-container .upper-half .upper-left input{
+    width: 90%;
+    text-align: left;
+}
+.edit-container .form-container .upper-half .upper-right{
+    width: 50%;
+    text-align: left;
+}
+.edit-container .form-container .upper-half .upper-right input{
+    width: 90%;
+    text-align: left;
+}
