@@ -55,6 +55,7 @@ if ($result && mysqli_num_rows($result) > 0) {
         <a href="bookinglist.php">Booking list page</a>
         <a href="viewvehicles.php">View Vehicles</a>
         <a href="viewdriver.php">View Driver</a>
+        <a href="viewbookinghistory.php">View Bookings History</a>
     </main>
     
     <footer>
