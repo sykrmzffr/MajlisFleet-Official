@@ -25,6 +25,9 @@ if ($result && $result->num_rows > 0) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $driver_fullname = trim($_POST['driver_fullname']);
 
+    // Capitalize each word's first letter
+    $driver_fullname = ucwords(strtolower($driver_fullname));
+
     // Insert new driver into the database
     $insert_query = "INSERT INTO driver (driver_id, driver_fullname) VALUES (?, ?)";
     $stmt = $dbconn->prepare($insert_query);
