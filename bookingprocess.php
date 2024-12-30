@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $booking_purpose = mysqli_real_escape_string($dbconn, $_POST['booking_purpose']);
 
     // Booking status is set to 'pending approval'
-    $booking_status = 'pending approval';
+    $booking_status = 'Pending Approval';
 
     // Generate new booking_id
     $result = mysqli_query($dbconn, "SELECT booking_id FROM booking ORDER BY booking_id DESC LIMIT 1");
