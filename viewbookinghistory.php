@@ -97,7 +97,7 @@ if (!$result) {
                             <td><?php echo htmlspecialchars($row['booking_purpose']); ?></td>
                             <td><?php echo htmlspecialchars($row['booking_status']); ?></td>
                             <td>
-                                <a href="editbooking.php?booking_id=<?php echo $row['booking_id']; ?>">
+                                <a href="editbookinghistory.php?booking_id=<?php echo $row['booking_id']; ?>">
                                     <button>Edit</button>
                                 </a>
                             </td>
