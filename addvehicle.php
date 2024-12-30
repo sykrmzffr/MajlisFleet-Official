@@ -35,6 +35,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $driver_id = strtoupper(trim($_POST['vehicle_driver']));
     $vehicle_img = trim($_POST['vehicle_img']); // No uppercase conversion for images
 
+    // Set default image if no image link is provided
+    if (empty($vehicle_img)) {
+        $vehicle_img = "https://i.ibb.co/xHMKJR8/noimageavailable.jpg";
+    }
+
     // Insert into database
     $stmt = $dbconn->prepare("
         INSERT INTO vehicles 
@@ -54,10 +59,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     );
 
     if ($stmt->execute()) {
-        echo "<script>alert('Vehicle added successfully!');</script>";
+        echo "<script>
+                alert('Vehicle added successfully!');
+                window.location.href = 'viewvehicles.php';
+              </script>";
     } else {
         echo "<script>alert('Error adding vehicle: " . $stmt->error . "');</script>";
-    }
+    }    
 
     $stmt->close();
     $dbconn->close();
