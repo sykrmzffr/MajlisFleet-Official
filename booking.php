@@ -82,23 +82,23 @@ if (isset($_GET['vehicle_id']) && !empty($_GET['vehicle_id'])) {
 
                 <div class="booking-form-container">
 
-                    <form action="bookingprocess.php" method="POST">
-                        <h2><b>Booking Details</b></h2>
-                        <p>Date Start</p>
-                        <input type="date" name="booking_datestart" required>
-                        <p>Time Start</p>
-                        <input type="time" name="booking_timestart" required>
-                        <p>Date End</p>
-                        <input type="date" name="booking_dateend" required>
-                        <p>Time End</p>
-                        <input type="time" name="booking_timeend" required>
-                        <p>Destination</p>
-                        <input type="text" name="booking_destination" required style="height: 50px;">
-                        <p>Purpose</p>
-                        <input type="text" name="booking_purpose" required style="height: 50px;">
-                        <input type="hidden" name="car_id" value="<?php echo htmlspecialchars($car_id); ?>"> <!-- Hidden car ID -->
-                        <button type="submit">SUBMIT</button>
-                    </form>
+                <form action="bookingprocess.php" method="POST">
+                    <h2><b>Booking Details</b></h2>
+                    <p>Date Start</p>
+                    <input type="date" name="booking_datestart" required>
+                    <p>Time Start</p>
+                    <input type="time" name="booking_timestart" required>
+                    <p>Date End</p>
+                    <input type="date" name="booking_dateend" required>
+                    <p>Time End</p>
+                    <input type="time" name="booking_timeend" required>
+                    <p>Destination</p>
+                    <input type="text" name="booking_destination" required style="height: 50px;">
+                    <p>Purpose</p>
+                    <input type="text" name="booking_purpose" required style="height: 50px;">
+                    <input type="hidden" name="vehicles_id" value="<?php echo htmlspecialchars($vehicle['vehicles_id']); ?>"> <!-- Hidden vehicle ID -->
+                    <button type="submit">SUBMIT</button>
+                </form>
 
 
 
