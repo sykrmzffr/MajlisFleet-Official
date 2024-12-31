@@ -82,6 +82,7 @@ if (!$result) {
                         <th style="width:15%">Destination</th>
                         <th style="width:15%">Purpose</th>
                         <th style="width:10%">Status</th>
+                        <th style="width:15%">Time Created</th>
                         <th style="width:10%">Action</th>
                     </tr>
                     <?php while ($row = $result->fetch_assoc()): ?>
@@ -96,6 +97,7 @@ if (!$result) {
                             <td><?php echo htmlspecialchars($row['booking_destination']); ?></td>
                             <td><?php echo htmlspecialchars($row['booking_purpose']); ?></td>
                             <td><?php echo htmlspecialchars($row['booking_status']); ?></td>
+                            <td><?php echo htmlspecialchars($row['booking_timecreated']); ?></td>
                             <td>
                                 <a href="editbookinghistory.php?booking_id=<?php echo $row['booking_id']; ?>">
                                     <button>Edit</button>
