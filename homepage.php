@@ -54,7 +54,8 @@ if ($result && mysqli_num_rows($result) > 0) {
         <?php if ($user_type === 'admin'): ?>
             <a href="booking.php">Booking page</a>
         <?php endif; ?>
-        <a href="bookinglist.php">Booking list page</a>
+        <a href="bookinglist.php">Vehicles list</a>
+        <a href="bookinghistoryuser.php">Booking history</a>
     </main>
     
     <footer>
