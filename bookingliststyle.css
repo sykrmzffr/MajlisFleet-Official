@@ -101,12 +101,14 @@ main{
     flex-shrink: 0;
     border-radius: 50px;
     overflow: hidden;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 .card-cars{
     display: flex;
     justify-content: flex-start;
-    overflow-x: auto;
+    
     gap: 20px;
+    width: auto;
     max-width: 90%;
     padding: 10px;
     border: 1px solid #e0e0e0; /* Optional for visibility */
@@ -133,8 +135,9 @@ main{
 .card-vans{
     display: flex;
     justify-content: flex-start;
-    overflow-x: auto;
+    
     gap: 20px;
+    width: auto;
     max-width: 90%;
     padding: 10px;
     border: 1px solid #e0e0e0; /* Optional for visibility */
