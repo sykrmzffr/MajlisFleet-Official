@@ -113,7 +113,18 @@ if (!$result) {
                                 <td><?php echo htmlspecialchars($row['booking_timeend']); ?></td>
                                 <td><?php echo htmlspecialchars($row['booking_destination']); ?></td>
                                 <td><?php echo htmlspecialchars($row['booking_purpose']); ?></td>
-                                <td><?php echo htmlspecialchars($row['booking_status']); ?></td>
+                                <td style="color: 
+                                    <?php 
+                                        if ($row['booking_status'] === 'Rejected') {
+                                            echo '#f44040'; // Red for Rejected
+                                        } elseif ($row['booking_status'] === 'Approved') {
+                                            echo '#097969'; // Green for Approved
+                                        } else {
+                                            echo 'grey'; // Grey for Pending
+                                        }
+                                    ?>; font-weight: bold;">
+                                    <?php echo htmlspecialchars($row['booking_status']); ?>
+                                </td>
                                 <td><?php echo htmlspecialchars($row['booking_timecreated']); ?></td>
                                 <td>
                                     <a href="editbookinghistory.php?booking_id=<?php echo $row['booking_id']; ?>">
