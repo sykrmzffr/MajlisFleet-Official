@@ -9,9 +9,24 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'admin') {
 
 include('dbconn.php');
 
-// Fetch all users
-$query = "SELECT * FROM user";
-$result = mysqli_query($dbconn, $query);
+// Handle search functionality
+$search_query = "";
+if (isset($_GET['search-bar']) && !empty($_GET['search-bar'])) {
+    $search_term = "%" . $dbconn->real_escape_string($_GET['search-bar']) . "%";
+    $search_query = "
+        WHERE user_id LIKE '$search_term' 
+        OR user_fullname LIKE '$search_term' 
+        OR user_type LIKE '$search_term' 
+        OR user_unit LIKE '$search_term'";
+}
+
+// Fetch all users or filtered users
+$query = "SELECT * FROM user $search_query ORDER BY user_fullname ASC";
+$result = $dbconn->query($query);
+
+if (!$result) {
+    die("Query failed: " . $dbconn->error);
+}
 ?>
 
 <!DOCTYPE html>
@@ -44,8 +59,8 @@ $result = mysqli_query($dbconn, $query);
                 <a href="adduser.php">
                     <button>Add New User</button>
                 </a>
-                <form method="GET" action="searchuser.php" style="display: inline;">
-                    <input type="text" name="search-bar" placeholder="Search">
+                <form method="GET" action="" style="display: inline;">
+                    <input type="text" name="search-bar" placeholder="Search by ID, Name, Type, or Unit" value="<?php echo isset($_GET['search-bar']) ? htmlspecialchars($_GET['search-bar']) : ''; ?>">
                     <button type="submit">Search</button>
                 </form>
             </div>
@@ -59,8 +74,8 @@ $result = mysqli_query($dbconn, $query);
                         <th style="width:25%">Unit</th>
                         <th style="width:10%">Action</th>
                     </tr>
-                    <?php if ($result && mysqli_num_rows($result) > 0): ?>
-                        <?php while ($row = mysqli_fetch_assoc($result)): ?>
+                    <?php if ($result->num_rows > 0): ?>
+                        <?php while ($row = $result->fetch_assoc()): ?>
                             <tr>
                                 <td><?php echo htmlspecialchars($row['user_id']); ?></td>
                                 <td><?php echo htmlspecialchars($row['user_fullname']); ?></td>
@@ -91,5 +106,6 @@ $result = mysqli_query($dbconn, $query);
 </html>
 
 <?php
-mysqli_close($dbconn);
+$result->free();
+$dbconn->close();
 ?>

@@ -9,7 +9,19 @@ if ($_SESSION['user_type'] !== 'admin') {
 
 include('dbconn.php');
 
-// Fetch vehicles with driver names
+// Handle search functionality
+$search_query = "";
+if (isset($_GET['search-bar']) && !empty($_GET['search-bar'])) {
+    $search_term = "%" . $dbconn->real_escape_string($_GET['search-bar']) . "%";
+    $search_query = "
+        WHERE vehicles.vehicles_id LIKE '$search_term' 
+        OR vehicles.vehicles_type LIKE '$search_term' 
+        OR vehicles.vehicles_model LIKE '$search_term' 
+        OR vehicles.vehicles_plate LIKE '$search_term' 
+        OR driver.driver_fullname LIKE '$search_term'";
+}
+
+// Fetch vehicles with driver names and optional search filtering
 $query = "
     SELECT 
         vehicles.vehicles_id, 
@@ -19,7 +31,9 @@ $query = "
         vehicles.vehicles_capacity, 
         driver.driver_fullname AS driver_name 
     FROM vehicles 
-    LEFT JOIN driver ON vehicles.driver_id = driver.driver_id";
+    LEFT JOIN driver ON vehicles.driver_id = driver.driver_id 
+    $search_query 
+    ORDER BY vehicles.vehicles_model ASC";
 $result = $dbconn->query($query);
 
 if (!$result) {
@@ -55,8 +69,8 @@ if (!$result) {
         <div class="view-container">
             <div class="view-btn">
                 <button onclick="window.location.href='addvehicle.php'">Add New Vehicle</button>
-                <form method="GET" action="searchvehicles.php" style="display: inline;">
-                    <input type="text" name="search-bar" placeholder="Search">
+                <form method="GET" action="" style="display: inline;">
+                    <input type="text" name="search-bar" placeholder="Search by ID, Type, Model, Plate, or Driver" value="<?php echo isset($_GET['search-bar']) ? htmlspecialchars($_GET['search-bar']) : ''; ?>">
                     <button type="submit">Search</button>
                 </form>
             </div>
@@ -71,21 +85,27 @@ if (!$result) {
                         <th style="width:20%">Driver Name</th>
                         <th style="width:10%">Action</th>
                     </tr>
-                    <?php while ($row = $result->fetch_assoc()): ?>
+                    <?php if ($result->num_rows > 0): ?>
+                        <?php while ($row = $result->fetch_assoc()): ?>
+                            <tr>
+                                <td><?php echo htmlspecialchars($row['vehicles_id']); ?></td>
+                                <td><?php echo htmlspecialchars($row['vehicles_type']); ?></td>
+                                <td><?php echo htmlspecialchars($row['vehicles_model']); ?></td>
+                                <td><?php echo htmlspecialchars($row['vehicles_plate']); ?></td>
+                                <td><?php echo htmlspecialchars($row['vehicles_capacity']); ?></td>
+                                <td><?php echo htmlspecialchars($row['driver_name'] ?? 'No Driver Assigned'); ?></td>
+                                <td>
+                                    <a href="editvehicle.php?vehicle_id=<?php echo urlencode($row['vehicles_id']); ?>">
+                                        <button>Edit</button>
+                                    </a>
+                                </td>
+                            </tr>
+                        <?php endwhile; ?>
+                    <?php else: ?>
                         <tr>
-                            <td><?php echo htmlspecialchars($row['vehicles_id']); ?></td>
-                            <td><?php echo htmlspecialchars($row['vehicles_type']); ?></td>
-                            <td><?php echo htmlspecialchars($row['vehicles_model']); ?></td>
-                            <td><?php echo htmlspecialchars($row['vehicles_plate']); ?></td>
-                            <td><?php echo htmlspecialchars($row['vehicles_capacity']); ?></td>
-                            <td><?php echo htmlspecialchars($row['driver_name'] ?? 'No Driver Assigned'); ?></td>
-                            <td>
-                                <a href="editvehicle.php?vehicle_id=<?php echo $row['vehicles_id']; ?>">
-                                    <button>Edit</button>
-                                </a>
-                            </td>
+                            <td colspan="7">No vehicles found.</td>
                         </tr>
-                    <?php endwhile; ?>
+                    <?php endif; ?>
                 </table>
             </div>
         </div>
@@ -96,3 +116,7 @@ if (!$result) {
     </footer>
 </body>
 </html>
+<?php
+$result->free();
+$dbconn->close();
+?>

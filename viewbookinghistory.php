@@ -9,7 +9,22 @@ if ($_SESSION['user_type'] !== 'admin') {
 
 include('dbconn.php');
 
-// Fetch booking history with user and vehicle details
+// Handle search functionality
+$search_query = "";
+if (isset($_GET['search-bar']) && !empty($_GET['search-bar'])) {
+    $search_term = "%" . $dbconn->real_escape_string($_GET['search-bar']) . "%";
+    $search_query = "
+        WHERE booking.booking_id LIKE '$search_term'
+        OR user.user_fullname LIKE '$search_term'
+        OR vehicles.vehicles_model LIKE '$search_term'
+        OR vehicles.vehicles_plate LIKE '$search_term'
+        OR booking.booking_destination LIKE '$search_term'
+        OR booking.booking_purpose LIKE '$search_term'
+        OR booking.booking_status LIKE '$search_term'
+    ";
+}
+
+// Fetch booking history with optional search filtering
 $query = "
     SELECT 
         booking.booking_id,
@@ -29,6 +44,7 @@ $query = "
     FROM booking
     LEFT JOIN user ON booking.user_id = user.user_id
     LEFT JOIN vehicles ON booking.vehicles_id = vehicles.vehicles_id
+    $search_query
     ORDER BY booking.booking_timecreated DESC";
 $result = $dbconn->query($query);
 
@@ -64,8 +80,8 @@ if (!$result) {
     <main>
         <div class="view-container">
             <div class="view-btn">
-                <form method="GET" action="searchbookings.php" style="display: inline;">
-                    <input type="text" name="search-bar" placeholder="Search">
+                <form method="GET" action="" style="display: inline;">
+                    <input type="text" name="search-bar" placeholder="Search" value="<?php echo isset($_GET['search-bar']) ? htmlspecialchars($_GET['search-bar']) : ''; ?>">
                     <button type="submit">Search</button>
                 </form>
             </div>
@@ -85,26 +101,32 @@ if (!$result) {
                         <th style="width:15%">Time Created</th>
                         <th style="width:10%">Action</th>
                     </tr>
-                    <?php while ($row = $result->fetch_assoc()): ?>
+                    <?php if ($result->num_rows > 0): ?>
+                        <?php while ($row = $result->fetch_assoc()): ?>
+                            <tr>
+                                <td><?php echo htmlspecialchars($row['booking_id']); ?></td>
+                                <td><?php echo htmlspecialchars($row['user_name']); ?></td>
+                                <td><?php echo htmlspecialchars($row['vehicle_model'] . " (" . $row['vehicle_plate'] . ")"); ?></td>
+                                <td><?php echo htmlspecialchars($row['booking_datestart']); ?></td>
+                                <td><?php echo htmlspecialchars($row['booking_dateend']); ?></td>
+                                <td><?php echo htmlspecialchars($row['booking_timestart']); ?></td>
+                                <td><?php echo htmlspecialchars($row['booking_timeend']); ?></td>
+                                <td><?php echo htmlspecialchars($row['booking_destination']); ?></td>
+                                <td><?php echo htmlspecialchars($row['booking_purpose']); ?></td>
+                                <td><?php echo htmlspecialchars($row['booking_status']); ?></td>
+                                <td><?php echo htmlspecialchars($row['booking_timecreated']); ?></td>
+                                <td>
+                                    <a href="editbookinghistory.php?booking_id=<?php echo $row['booking_id']; ?>">
+                                        <button>Edit</button>
+                                    </a>
+                                </td>
+                            </tr>
+                        <?php endwhile; ?>
+                    <?php else: ?>
                         <tr>
-                            <td><?php echo htmlspecialchars($row['booking_id']); ?></td>
-                            <td><?php echo htmlspecialchars($row['user_name']); ?></td>
-                            <td><?php echo htmlspecialchars($row['vehicle_model'] . " (" . $row['vehicle_plate'] . ")"); ?></td>
-                            <td><?php echo htmlspecialchars($row['booking_datestart']); ?></td>
-                            <td><?php echo htmlspecialchars($row['booking_dateend']); ?></td>
-                            <td><?php echo htmlspecialchars($row['booking_timestart']); ?></td>
-                            <td><?php echo htmlspecialchars($row['booking_timeend']); ?></td>
-                            <td><?php echo htmlspecialchars($row['booking_destination']); ?></td>
-                            <td><?php echo htmlspecialchars($row['booking_purpose']); ?></td>
-                            <td><?php echo htmlspecialchars($row['booking_status']); ?></td>
-                            <td><?php echo htmlspecialchars($row['booking_timecreated']); ?></td>
-                            <td>
-                                <a href="editbookinghistory.php?booking_id=<?php echo $row['booking_id']; ?>">
-                                    <button>Edit</button>
-                                </a>
-                            </td>
+                            <td colspan="12">No results found.</td>
                         </tr>
-                    <?php endwhile; ?>
+                    <?php endif; ?>
                 </table>
             </div>
         </div>
