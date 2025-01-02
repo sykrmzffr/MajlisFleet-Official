@@ -32,12 +32,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit();
         } else {
             // Incorrect password
-            header("Location: failed.html");
+            header("Location: index.php?error=Incorrect%20password");
             exit();
         }
     } else {
         // User not found
-        header("Location: failed.html");
+        header("Location: index.php?error=User%20ID%20not%20found");
         exit();
     }
 
