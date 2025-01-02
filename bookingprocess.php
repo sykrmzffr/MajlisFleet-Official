@@ -20,6 +20,43 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $booking_destination = mysqli_real_escape_string($dbconn, $_POST['booking_destination']);
     $booking_purpose = mysqli_real_escape_string($dbconn, $_POST['booking_purpose']);
 
+    // Combine date and time for comparison
+    $start_datetime = $booking_datestart . ' ' . $booking_timestart;
+    $end_datetime = $booking_dateend . ' ' . $booking_timeend;
+    $current_datetime = date('Y-m-d H:i:s');
+
+    // Ensure start date and time are not later than end date and time
+    if (strtotime($start_datetime) >= strtotime($end_datetime)) {
+        $error_message = urlencode("Start date and time must be earlier than end date and time.");
+        header("Location: booking.php?vehicle_id=$vehicles_id&error=$error_message");
+        exit();
+    }
+
+    // Ensure start date and time are not before the current date and time
+    if (strtotime($start_datetime) < strtotime($current_datetime)) {
+        $error_message = urlencode("Start date and time must be later than current date and time.");
+        header("Location: booking.php?vehicle_id=$vehicles_id&error=$error_message");
+        exit();
+    }
+
+    // Check for booking clashes
+    $clash_sql = "SELECT * FROM booking WHERE vehicles_id = ? AND 
+                  ((? BETWEEN booking_datestart AND booking_dateend) OR 
+                   (? BETWEEN booking_datestart AND booking_dateend) OR 
+                   (booking_datestart BETWEEN ? AND ?) OR 
+                   (booking_dateend BETWEEN ? AND ?))";
+
+    $stmt = $dbconn->prepare($clash_sql);
+    $stmt->bind_param("sssssss", $vehicles_id, $start_datetime, $end_datetime, $start_datetime, $end_datetime, $start_datetime, $end_datetime);
+    $stmt->execute();
+    $clash_result = $stmt->get_result();
+
+    if ($clash_result && $clash_result->num_rows > 0) {
+        $error_message = urlencode("Booking time clashes with an existing booking.");
+        header("Location: booking.php?vehicle_id=$vehicles_id&error=$error_message");
+        exit();
+    }
+
     // Booking status is set to 'pending'
     $booking_status = 'Pending';
 
@@ -45,7 +82,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         header("Location: bookingsuccess.php");
         exit();
     } else {
-        echo "Error: " . $sql . "<br>" . mysqli_error($dbconn);
+        $error_message = urlencode("Error: " . mysqli_error($dbconn));
+        header("Location: booking.php?vehicle_id=$vehicles_id&error=$error_message");
+        exit();
     }
 }
 
