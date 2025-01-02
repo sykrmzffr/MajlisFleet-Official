@@ -22,16 +22,21 @@ if ($max_id) {
     $new_user_id = 'UR00002'; // Default first user ID
 }
 
+// Initialize message variables
+$success_message = "";
+$error_message = "";
+
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $user_fullname = $_POST['user_fullname'];
+    // Convert user_fullname to uppercase
+    $user_fullname = strtoupper($_POST['user_fullname']);
     $user_password = $_POST['user_password'];
     $user_type = $_POST['user_type'];
     $user_unit = $_POST['user_unit'];
 
     // Validation
     if ($user_type === 'default' || $user_unit === 'default') {
-        echo "Please select valid options for User Type and User Unit.";
+        $error_message = "Please select valid options for User Type and User Unit.";
     } else {
         // Insert user into the database
         $insert_query = "INSERT INTO user (user_id, user_password, user_type, user_fullname, user_unit) VALUES (?, ?, ?, ?, ?)";
@@ -39,11 +44,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bind_param("sssss", $new_user_id, $user_password, $user_type, $user_fullname, $user_unit);
 
         if ($stmt->execute()) {
-            echo "User added successfully.";
-            header("Location: viewuser.php");
-            exit();
+            $success_message = "User added successfully.";
         } else {
-            echo "Failed to add user.";
+            $error_message = "Failed to add user.";
         }
     }
 }
@@ -56,76 +59,152 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Users</title>
     <link rel="stylesheet" href="edituserstyle.css">
+    <script>
+        function showPopup(message, isSuccess) {
+            const popup = document.getElementById(isSuccess ? 'success-popup' : 'error-popup');
+            const popupMessage = document.getElementById(isSuccess ? 'success-popup-message' : 'error-popup-message');
+            const body = document.body;
+            popupMessage.textContent = message;
+            popup.style.display = 'block';
+            body.classList.add('modal-open');
+        }
+
+        function closePopup(popupId) {
+            const popup = document.getElementById(popupId);
+            const body = document.body;
+            popup.style.display = 'none';
+            body.classList.remove('modal-open');
+        }
+
+        function redirectTo(url) {
+            window.location.href = url;
+        }
+
+        window.onload = function() {
+            const successMessage = "<?php echo $success_message; ?>";
+            const errorMessage = "<?php echo $error_message; ?>";
+            if (successMessage) {
+                showPopup(successMessage, true);
+            } else if (errorMessage) {
+                showPopup(errorMessage, false);
+            }
+        };
+    </script>
+    <style>
+        /* Modal styles */
+        .popup {
+            display: none;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: white;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+        .popup-message {
+            margin-bottom: 20px;
+        }
+        .popup button {
+            padding: 10px;
+            margin: 5px;
+        }
+        /* Background blur and disable styles */
+        .modal-open {
+            overflow: hidden;
+        }
+        .modal-open #blur-background {
+            filter: blur(5px);
+            pointer-events: none;
+        }
+    </style>
 </head>
 <body>
-    <div class="navbar">
-        <div class="nav-items">
-            <div class="nav-logo">
-                <img src="image/logo.png" alt="">
-                <a href="homepageadmin.php">MajlisFleet</a>
-            </div>
-            <div class="nav-content">
-                <ul>
-                    <li><a href="profile.php">Profile</a></li>
-                    <li><a href="logout.php">Logout</a></li>
-                </ul>
+    <div id="blur-background">
+        <div class="navbar">
+            <div class="nav-items">
+                <div class="nav-logo">
+                    <img src="image/logo.png" alt="">
+                    <a href="homepageadmin.php">MajlisFleet</a>
+                </div>
+                <div class="nav-content">
+                    <ul>
+                        <li><a href="profile.php">Profile</a></li>
+                        <li><a href="logout.php">Logout</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
-    </div>
-    
-    <main>
-        <div class="edit-container">
-            <form method="POST">
-                <div class="form-container">
-                    <div class="form-upper">
-                        <div class="upper-left">
-                            <p><b>USER ID</b></p>
-                            <input type="text" value="<?php echo $new_user_id; ?>" disabled>
+        
+        <main>
+            <div class="edit-container">
+                <form method="POST">
+                    <div class="form-container">
+                        <div class="form-upper">
+                            <div class="upper-left">
+                                <p><b>USER ID</b></p>
+                                <input type="text" value="<?php echo $new_user_id; ?>" disabled>
+                            </div>
+                            <div class="upper-right">
+                                <p><b>USER TYPE</b></p>
+                                <select name="user_type" id="user-type" required>
+                                    <option value="default">CLICK TO SELECT</option>
+                                    <option value="user">USER</option>
+                                    <option value="admin">ADMIN</option>
+                                </select>
+                            </div>
                         </div>
-                        <div class="upper-right">
-                            <p><b>USER TYPE</b></p>
-                            <select name="user_type" id="user-type" required>
+                        <div class="form-lower">
+                            <p><b>USER FULLNAME</b></p>
+                            <input type="text" name="user_fullname" placeholder="User Fullname" required>
+                            <p><b>USER UNIT</b></p>
+                            <select name="user_unit" id="user-unit" required>
                                 <option value="default">CLICK TO SELECT</option>
-                                <option value="user">USER</option>
-                                <option value="admin">ADMIN</option>
+                                <option value="JABATAN KEJURUTERAAN DAN KAWALAN BANGUNAN">JABATAN KEJURUTERAAN DAN KAWALAN BANGUNAN</option>
+                                <option value="JABATAN PERBENDAHARAAN">JABATAN PERBENDAHARAAN</option>
+                                <option value="JABATAN PENILAIAN DAN PENGURUSAN HARTA">JABATAN PENILAIAN DAN PENGURUSAN HARTA</option>
+                                <option value="JABATAN PERANCANGAN BANDAR DAN LANDSKAP">JABATAN PERANCANGAN BANDAR DAN LANDSKAP</option>
+                                <option value="JABATAN KESIHATAN AWAM DAN PERKHIDMATAN PERBANDARAN">JABATAN KESIHATAN AWAM DAN PERKHIDMATAN PERBANDARAN</option>
+                                <option value="JABATAN PENGURUSAN">JABATAN PENGURUSAN</option>
+                                <option value="UNIT PUSAT SETEMPAT">UNIT PUSAT SETEMPAT</option>
+                                <option value="UNIT UNDANG-UNDANG">UNIT UNDANG-UNDANG</option>
+                                <option value="UNIT PERHUBUNGAN AWAM DAN PEMBANGUNAN SYARIKAT">UNIT PERHUBUNGAN AWAM DAN PEMBANGUNAN SYARIKAT</option>
+                                <option value="UNIT AUDIT DALAM">UNIT AUDIT DALAM</option>
+                                <option value="BAHAGIAN LANDSKAP">BAHAGIAN LANDSKAP</option>
+                                <option value="BAHAGIAN PENTADBIRAN">BAHAGIAN PENTADBIRAN</option>
+                                <option value="BAHAGIAN PENGUATKUASAAN DAN KESELAMATAN">BAHAGIAN PENGUATKUASAAN DAN KESELAMATAN</option>
+                                <option value="BAHAGIAN TEKNOLOGI MAKLUMAT">BAHAGIAN TEKNOLOGI MAKLUMAT</option>
+                                <option value="BAHAGIAN TEMPAT LETAK KERETA">BAHAGIAN TEMPAT LETAK KERETA</option>
                             </select>
+                            <p><b>USER PASSWORD</b></p>
+                            <input type="password" name="user_password" placeholder="User Password" required>
                         </div>
                     </div>
-                    <div class="form-lower">
-                        <p><b>USER FULLNAME</b></p>
-                        <input type="text" name="user_fullname" placeholder="User Fullname" required>
-                        <p><b>USER UNIT</b></p>
-                        <select name="user_unit" id="user-unit" required>
-                            <option value="default">CLICK TO SELECT</option>
-                            <option value="JABATAN KEJURUTERAAN DAN KAWALAN BANGUNAN">JABATAN KEJURUTERAAN DAN KAWALAN BANGUNAN</option>
-                            <option value="JABATAN PERBENDAHARAAN">JABATAN PERBENDAHARAAN</option>
-                            <option value="JABATAN PENILAIAN DAN PENGURUSAN HARTA">JABATAN PENILAIAN DAN PENGURUSAN HARTA</option>
-                            <option value="JABATAN PERANCANGAN BANDAR DAN LANDSKAP">JABATAN PERANCANGAN BANDAR DAN LANDSKAP</option>
-                            <option value="JABATAN KESIHATAN AWAM DAN PERKHIDMATAN PERBANDARAN">JABATAN KESIHATAN AWAM DAN PERKHIDMATAN PERBANDARAN</option>
-                            <option value="JABATAN PENGURUSAN">JABATAN PENGURUSAN</option>
-                            <option value="UNIT PUSAT SETEMPAT">UNIT PUSAT SETEMPAT</option>
-                            <option value="UNIT UNDANG-UNDANG">UNIT UNDANG-UNDANG</option>
-                            <option value="UNIT PERHUBUNGAN AWAM DAN PEMBANGUNAN SYARIKAT">UNIT PERHUBUNGAN AWAM DAN PEMBANGUNAN SYARIKAT</option>
-                            <option value="UNIT AUDIT DALAM">UNIT AUDIT DALAM</option>
-                            <option value="BAHAGIAN LANDSKAP">BAHAGIAN LANDSKAP</option>
-                            <option value="BAHAGIAN PENTADBIRAN">BAHAGIAN PENTADBIRAN</option>
-                            <option value="BAHAGIAN PENGUATKUASAAN DAN KESELAMATAN">BAHAGIAN PENGUATKUASAAN DAN KESELAMATAN</option>
-                            <option value="BAHAGIAN TEKNOLOGI MAKLUMAT">BAHAGIAN TEKNOLOGI MAKLUMAT</option>
-                            <option value="BAHAGIAN TEMPAT LETAK KERETA">BAHAGIAN TEMPAT LETAK KERETA</option>
-                        </select>
-                        <p><b>USER PASSWORD</b></p>
-                        <input type="text" name="user_password" placeholder="User Password" required>
+                    <div class="button-container">
+                        <button type="submit" id="add">ADD</button>
                     </div>
-                </div>
-                <div class="button-container">
-                    <button type="submit" id="add">ADD</button>
-                </div>
-            </form>
-        </div>
-    </main>
+                </form>
+            </div>
+        </main>
     
-    <footer>
-        <p>Footer Content</p>
-    </footer>
+        <footer>
+            <p>Footer Content</p>
+        </footer>
+    </div>
+
+    <!-- Modal for success messages -->
+    <div id="success-popup" class="popup">
+        <p id="success-popup-message" class="popup-message"></p>
+        <button onclick="redirectTo('viewuser.php')">View Users</button>
+        <button onclick="redirectTo('homepageadmin.php')">Back to Homepage</button>
+    </div>
+
+    <!-- Modal for error messages -->
+    <div id="error-popup" class="popup">
+        <p id="error-popup-message" class="popup-message"></p>
+        <button onclick="closePopup('error-popup')">Close</button>
+    </div>
 </body>
 </html>
