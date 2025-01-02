@@ -128,6 +128,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             border: 1px solid #ccc;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             z-index: 1000;
+            border-radius: 10px;
         }
         #success-popup-message {
             margin-bottom: 20px;
@@ -135,6 +136,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         #success-popup button {
             padding: 10px;
             margin: 5px;
+            background-color: #4070f4;
+            color: #fff;
+            border-radius: 5px;
+        }
+        #success-popup button:hover {
+            background-color:rgb(49, 70, 187);
+            pointer: cursor;
         }
         /* Background blur and disable styles */
         .modal-open {
