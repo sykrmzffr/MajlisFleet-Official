@@ -109,8 +109,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         function showPopup(message) {
             const popup = document.getElementById('success-popup');
             const popupMessage = document.getElementById('success-popup-message');
+            const body = document.body;
             popupMessage.textContent = message;
             popup.style.display = 'block';
+            body.classList.add('modal-open');
+        }
+
+        function closePopup() {
+            const popup = document.getElementById('success-popup');
+            const body = document.body;
+            popup.style.display = 'none';
+            body.classList.remove('modal-open');
         }
 
         function redirectTo(url) {
@@ -145,71 +154,85 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             padding: 10px;
             margin: 5px;
         }
+        /* Background blur and disable styles */
+        .modal-open {
+            overflow: hidden;
+        }
+        .modal-open #blur-background {
+            filter: blur(5px);
+            pointer-events: none;
+        }
     </style>
 </head>
 <body>
-    <div class="navbar">
-        <div class="nav-items">
-            <div class="nav-logo">
-                <img src="image/logo.png" alt="">
-                <a href="homepageadmin.php">MajlisFleet</a>
-            </div>
-            <div class="nav-content">
-                <ul>
-                    <li><a href="profile.php">Profile</a></li>
-                    <li><a href="logout.php">Logout</a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    
-    <main>
-        <div class="edit-container">
-            <form action="" method="POST" class="form-container">
-                <p><b>Booking ID</b></p>
-                <input type="text" value="<?php echo htmlspecialchars($booking['booking_id']); ?>" disabled>
-                <br>
-                <p><b>User</b></p>
-                <input type="text" value="<?php echo htmlspecialchars($booking['user_name']); ?>" disabled>
-                <br>
-                <p><b>Vehicle</b></p>
-                <input type="text" value="<?php echo htmlspecialchars($booking['vehicle_model'] . " (" . $booking['vehicle_plate'] . ")"); ?>" disabled>
-                <br>
-                <p><b>Date Start</b></p>
-                <input type="date" name="booking_datestart" value="<?php echo htmlspecialchars($booking['booking_datestart']); ?>" required>
-                <br>
-                <p><b>Date End</b></p>
-                <input type="date" name="booking_dateend" value="<?php echo htmlspecialchars($booking['booking_dateend']); ?>" required>
-                <br>
-                <p><b>Time Start</b></p>
-                <input type="time" name="booking_timestart" value="<?php echo htmlspecialchars($booking['booking_timestart']); ?>" required>
-                <br>
-                <p><b>Time End</b></p>
-                <input type="time" name="booking_timeend" value="<?php echo htmlspecialchars($booking['booking_timeend']); ?>" required>
-                <br>
-                <p><b>Destination</b></p>
-                <input type="text" name="booking_destination" value="<?php echo htmlspecialchars($booking['booking_destination']); ?>" required>
-                <br>
-                <p><b>Purpose</b></p>
-                <input type="text" name="booking_purpose" value="<?php echo htmlspecialchars($booking['booking_purpose']); ?>" required>
-                <br>
-                <p><b>Status</b></p>
-                <select name="booking_status" required>
-                    <option value="Pending" <?php echo $booking['booking_status'] === 'Pending' ? 'selected' : ''; ?>>Pending</option>
-                    <option value="Approved" <?php echo $booking['booking_status'] === 'Approved' ? 'selected' : ''; ?>>Approved</option>
-                    <option value="Rejected" <?php echo $booking['booking_status'] === 'Rejected' ? 'selected' : ''; ?>>Rejected</option>
-                </select>
-                <br>
-                <p><b>Time Created</b></p>
-                <input type="text" value="<?php echo htmlspecialchars($booking['booking_timecreated']); ?>" disabled>
-                <br>
-                <div class="button-container">
-                    <button type="submit" name="update">UPDATE</button>
-                    <button type="submit" name="delete" onclick="return confirm('Are you sure you want to delete this booking?');">DELETE</button>
+    <div id="blur-background">
+        <div class="navbar">
+            <div class="nav-items">
+                <div class="nav-logo">
+                    <img src="image/logo.png" alt="">
+                    <a href="homepageadmin.php">MajlisFleet</a>
                 </div>
-            </form>
+                <div class="nav-content">
+                    <ul>
+                        <li><a href="profile.php">Profile</a></li>
+                        <li><a href="logout.php">Logout</a></li>
+                    </ul>
+                </div>
+            </div>
         </div>
-    </main>
+        
+        <main>
+            <div class="edit-container">
+                <form action="" method="POST" class="form-container">
+                    <p><b>Booking ID</b></p>
+                    <input type="text" value="<?php echo htmlspecialchars($booking['booking_id']); ?>" disabled>
+                    <br>
+                    <p><b>User</b></p>
+                    <input type="text" value="<?php echo htmlspecialchars($booking['user_name']); ?>" disabled>
+                    <br>
+                    <p><b>Vehicle</b></p>
+                    <input type="text" value="<?php echo htmlspecialchars($booking['vehicle_model'] . " (" . $booking['vehicle_plate'] . ")"); ?>" disabled>
+                    <br>
+                    <p><b>Date Start</b></p>
+                    <input type="date" name="booking_datestart" value="<?php echo htmlspecialchars($booking['booking_datestart']); ?>" required>
+                    <br>
+                    <p><b>Date End</b></p>
+                    <input type="date" name="booking_dateend" value="<?php echo htmlspecialchars($booking['booking_dateend']); ?>" required>
+                    <br>
+                    <p><b>Time Start</b></p>
+                    <input type="time" name="booking_timestart" value="<?php echo htmlspecialchars($booking['booking_timestart']); ?>" required>
+                    <br>
+                    <p><b>Time End</b></p>
+                    <input type="time" name="booking_timeend" value="<?php echo htmlspecialchars($booking['booking_timeend']); ?>" required>
+                    <br>
+                    <p><b>Destination</b></p>
+                    <input type="text" name="booking_destination" value="<?php echo htmlspecialchars($booking['booking_destination']); ?>" required>
+                    <br>
+                    <p><b>Purpose</b></p>
+                    <input type="text" name="booking_purpose" value="<?php echo htmlspecialchars($booking['booking_purpose']); ?>" required>
+                    <br>
+                    <p><b>Status</b></p>
+                    <select name="booking_status" required>
+                        <option value="Pending" <?php echo $booking['booking_status'] === 'Pending' ? 'selected' : ''; ?>>Pending</option>
+                        <option value="Approved" <?php echo $booking['booking_status'] === 'Approved' ? 'selected' : ''; ?>>Approved</option>
+                        <option value="Rejected" <?php echo $booking['booking_status'] === 'Rejected' ? 'selected' : ''; ?>>Rejected</option>
+                    </select>
+                    <br>
+                    <p><b>Time Created</b></p>
+                    <input type="text" value="<?php echo htmlspecialchars($booking['booking_timecreated']); ?>" disabled>
+                    <br>
+                    <div class="button-container">
+                        <button type="submit" name="update">UPDATE</button>
+                        <button type="submit" name="delete" onclick="return confirm('Are you sure you want to delete this booking?');">DELETE</button>
+                    </div>
+                </form>
+            </div>
+        </main>
+
+        <footer>
+            <p>Footer Content</p>
+        </footer>
+    </div>
 
     <!-- Modal for success messages -->
     <div id="success-popup">
@@ -217,9 +240,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <button onclick="redirectTo('homepageadmin.php')">Go to Homepage</button>
         <button onclick="redirectTo('viewbookinghistory.php')">View Booking History</button>
     </div>
-    
-    <footer>
-        <p>Footer Content</p>
-    </footer>
 </body>
 </html>
