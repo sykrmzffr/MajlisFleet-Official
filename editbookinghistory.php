@@ -39,6 +39,9 @@ if (isset($_GET['booking_id'])) {
     exit();
 }
 
+// Initialize success message variable
+$success_message = "";
+
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['update'])) {
@@ -75,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         );
 
         if ($update_stmt->execute()) {
-            echo "Booking updated successfully.";
+            $success_message = "Booking updated successfully.";
         } else {
             echo "Error updating booking.";
         }
@@ -85,8 +88,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $delete_stmt->bind_param("s", $booking_id);
 
         if ($delete_stmt->execute()) {
-            echo "Booking deleted successfully.";
-            header("Location: viewbookinghistory.php");
+            $success_message = "Booking deleted successfully.";
+            header("Location: viewbookinghistory.php?success=" . urlencode($success_message));
             exit();
         } else {
             echo "Error deleting booking.";
@@ -102,6 +105,47 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Booking</title>
     <link rel="stylesheet" href="editbookinghistorystyle.css">
+    <script>
+        function showPopup(message) {
+            const popup = document.getElementById('success-popup');
+            const popupMessage = document.getElementById('success-popup-message');
+            popupMessage.textContent = message;
+            popup.style.display = 'block';
+        }
+
+        function redirectTo(url) {
+            window.location.href = url;
+        }
+
+        window.onload = function() {
+            const successMessage = "<?php echo $success_message; ?>";
+            if (successMessage) {
+                showPopup(successMessage);
+            }
+        };
+    </script>
+    <style>
+        /* Modal styles */
+        #success-popup {
+            display: none;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: white;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+        #success-popup-message {
+            margin-bottom: 20px;
+        }
+        #success-popup button {
+            padding: 10px;
+            margin: 5px;
+        }
+    </style>
 </head>
 <body>
     <div class="navbar">
@@ -166,6 +210,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </form>
         </div>
     </main>
+
+    <!-- Modal for success messages -->
+    <div id="success-popup">
+        <p id="success-popup-message"></p>
+        <button onclick="redirectTo('homepageadmin.php')">Go to Homepage</button>
+        <button onclick="redirectTo('viewbookinghistory.php')">View Booking History</button>
+    </div>
     
     <footer>
         <p>Footer Content</p>
