@@ -17,7 +17,7 @@ if (isset($_GET['search-bar']) && !empty($_GET['search-bar'])) {
 }
 
 // Fetch drivers from the database with optional search filtering
-$query = "SELECT driver_id, driver_fullname FROM driver $search_query ORDER BY driver_fullname ASC";
+$query = "SELECT driver_id, driver_fullname FROM driver $search_query ORDER BY driver_id DESC";
 $result = $dbconn->query($query);
 
 if (!$result) {

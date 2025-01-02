@@ -33,7 +33,7 @@ $query = "
     FROM vehicles 
     LEFT JOIN driver ON vehicles.driver_id = driver.driver_id 
     $search_query 
-    ORDER BY vehicles.vehicles_model ASC";
+    ORDER BY vehicles.vehicles_id DESC";
 $result = $dbconn->query($query);
 
 if (!$result) {

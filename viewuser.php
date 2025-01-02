@@ -21,7 +21,7 @@ if (isset($_GET['search-bar']) && !empty($_GET['search-bar'])) {
 }
 
 // Fetch all users or filtered users
-$query = "SELECT * FROM user $search_query ORDER BY user_fullname ASC";
+$query = "SELECT * FROM user $search_query ORDER BY user_id DESC";
 $result = $dbconn->query($query);
 
 if (!$result) {
