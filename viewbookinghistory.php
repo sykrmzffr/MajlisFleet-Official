@@ -3,7 +3,7 @@ session_start();
 
 // Only allow admin access
 if ($_SESSION['user_type'] !== 'admin') {
-    header("Location: homepage.php");
+    header("Location: index.php");
     exit();
 }
 
