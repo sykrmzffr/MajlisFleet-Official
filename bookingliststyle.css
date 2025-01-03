@@ -86,8 +86,13 @@ main{
     justify-content: center;
 }
 .list-cars{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     text-align: center;
     margin: 20px;
+    width: 100%;
 }
 .card{
     display: flex;
@@ -106,15 +111,16 @@ main{
 .card-cars{
     display: flex;
     justify-content: flex-start;
-    
+    overflow: auto;
     gap: 20px;
-    width: auto;
-    max-width: 90%;
+    width: 80%;
     padding: 10px;
-    border: 1px solid #e0e0e0; /* Optional for visibility */
     border-radius: 10px; /* Optional for better aesthetics */
     scrollbar-width: thin; /* For narrower scrollbars */
     box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 .card-cars::-webkit-scrollbar {
     height: 8px;
@@ -129,21 +135,28 @@ main{
     width: 90%;
 }
 .list-vans{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     text-align: center;
     margin: 20px;
+    width: 100%;
 }
 .card-vans{
     display: flex;
     justify-content: flex-start;
-    
+    overflow: auto;
     gap: 20px;
-    width: auto;
-    max-width: 90%;
+    width: 80%;
     padding: 10px;
-    border: 1px solid #e0e0e0; /* Optional for visibility */
     border-radius: 10px; /* Optional for better aesthetics */
     scrollbar-width: thin; /* For narrower scrollbars */
     box-sizing: border-box;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 .card-vans::-webkit-scrollbar {
     height: 8px;
