@@ -144,9 +144,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <p><b>Image Link (Optional)</b></p>
                         <input type="text" name="vehicle_img" id="img-link">
                     </div>
-                </div>
-                <div class="button-container">
+                    <div class="button-container">
                     <button type="submit" id="add">ADD</button>
+                </div>
                 </div>
             </form>
         </div>
