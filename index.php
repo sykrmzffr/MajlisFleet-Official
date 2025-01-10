@@ -91,6 +91,7 @@
                 <div class="login-container-right">
                     <div class="login-container-logo">
                         <img src="image/logo.png">
+                        <h1>MajlisFleet</h1>
                     </div>
                 </div>
             </div>
