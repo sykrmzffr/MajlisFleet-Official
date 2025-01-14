@@ -85,7 +85,7 @@ main{
 }
 .card-pages{
     display: flex;
-    justify-content: center;
+    justify-content: start;
     overflow: auto;
     gap: 20px;
     width: 80%;
