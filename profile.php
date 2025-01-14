@@ -10,6 +10,7 @@ if (!isset($_SESSION['user_id'])) {
 include('dbconn.php');
 
 $user_id = $_SESSION['user_id'];
+$user_type = $_SESSION['user_type']; // Assuming user_type is stored in session
 
 // Fetch user information from the database
 $sql = "SELECT * FROM user WHERE user_id = '$user_id'";
@@ -33,7 +34,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $update_sql = "UPDATE user SET user_password = '$new_password' WHERE user_id = '$user_id'";
         
         if (mysqli_query($dbconn, $update_sql)) {
-            echo "<script>alert('Password updated successfully!');</script>";
+            // Use JavaScript to show the alert and redirect after OK is clicked
+            echo "<script>
+                    alert('Password updated successfully!');
+                    if ('" . $user_type . "' === 'admin') {
+                        window.location.href = 'homepageadmin.php';
+                    } else {
+                        window.location.href = 'homepage.php';
+                    }
+                  </script>";
+            exit();
         } else {
             echo "<script>alert('Error updating password: " . mysqli_error($dbconn) . "');</script>";
         }
