@@ -38,15 +38,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update'])) {
     $new_fullname = strtoupper($_POST['user_fullname']);
     $new_type = $_POST['user_type'];
     $new_unit = $_POST['user_unit'];
+    $new_password = $_POST['user_password'];
 
+    // Update the user's basic details
     $update_query = "UPDATE user SET user_fullname = ?, user_type = ?, user_unit = ? WHERE user_id = ?";
     $update_stmt = $dbconn->prepare($update_query);
     $update_stmt->bind_param("ssss", $new_fullname, $new_type, $new_unit, $user_id);
 
     if ($update_stmt->execute()) {
-        $success_message = "User updated successfully.";
+        $success_message = "User details updated successfully.";
     } else {
-        $error_message = "Failed to update user.";
+        $error_message = "Failed to update user details.";
+    }
+
+    // If a new password is provided, update it
+    if (!empty($new_password)) {
+        $hashed_password = password_hash($new_password, PASSWORD_BCRYPT);
+        $password_update_query = "UPDATE user SET user_password = ? WHERE user_id = ?";
+        $password_update_stmt = $dbconn->prepare($password_update_query);
+        $password_update_stmt->bind_param("ss", $hashed_password, $user_id);
+
+        if ($password_update_stmt->execute()) {
+            $success_message .= " Password updated successfully.";
+        } else {
+            $error_message = "Failed to update password.";
+        }
     }
 }
 
@@ -207,6 +223,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['confirm_delete'])) {
                                 <option value="BAHAGIAN TEMPAT LETAK KERETA" <?php echo $user['user_unit'] === 'BAHAGIAN TEMPAT LETAK KERETA' ? 'selected' : ''; ?>>BAHAGIAN TEMPAT LETAK KERETA</option>
                                 <!-- Add other options here -->
                             </select>
+                            <p><b>NEW PASSWORD</b></p>
+                            <input type="password" name="user_password" placeholder="Enter new password if needs changing">
                         </div>
                     </div>
                     <div class="button-container">
