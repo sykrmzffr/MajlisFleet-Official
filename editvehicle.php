@@ -172,6 +172,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
         
         <main>
+            <a href="javascript:history.back()"><< Back to Previous Page</a>
             <div class="edit-container">
                 <form action="" method="POST" class="form-container">
                     <div class="upper-half">

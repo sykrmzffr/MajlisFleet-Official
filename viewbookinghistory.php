@@ -78,6 +78,7 @@ if (!$result) {
     </div>
     
     <main>
+        <a href="javascript:history.back()"><< Back to Previous Page</a>
         <div class="view-container">
             <div class="view-btn">
                 <form method="GET" action="" style="display: inline;">

@@ -168,6 +168,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['confirm_delete'])) {
         </div>
         
         <main>
+            <a href="javascript:history.back()"><< Back to Previous Page</a>
             <div class="edit-container">
                 <form method="POST">
                     <div class="form-container">

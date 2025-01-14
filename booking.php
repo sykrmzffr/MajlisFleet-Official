@@ -125,6 +125,7 @@ if (isset($_GET['vehicle_id']) && !empty($_GET['vehicle_id'])) {
         </div>
         
         <main>
+            <a href="javascript:history.back()"><< Back to Previous Page</a>
             <div class="booking-container">
 
                 <div class="vehicle-details-container">
