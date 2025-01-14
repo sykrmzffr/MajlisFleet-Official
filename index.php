@@ -80,7 +80,7 @@
                                 <input type="text" name="user_id" placeholder="User ID" required autofocus>
                             </div>
                             <div class="login-container-input">
-                                <input type="password" name="password" placeholder="Password" required autofocus>
+                                <input type="password" name="password" placeholder="Password" required>
                             </div>
                         </div>
                         <div class="login-container-submit">

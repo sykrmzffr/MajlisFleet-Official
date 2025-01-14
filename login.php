@@ -8,7 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     include('dbconn.php');
 
-    // Validate login
+    // Validate login for regular users
     $query = "SELECT user_id, user_password, user_type FROM user WHERE user_id = ?";
     $stmt = $dbconn->prepare($query);
     $stmt->bind_param("s", $id);
@@ -18,7 +18,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($result->num_rows === 1) {
         $user = $result->fetch_assoc();
 
-        if ($user['user_password'] === $password) { // Plain text comparison for now
+        if (password_verify($password, $user['user_password'])) { // Hashed password comparison
+            echo "Password verified successfully!"; // Debugging line
             // Success: Store user details in session
             $_SESSION['user_id'] = $user['user_id'];
             $_SESSION['user_type'] = $user['user_type'];
@@ -31,6 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
             exit();
         } else {
+            echo "Password verification failed!"; // Debugging line
             // Incorrect password
             header("Location: index.php?error=Incorrect%20password");
             exit();

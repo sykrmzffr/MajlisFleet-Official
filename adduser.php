@@ -38,10 +38,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($user_type === 'default' || $user_unit === 'default') {
         $error_message = "Please select valid options for User Type and User Unit.";
     } else {
+        // Hash the password
+        $hashed_password = password_hash($user_password, PASSWORD_BCRYPT);
+        echo "Hashed Password: " . $hashed_password; // Debugging line
+
         // Insert user into the database
         $insert_query = "INSERT INTO user (user_id, user_password, user_type, user_fullname, user_unit) VALUES (?, ?, ?, ?, ?)";
         $stmt = $dbconn->prepare($insert_query);
-        $stmt->bind_param("sssss", $new_user_id, $user_password, $user_type, $user_fullname, $user_unit);
+        $stmt->bind_param("sssss", $new_user_id, $hashed_password, $user_type, $user_fullname, $user_unit);
 
         if ($stmt->execute()) {
             $success_message = "User added successfully.";

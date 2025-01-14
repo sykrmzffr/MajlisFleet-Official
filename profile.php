@@ -30,8 +30,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $confirm_password = trim($_POST['confirm_password']);
 
     if ($new_password === $confirm_password && !empty($new_password)) {
-        // Note: Storing plain text passwords is not recommended
-        $update_sql = "UPDATE user SET user_password = '$new_password' WHERE user_id = '$user_id'";
+        // Hash the new password
+        $hashed_password = password_hash($new_password, PASSWORD_BCRYPT);
+
+        // Update the password in the database
+        $update_sql = "UPDATE user SET user_password = '$hashed_password' WHERE user_id = '$user_id'";
         
         if (mysqli_query($dbconn, $update_sql)) {
             // Use JavaScript to show the alert and redirect after OK is clicked
