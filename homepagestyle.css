@@ -74,3 +74,54 @@ main{
     justify-content: center;
     padding: 5%;
 }
+.list-pages{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin: 20px;
+    width: 100%;
+}
+.card-pages{
+    display: flex;
+    justify-content: center;
+    overflow: auto;
+    gap: 20px;
+    width: 80%;
+    padding: 10px;
+    border-radius: 10px; /* Optional for better aesthetics */
+    scrollbar-width: thin; /* For narrower scrollbars */
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.card{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 200px;
+    height: 150px ;
+    background: #fff;
+    padding: 1.5rem;
+    flex-shrink: 0;
+    border-radius: 50px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+button{
+    height: 50px;
+    width: 100%;
+    background-color: #4070f4;
+    color: #fff;
+    border-radius: 10px;
+}
+button:hover{
+    background-color: #2e5fd8;
+    cursor: pointer;
+}
+a{
+    width: 100%;
+}

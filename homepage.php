@@ -51,8 +51,24 @@ if ($result && mysqli_num_rows($result) > 0) {
     </div>
     
     <main>
-        <a href="bookinglist.php">Vehicles list</a>
-        <a href="bookinghistoryuser.php">Booking history</a>
+
+        <div class="list-pages">
+            <div class="card-pages">
+                <div class="card">
+                    <h3>View Vehicles List</h3>
+                    <a href="bookinglist.php">
+                        <button>Click Here!</button>
+                    </a>
+                </div>
+                <div class="card">
+                    <h3>View Booking History</h3>
+                    <a href="bookinghistoryuser.php">
+                        <button>Click Here!</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+        
     </main>
     
     <footer>

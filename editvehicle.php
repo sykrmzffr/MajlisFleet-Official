@@ -220,8 +220,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <input type="text" name="vehicle_img" id="img-link" value="<?php echo htmlspecialchars($vehicle['vehicles_img']); ?>">
                     </div>
                     <div class="button-container">
-                        <button type="submit" name="update">UPDATE</button>
-                        <button type="submit" name="delete" onclick="return confirm('Are you sure you want to delete this vehicle?');">DELETE</button>
+                        <button type="submit" name="update" id="update">UPDATE</button>
+                        <button type="submit" name="delete" id="delete" onclick="return confirm('Are you sure you want to delete this vehicle?');">DELETE</button>
                     </div>
                 </form>
             </div>

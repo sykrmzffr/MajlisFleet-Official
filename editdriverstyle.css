@@ -91,3 +91,31 @@ main{
     border-radius: 25px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
+.button-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 10px;
+    width: 100%;
+}
+button{
+    height: 50px;
+    width: 30%;
+    color: #fff;
+    border-radius: 10px;
+    margin: auto;
+}
+#update{
+    background-color: #4070f4;
+}
+#delete{
+    background-color: #f44336;
+}
+#update:hover{
+    background-color: #2e5fd8;
+    cursor: pointer;
+}
+#delete:hover{
+    background-color: #d32f2f;
+    cursor: pointer;
+}

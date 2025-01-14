@@ -106,8 +106,8 @@ $dbconn->close();
                     <input type="text" name="driver_fullname" value="<?php echo htmlspecialchars($driver['driver_fullname']); ?>" required>
                 </div>
                 <div class="button-container">
-                    <button type="submit" name="update">UPDATE</button>
-                    <button type="submit" name="delete" onclick="return confirm('Are you sure you want to delete this driver?');">DELETE</button>
+                    <button type="submit" name="update" id="update">UPDATE</button>
+                    <button type="submit" name="delete" id="delete" onclick="return confirm('Are you sure you want to delete this driver?');">DELETE</button>
                 </div>
             </form>
         </div>

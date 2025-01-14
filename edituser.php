@@ -209,8 +209,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['confirm_delete'])) {
                         </div>
                     </div>
                     <div class="button-container">
-                        <button type="submit" name="update">UPDATE</button>
-                        <button type="button" onclick="confirmDeletion(event)">DELETE</button>
+                        <button type="submit" name="update" id="update">UPDATE</button>
+                        <button type="button" id="delete" onclick="confirmDeletion(event)">DELETE</button>
                     </div>
                 </form>
             </div>
