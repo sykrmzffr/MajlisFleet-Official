@@ -2,7 +2,7 @@
 session_start();
 
 if ($_SESSION['user_type'] !== 'admin') {
-    header("Location: index.php");
+    header("Location: homepage.php");
     exit();
 }
 
