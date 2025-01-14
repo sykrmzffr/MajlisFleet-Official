@@ -63,12 +63,20 @@ if ($result && mysqli_num_rows($result) > 0) {
                 <div class="profile-form">
                     <div class="left-side">
                         <div class="profile-id">
-                            <p> ID</p>
-                            <input type="text" placeholder="New ID">
+                            <p>ID</p>
+                            <input type="text" placeholder="" disabled>
+                        </div>
+                        <div class="profile-name">
+                            <p>Name</p>
+                            <input type="text" placeholder="" disabled>
                         </div>
                         <div class="profile-password">
-                            <p>Password</p>
+                            <p>Reset Password</p>
                             <input type="password" placeholder="New password">
+                        </div>
+                        <div class="profile-confirm-password">
+                            <p>Confirm Password</p>
+                            <input type="password" placeholder="Confirm new password">
                         </div>
                     </div>
                     <div class="right-side">
@@ -77,7 +85,6 @@ if ($result && mysqli_num_rows($result) > 0) {
                 </div>
                 <div class="profile-btn">
                     <button id="update">UPDATE</button>
-                    <button id="delete">DELETE</button>
                 </div>
             </div>
         </main>
