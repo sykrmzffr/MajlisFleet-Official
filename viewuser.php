@@ -70,7 +70,7 @@ if (!$result) {
                     <tr id="row-first">
                         <th style="width:15%">User ID</th>
                         <th style="width:35%">Full Name</th>
-                        <th style="width:15%">Password</th>
+                        
                         <th style="width:15%">User Type</th>
                         <th style="width:25%">Unit</th>
                         <th style="width:10%">Action</th>
@@ -80,7 +80,7 @@ if (!$result) {
                             <tr>
                                 <td><?php echo htmlspecialchars($row['user_id']); ?></td>
                                 <td><?php echo htmlspecialchars($row['user_fullname']); ?></td>
-                                <td><?php echo htmlspecialchars($row['user_password']); ?></td>
+                                
                                 <td><?php echo htmlspecialchars($row['user_type']); ?></td>
                                 <td><?php echo htmlspecialchars($row['user_unit']); ?></td>
                                 <td>
