@@ -82,20 +82,20 @@ main{
     text-align: center;
     margin: 20px;
     width: 100%;
+    overflow-x: hidden;
 }
 .card-pages{
     display: flex;
-    justify-content: start;
+    justify-content: center;
     overflow: auto;
     gap: 20px;
     width: 80%;
     padding: 10px;
     border-radius: 10px; /* Optional for better aesthetics */
     scrollbar-width: thin; /* For narrower scrollbars */
-    box-sizing: border-box;
-    display: flex;
     flex-direction: row;
     align-items: center;
+    flex-wrap: wrap;
 }
 .card{
     display: flex;
