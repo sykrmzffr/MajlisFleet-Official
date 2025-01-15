@@ -121,8 +121,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['confirm_delete'])) {
             body.classList.remove('modal-open');
         }
 
-        function redirectTo(url) {
-            window.location.href = url;
+        function togglePasswordVisibility(id, buttonId) {
+            const passwordInput = document.getElementById(id);
+            const toggleButton = document.getElementById(buttonId);
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleButton.textContent = 'Hide Password';
+            } else {
+                passwordInput.type = 'password';
+                toggleButton.textContent = 'Show Password';
+            }
         }
 
         window.onload = function() {
@@ -224,7 +232,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['confirm_delete'])) {
                                 <!-- Add other options here -->
                             </select>
                             <p><b>NEW PASSWORD</b></p>
-                            <input type="password" name="user_password" placeholder="Enter new password if needs changing">
+                            <div style="position: relative;">
+                                <input type="password" id="user_password" name="user_password" placeholder="Enter new password if needs changing" style="width: calc(80% - 50px);">
+                                <button type="button" id="toggle_password" onclick="togglePasswordVisibility('user_password', 'toggle_password')" style="position: absolute; right: 5; top: 0; height: 100%; width: 20%; border: none; background: none; cursor: pointer; color: black;">Show Password</button>
+                            </div>
                         </div>
                     </div>
                     <div class="button-container">
