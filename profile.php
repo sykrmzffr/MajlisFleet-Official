@@ -54,6 +54,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         echo "<script>alert('Passwords do not match or are empty!');</script>";
     }
 }
+// Determine the appropriate homepage link based on user type
+$homepage_link = ($user_type === 'admin') ? 'homepageadmin.php' : 'homepage.php';
 ?>
 
 <!DOCTYPE html>
@@ -106,6 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
 
         <main>
+        <a href="<?php echo $homepage_link; ?>"><< Back to Homepage</a>
             <div class="profile-container">
                 <div class="profile-header">
                     <h2>My profile</h2>
