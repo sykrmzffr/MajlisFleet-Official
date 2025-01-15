@@ -154,6 +154,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             padding: 10px;
             margin: 5px;
         }
+        #success-popup button:hover {
+            background-color: rgb(49, 70, 187);
+            cursor: pointer;
+        }
         /* Background blur and disable styles */
         .modal-open {
             overflow: hidden;

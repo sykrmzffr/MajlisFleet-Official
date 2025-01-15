@@ -174,6 +174,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['confirm_delete'])) {
             color: #fff;
             width: 40%;
         }
+        .popup button:hover {
+            background-color: rgb(49, 70, 187);
+            cursor: pointer;
+        }
         /* Background blur and disable styles */
         .modal-open {
             overflow: hidden;

@@ -38,6 +38,10 @@ if (isset($_GET['booking_id'])) {
     exit();
 }
 
+// Initialize message variables
+$success_message = "";
+$error_message = "";
+
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['update'])) {
@@ -72,9 +76,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         );
 
         if ($update_stmt->execute()) {
-            echo "Booking updated successfully.";
+            $success_message = "Booking updated successfully.";
         } else {
-            echo "Error updating booking.";
+            $error_message = "Error updating booking.";
         }
     } elseif (isset($_POST['delete'])) {
         $delete_sql = "DELETE FROM booking WHERE booking_id = ? AND user_id = ?";
@@ -82,11 +86,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $delete_stmt->bind_param("ss", $booking_id, $user_id);
 
         if ($delete_stmt->execute()) {
-            echo "Booking deleted successfully.";
-            header("Location: bookinghistoryuser.php");
+            echo "<script>
+                    alert('Booking deleted successfully.');
+                    window.location.href = 'bookinghistoryuser.php';
+                  </script>";
             exit();
         } else {
-            echo "Error deleting booking.";
+            $error_message = "Error deleting booking.";
         }
     }
 }
@@ -99,64 +105,174 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Booking</title>
     <link rel="stylesheet" href="editbookinguserstyle.css">
+    <script>
+        function showPopup(message, isSuccess) {
+            const popup = document.getElementById(isSuccess ? 'success-popup' : 'error-popup');
+            const popupMessage = document.getElementById(isSuccess ? 'success-popup-message' : 'error-popup-message');
+            const body = document.body;
+            popupMessage.textContent = message;
+            popup.style.display = 'block';
+            body.classList.add('modal-open');
+        }
+
+        function closePopup(popupId) {
+            const popup = document.getElementById(popupId);
+            const body = document.body;
+            popup.style.display = 'none';
+            body.classList.remove('modal-open');
+        }
+
+        function confirmDeletion(event) {
+            event.preventDefault();
+            const deletePopup = document.getElementById('delete-popup');
+            const body = document.body;
+            deletePopup.style.display = 'block';
+            body.classList.add('modal-open');
+        }
+
+        function cancelDeletion() {
+            const deletePopup = document.getElementById('delete-popup');
+            const body = document.body;
+            deletePopup.style.display = 'none';
+            body.classList.remove('modal-open');
+        }
+
+        function redirectTo(url) {
+            window.location.href = url;
+        }
+
+        window.onload = function() {
+            const successMessage = "<?php echo $success_message; ?>";
+            const errorMessage = "<?php echo $error_message; ?>";
+            if (successMessage) {
+                showPopup(successMessage, true);
+            } else if (errorMessage) {
+                showPopup(errorMessage, false);
+            }
+        };
+    </script>
+    <style>
+        /* Modal styles */
+        .popup {
+            display: none;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: white;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            width: 30%;
+            text-align: center;
+            border-radius: 10px;
+        }
+        .popup-message {
+            margin-bottom: 20px;
+        }
+        .popup button {
+            padding: 10px;
+            margin: 5px;
+            background-color: #4070f4;
+            color: #fff;
+            width: 40%;
+        }
+        .popup button:hover {
+            background-color: rgb(49, 70, 187);
+            cursor: pointer;
+        }
+        /* Background blur and disable styles */
+        .modal-open {
+            overflow: hidden;
+        }
+        .modal-open #blur-background {
+            filter: blur(5px);
+            pointer-events: none;
+        }
+    </style>
 </head>
 <body>
-    <div class="navbar">
-        <div class="nav-items">
-            <div class="nav-logo">
-                <img src="image/logo.png" alt="">
-                <a href="homepage.php">MajlisFleet</a>
-            </div>
-            <div class="nav-content">
-                <ul>
-                    <li><a href="profile.php">Profile</a></li>
-                    <li><a href="logout.php">Logout</a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    
-    <main>
-        <a href="javascript:history.back()"><< Back to Previous Page</a>
-        <div class="edit-container">
-            <form action="" method="POST" class="form-container">
-                <p><b>Booking ID</b></p>
-                <input type="text" value="<?php echo htmlspecialchars($booking['booking_id']); ?>" disabled>
-                <br>
-                <p><b>Vehicle</b></p>
-                <input type="text" value="<?php echo htmlspecialchars($booking['vehicle_model'] . " (" . $booking['vehicle_plate'] . ")"); ?>" disabled>
-                <br>
-                <p><b>Date Start</b></p>
-                <input type="date" name="booking_datestart" value="<?php echo htmlspecialchars($booking['booking_datestart']); ?>" required>
-                <br>
-                <p><b>Date End</b></p>
-                <input type="date" name="booking_dateend" value="<?php echo htmlspecialchars($booking['booking_dateend']); ?>" required>
-                <br>
-                <p><b>Time Start</b></p>
-                <input type="time" name="booking_timestart" value="<?php echo htmlspecialchars($booking['booking_timestart']); ?>" required>
-                <br>
-                <p><b>Time End</b></p>
-                <input type="time" name="booking_timeend" value="<?php echo htmlspecialchars($booking['booking_timeend']); ?>" required>
-                <br>
-                <p><b>Destination</b></p>
-                <input type="text" name="booking_destination" value="<?php echo htmlspecialchars($booking['booking_destination']); ?>" required>
-                <br>
-                <p><b>Purpose</b></p>
-                <input type="text" name="booking_purpose" value="<?php echo htmlspecialchars($booking['booking_purpose']); ?>" required>
-                <br>
-                <p><b>Time Created</b></p>
-                <input type="text" value="<?php echo htmlspecialchars($booking['booking_timecreated']); ?>" disabled>
-                <br>
-                <div class="button-container">
-                    <button type="submit" name="update" id="update">UPDATE</button>
-                    <button type="submit" name="delete" id="delete" onclick="return confirm('Are you sure you want to delete this booking?');">DELETE</button>
+    <div id="blur-background">
+        <div class="navbar">
+            <div class="nav-items">
+                <div class="nav-logo">
+                    <img src="image/logo.png" alt="">
+                    <a href="homepage.php">MajlisFleet</a>
                 </div>
-            </form>
+                <div class="nav-content">
+                    <ul>
+                        <li><a href="profile.php">Profile</a></li>
+                        <li><a href="logout.php">Logout</a></li>
+                    </ul>
+                </div>
+            </div>
         </div>
-    </main>
+        
+        <main>
+            <a href="javascript:history.back()"><< Back to Previous Page</a>
+            <div class="edit-container">
+                <form action="" method="POST" class="form-container">
+                    <p><b>Booking ID</b></p>
+                    <input type="text" value="<?php echo htmlspecialchars($booking['booking_id']); ?>" disabled>
+                    <br>
+                    <p><b>Vehicle</b></p>
+                    <input type="text" value="<?php echo htmlspecialchars($booking['vehicle_model'] . " (" . $booking['vehicle_plate'] . ")"); ?>" disabled>
+                    <br>
+                    <p><b>Date Start</b></p>
+                    <input type="date" name="booking_datestart" value="<?php echo htmlspecialchars($booking['booking_datestart']); ?>" required>
+                    <br>
+                    <p><b>Date End</b></p>
+                    <input type="date" name="booking_dateend" value="<?php echo htmlspecialchars($booking['booking_dateend']); ?>" required>
+                    <br>
+                    <p><b>Time Start</b></p>
+                    <input type="time" name="booking_timestart" value="<?php echo htmlspecialchars($booking['booking_timestart']); ?>" required>
+                    <br>
+                    <p><b>Time End</b></p>
+                    <input type="time" name="booking_timeend" value="<?php echo htmlspecialchars($booking['booking_timeend']); ?>" required>
+                    <br>
+                    <p><b>Destination</b></p>
+                    <input type="text" name="booking_destination" value="<?php echo htmlspecialchars($booking['booking_destination']); ?>" required>
+                    <br>
+                    <p><b>Purpose</b></p>
+                    <input type="text" name="booking_purpose" value="<?php echo htmlspecialchars($booking['booking_purpose']); ?>" required>
+                    <br>
+                    <p><b>Time Created</b></p>
+                    <input type="text" value="<?php echo htmlspecialchars($booking['booking_timecreated']); ?>" disabled>
+                    <br>
+                    <div class="button-container">
+                        <button type="submit" name="update" id="update">UPDATE</button>
+                        <button type="submit" name="delete" id="delete" onclick="return confirm('Are you sure you want to delete this booking?');">DELETE</button>
+                    </div>
+                </form>
+            </div>
+        </main>
     
-    <footer>
-        <p>Footer Content</p>
-    </footer>
+        <footer>
+            <p>Footer Content</p>
+        </footer>
+    </div>
+
+    <!-- Modal for success messages -->
+    <div id="success-popup" class="popup">
+        <p id="success-popup-message" class="popup-message"></p>
+        <button onclick="redirectTo('bookinghistoryuser.php')">View Bookings History</button>
+        <button onclick="redirectTo('homepage.php')">Back to Homepage</button>
+    </div>
+
+    <!-- Modal for error messages -->
+    <div id="error-popup" class="popup">
+        <p id="error-popup-message" class="popup-message"></p>
+        <button onclick="closePopup('error-popup')">Close</button>
+    </div>
+
+    <!-- Modal for delete confirmation -->
+    <div id="delete-popup" class="popup">
+        <p class="popup-message">Are you sure you want to delete this booking?</p>
+        <form method="POST">
+            <button type="submit" name="confirm_delete">Yes, Delete</button>
+            <button type="button" onclick="cancelDeletion()">No, Cancel</button>
+        </form>
+    </div>
 </body>
-</html>
+</html>x
