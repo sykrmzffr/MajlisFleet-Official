@@ -248,8 +248,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['confirm_delete'])) {
                             </select>
                             <p><b>NEW PASSWORD</b></p>
                             <div style="position: relative;">
-                                <input type="password" id="user_password" name="user_password" placeholder="Enter new password if needs changing" style="width: calc(100% - 50px);">
-                                <button type="button" id="toggle_password" onclick="togglePasswordVisibility('user_password', 'toggle_password')" style="position: absolute; right: 0; top: 0; height: 100%; border: none; background: none; cursor: pointer;">Show Password</button>
+                                <input type="password" id="user_password" name="user_password" placeholder="Enter new password if needs changing" style="width: calc(80% - 50px);">
+                                <button type="button" id="toggle_password" onclick="togglePasswordVisibility('user_password', 'toggle_password')" style="position: absolute; top: 0; height: 100%; width: 15%; border: none; background: none; color: black; cursor: pointer;">Show Password</button>
                             </div>
                         </div>
                     </div>

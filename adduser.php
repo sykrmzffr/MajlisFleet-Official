@@ -92,6 +92,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else if (errorMessage) {
                 showPopup(errorMessage, false);
             }
+        }
+        function togglePasswordVisibility(id, buttonId) {
+            const passwordInput = document.getElementById(id);
+            const toggleButton = document.getElementById(buttonId);
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleButton.textContent = 'Hide Password';
+            } else {
+                passwordInput.type = 'password';
+                toggleButton.textContent = 'Show Password';
+            }
         };
     </script>
     <style>
@@ -194,7 +205,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <option value="BAHAGIAN TEMPAT LETAK KERETA">BAHAGIAN TEMPAT LETAK KERETA</option>
                             </select>
                             <p><b>USER PASSWORD</b></p>
-                            <input type="password" name="user_password" placeholder="User Password" required>
+                            <div style="position: relative;">
+                                <input type="password" id="user_password" name="user_password" placeholder="Enter new password if needs changing" style="width: calc(80% - 50px);">
+                                <button type="button" id="toggle_password" onclick="togglePasswordVisibility('user_password', 'toggle_password')" style="position: absolute; top: 0; height: 100%; width: 15%; border: none; background: none; color: black; cursor: pointer;">Show Password</button>
+                            </div>
                         </div>
                     </div>
                     <div class="button-container">
