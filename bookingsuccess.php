@@ -41,6 +41,7 @@ if (!isset($_SESSION['user_id'])) {
             border: 1px solid #ccc;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             z-index: 1000;
+            text-align: center;
         }
         #success-popup-message {
             margin-bottom: 20px;
@@ -48,6 +49,13 @@ if (!isset($_SESSION['user_id'])) {
         #success-popup button {
             padding: 10px;
             margin: 5px;
+            background-color: #4070f4;
+            color: #fff;
+            width: 40%;
+        }
+        #success-popup button:hover {
+            background-color: rgb(49, 70, 187);
+            cursor: pointer;
         }
     </style>
 </head>
@@ -55,8 +63,9 @@ if (!isset($_SESSION['user_id'])) {
     
     <div id="success-popup">
         <p id="success-popup-message">Booking submitted successfully!</p>
-        <button onclick="redirectTo('homepage.php')">Go to Homepage</button>
         <button onclick="redirectTo('bookinghistoryuser.php')">View Booking History</button>
+        <button onclick="redirectTo('homepage.php')">Go to Homepage</button>
+        
     </div>
     
 </body>

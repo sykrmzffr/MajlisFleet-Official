@@ -98,12 +98,21 @@ if (isset($_GET['vehicle_id']) && !empty($_GET['vehicle_id'])) {
             border: 1px solid #ccc;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             z-index: 1000;
+            text-align: center;
         }
         #popup-message {
             margin-bottom: 20px;
         }
         #popup button {
             padding: 10px;
+            margin: 5px;
+            background-color: #4070f4;
+            color: #fff;
+            width: 40%;
+        }
+        #popup button:hover {
+            background-color: rgb(49, 70, 187);
+            cursor: pointer;
         }
     </style>
 </head>
@@ -137,7 +146,7 @@ if (isset($_GET['vehicle_id']) && !empty($_GET['vehicle_id'])) {
                     </div>
                     <div class="img-driver">
                         <h4><b>DRIVER DETAILS</b></h4>
-                        <img src="image/driver.jpg" alt="Driver Image">
+                        <img src="image/dp.jpg" alt="Driver Image">
                         <p><?php echo strtoupper($vehicle['driver_fullname']); ?></p>
                     </div>
                 </div>
