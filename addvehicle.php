@@ -40,30 +40,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $vehicle_img = "https://i.ibb.co/xHMKJR8/noimageavailable.jpg";
     }
 
-    $stmt = $dbconn->prepare("
-        INSERT INTO vehicles 
-        (vehicles_id, vehicles_type, vehicles_model, vehicles_plate, vehicles_capacity, driver_id, vehicles_img) 
-        VALUES (?, ?, ?, ?, ?, ?, ?)
-    ");
+    // Check if the vehicle plate number already exists
+    $check_plate_query = "SELECT vehicles_id FROM vehicles WHERE vehicles_plate = ?";
+    $check_plate_stmt = $dbconn->prepare($check_plate_query);
+    $check_plate_stmt->bind_param("s", $vehicle_plate);
+    $check_plate_stmt->execute();
+    $check_plate_result = $check_plate_stmt->get_result();
 
-    $stmt->bind_param(
-        "sssssss", 
-        $vehicle_id, 
-        $vehicle_type, 
-        $vehicle_model, 
-        $vehicle_plate, 
-        $vehicle_capacity, 
-        $driver_id, 
-        $vehicle_img
-    );
-
-    if ($stmt->execute()) {
-        $success_message = "Vehicle added successfully!";
+    if ($check_plate_result->num_rows > 0) {
+        $error_message = "This vehicle plate number already exists.";
     } else {
-        $error_message = "Error adding vehicle: " . $stmt->error;
+        // Insert the new vehicle into the database
+        $stmt = $dbconn->prepare("
+            INSERT INTO vehicles 
+            (vehicles_id, vehicles_type, vehicles_model, vehicles_plate, vehicles_capacity, driver_id, vehicles_img) 
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+        ");
+
+        $stmt->bind_param(
+            "sssssss", 
+            $vehicle_id, 
+            $vehicle_type, 
+            $vehicle_model, 
+            $vehicle_plate, 
+            $vehicle_capacity, 
+            $driver_id, 
+            $vehicle_img
+        );
+
+        if ($stmt->execute()) {
+            $success_message = "Vehicle added successfully!";
+        } else {
+            $error_message = "Error adding vehicle: " . $stmt->error;
+        }
+
+        $stmt->close();
     }
 
-    $stmt->close();
+    $check_plate_stmt->close();
 }
 ?>
 
