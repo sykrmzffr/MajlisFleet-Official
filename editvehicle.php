@@ -128,6 +128,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             border: 1px solid #ccc;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             z-index: 1000;
+            width: 30%;
+            text-align: center;
             border-radius: 10px;
         }
         #success-popup-message {
@@ -139,6 +141,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             background-color: #4070f4;
             color: #fff;
             border-radius: 5px;
+            width: 40%;
         }
         #success-popup button:hover {
             background-color:rgb(49, 70, 187);
@@ -236,8 +239,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <!-- Modal for success messages -->
     <div id="success-popup">
         <p id="success-popup-message"></p>
-        <button onclick="redirectTo('homepageadmin.php')">Go to Homepage</button>
         <button onclick="redirectTo('viewvehicles.php')">View Vehicles</button>
+        <button onclick="redirectTo('homepageadmin.php')">Go to Homepage</button>
     </div>
 </body>
 </html>

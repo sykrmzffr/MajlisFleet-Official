@@ -108,6 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             z-index: 1000;
             width: 30%;
             text-align: center;
+            border-radius: 10px;
         }
         .popup-message {
             margin-bottom: 20px;
