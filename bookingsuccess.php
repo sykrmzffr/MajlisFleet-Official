@@ -41,7 +41,9 @@ if (!isset($_SESSION['user_id'])) {
             border: 1px solid #ccc;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             z-index: 1000;
+            width: 30%;
             text-align: center;
+            border-radius: 10px;
         }
         #success-popup-message {
             margin-bottom: 20px;
