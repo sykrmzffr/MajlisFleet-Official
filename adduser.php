@@ -40,7 +40,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         // Hash the password
         $hashed_password = password_hash($user_password, PASSWORD_BCRYPT);
-        echo "Hashed Password: " . $hashed_password; // Debugging line
 
         // Insert user into the database
         $insert_query = "INSERT INTO user (user_id, user_password, user_type, user_fullname, user_unit) VALUES (?, ?, ?, ?, ?)";
