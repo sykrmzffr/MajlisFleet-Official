@@ -66,7 +66,7 @@ if (!$result) {
     </div>
     
     <main>
-        <a href="javascript:history.back()"><< Back to Previous Page</a>
+        <a href="homepageadmin.php"><< Back to Previous Page</a>
         <div class="view-container">
             <div class="view-btn">
                 <button onclick="window.location.href='addvehicle.php'">Add New Vehicle</button>

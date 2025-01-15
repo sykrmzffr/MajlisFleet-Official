@@ -54,7 +54,7 @@ if (!$result) {
     </div>
     
     <main>
-        <a href="javascript:history.back()"><< Back to Previous Page</a>
+        <a href="homepageadmin.php"><< Back to Previous Page</a>
         <div class="view-container">
             <div class="view-btn">
                 <a href="adduser.php">
