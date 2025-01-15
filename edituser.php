@@ -157,6 +157,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['confirm_delete'])) {
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             z-index: 1000;
             width: 30%;
+            border-radius: 10px;
         }
         .popup-message {
             margin-bottom: 20px;
