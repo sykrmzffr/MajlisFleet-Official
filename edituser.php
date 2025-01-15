@@ -133,6 +133,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['confirm_delete'])) {
             }
         }
 
+        function redirectTo(url) {
+            window.location.href = url;
+        }
+
         window.onload = function() {
             const successMessage = "<?php echo $success_message; ?>";
             const errorMessage = "<?php echo $error_message; ?>";
@@ -157,15 +161,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['confirm_delete'])) {
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             z-index: 1000;
             width: 30%;
-            border-radius: 10px;
+            text-align: center;
         }
         .popup-message {
             margin-bottom: 20px;
         }
         .popup button {
             padding: 10px;
+            margin: 5px;
+            background-color: #4070f4;
+            color: #fff;
             width: 40%;
-            background: #4070f4;
         }
         /* Background blur and disable styles */
         .modal-open {
@@ -236,8 +242,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['confirm_delete'])) {
                             </select>
                             <p><b>NEW PASSWORD</b></p>
                             <div style="position: relative;">
-                                <input type="password" id="user_password" name="user_password" placeholder="Enter new password if needs changing" style="width: calc(80% - 50px);">
-                                <button type="button" id="toggle_password" onclick="togglePasswordVisibility('user_password', 'toggle_password')" style="position: absolute; right: 5; top: 0; height: 100%; width: 20%; border: none; background: none; cursor: pointer; color: black;">Show Password</button>
+                                <input type="password" id="user_password" name="user_password" placeholder="Enter new password if needs changing" style="width: calc(100% - 50px);">
+                                <button type="button" id="toggle_password" onclick="togglePasswordVisibility('user_password', 'toggle_password')" style="position: absolute; right: 0; top: 0; height: 100%; border: none; background: none; cursor: pointer;">Show Password</button>
                             </div>
                         </div>
                     </div>
