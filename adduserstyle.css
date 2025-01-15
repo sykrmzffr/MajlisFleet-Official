@@ -74,36 +74,62 @@ main{
     justify-content: center;
     padding: 5%;
 }
-.view-container{
+.edit-container{
     display: flex;
     flex-direction: column;
     justify-content: center;
     text-align: center;
-    
     width: 60%;
 }
-.view-btn{
-    text-align: right;
-    padding: 10px;
-}
-.list-table{
+.edit-container .form-container{
     background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    padding: 10px;
     border-radius: 25px;
-    padding: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
-.list-table table{
-    margin-left: auto;
-    margin-right: auto;
+.edit-container .form-container .form-upper{
+    display: flex;
+    flex-direction: row;
+    
+}
+.edit-container .form-container .form-upper .upper-left{
+    width: 50%;
+    text-align: left;
+}
+.edit-container .form-container .form-upper .upper-left input{
     width: 90%;
     text-align: left;
-    border-collapse: collapse;
 }
-#row-first{
-    background-color: #4070f4;
-    color: #fff;
+.edit-container .form-container .form-upper .upper-right{
+    width: 50%;
+    text-align: left;
 }
-.list-table button{
+.edit-container .form-container .form-lower{
+    text-align: left;
+}
+.edit-container .form-container .form-lower input{
+    width: 90%;
+}
+.button-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 10px;
     width: 100%;
 }
-
-
+button{
+    height: 50px;
+    width: 30%;
+    color: #fff;
+    border-radius: 10px;
+    margin: auto;
+    background-color: #4070f4;
+}
+button:hover{
+    background-color: #2e5fe6;
+    cursor: pointer;
+}

@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Users</title>
-    <link rel="stylesheet" href="edituserstyle.css">
+    <link rel="stylesheet" href="adduserstyle.css">
     <script>
         function showPopup(message, isSuccess) {
             const popup = document.getElementById(isSuccess ? 'success-popup' : 'error-popup');
@@ -106,6 +106,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             border: 1px solid #ccc;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             z-index: 1000;
+            width: 30%;
+            text-align: center;
         }
         .popup-message {
             margin-bottom: 20px;
@@ -113,6 +115,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .popup button {
             padding: 10px;
             margin: 5px;
+            background-color: #4070f4;
+            color: #fff;
+            width: 40%;
         }
         /* Background blur and disable styles */
         .modal-open {
