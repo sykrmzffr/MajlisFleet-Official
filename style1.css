@@ -58,7 +58,7 @@ form{
 .login-container-input{
     margin: 10px;
     width: 100%;
-    
+    text-align: center;
 }
 .login-container-input input{
     padding: 5px;
@@ -70,6 +70,14 @@ form{
     display: block;
     margin : 0 auto;
     text-align: center;
+}
+#toggle-password{
+    position: relative;
+    display: inline-block;
+    margin-top: 10px;
+    border: none; 
+    background: none; 
+    cursor: pointer;
 }
 .login-container-submit button{
     width: 70%;

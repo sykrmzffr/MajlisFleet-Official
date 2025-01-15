@@ -22,6 +22,18 @@
             body.classList.remove('modal-open');
         }
 
+        function togglePasswordVisibility(id, buttonId) {
+            const passwordInput = document.getElementById(id);
+            const toggleButton = document.getElementById(buttonId);
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleButton.textContent = 'Hide Password';
+            } else {
+                passwordInput.type = 'password';
+                toggleButton.textContent = 'Show Password';
+            }
+        }
+
         window.onload = function() {
             const errorMessage = "<?php echo isset($_GET['error']) ? htmlspecialchars($_GET['error']) : ''; ?>";
             if (errorMessage) {
@@ -79,8 +91,9 @@
                             <div class="login-container-input">
                                 <input type="text" name="user_id" placeholder="User ID" required autofocus>
                             </div>
-                            <div class="login-container-input">
-                                <input type="password" name="password" placeholder="Password" required>
+                            <div class="login-container-input" style="position: relative;">
+                                <input type="password" id="password" name="password" placeholder="Password" required>
+                                <button type="button" id="toggle-password" class="password-toggle" onclick="togglePasswordVisibility('password', 'toggle-password')">Show Password</button>
                             </div>
                         </div>
                         <div class="login-container-submit">
