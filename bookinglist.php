@@ -43,8 +43,9 @@ if ($result && mysqli_num_rows($result) > 0) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Booking Layout</title>
+    <title>Vehicles List</title>
     <link rel="stylesheet" href="bookingliststyle.css">
+    <link rel="icon" href="image/logo.png" type="image/x-icon">
 </head>
 <body>
     <div class="container">
@@ -64,6 +65,7 @@ if ($result && mysqli_num_rows($result) > 0) {
         </div>
         
         <main>
+        <a href="homepage.php"><< Back to Previous Page</a>
             <div class="welcome-text">
                 TEST
             </div>

@@ -39,8 +39,9 @@ if (isset($_GET['vehicle_id']) && !empty($_GET['vehicle_id'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Booking Layout</title>
+    <title>Booking</title>
     <link rel="stylesheet" href="bookingstyle.css">
+    <link rel="icon" href="image/logo.png" type="image/x-icon">
     <script>
         function validateBookingForm() {
             const bookingDateStart = new Date(document.querySelector('input[name="booking_datestart"]').value);

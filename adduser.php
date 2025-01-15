@@ -62,6 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Users</title>
     <link rel="stylesheet" href="adduserstyle.css">
+    <link rel="icon" href="image/logo.png" type="image/x-icon">
     <script>
         function showPopup(message, isSuccess) {
             const popup = document.getElementById(isSuccess ? 'success-popup' : 'error-popup');

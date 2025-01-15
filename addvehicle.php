@@ -88,6 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Vehicle</title>
     <link rel="stylesheet" href="addvehiclestyle.css">
+    <link rel="icon" href="image/logo.png" type="image/x-icon">
     <style>
         .popup {
             display: none;

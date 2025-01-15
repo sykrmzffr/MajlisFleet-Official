@@ -46,8 +46,9 @@ if (!$result) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View Vehicles</title>
+    <title>Vehicles List</title>
     <link rel="stylesheet" href="viewvehiclestyle.css">
+    <link rel="icon" href="image/logo.png" type="image/x-icon">
 </head>
 <body>
     <div class="navbar">

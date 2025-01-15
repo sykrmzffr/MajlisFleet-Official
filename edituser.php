@@ -89,6 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['confirm_delete'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit User</title>
     <link rel="stylesheet" href="edituserstyle.css">
+    <link rel="icon" href="image/logo.png" type="image/x-icon">
     <script>
         function showPopup(message, isSuccess) {
             const popup = document.getElementById(isSuccess ? 'success-popup' : 'error-popup');

@@ -57,8 +57,9 @@ $result = $stmt->get_result();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View Booking History</title>
+    <title>Booking History</title>
     <link rel="stylesheet" href="bookinghistoryuserstyle.css">
+    <link rel="icon" href="image/logo.png" type="image/x-icon">
 </head>
 <body>
     <div class="navbar">
