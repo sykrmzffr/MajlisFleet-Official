@@ -1,3 +1,14 @@
+<?php
+session_start();
+
+// Check if the user is already logged in
+if (isset($_SESSION['user_id'])) {
+    // Determine the appropriate homepage link based on user type
+    $homepage_link = ($_SESSION['user_type'] === 'admin') ? 'homepageadmin.php' : 'homepage.php';
+    header("Location: $homepage_link");
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
