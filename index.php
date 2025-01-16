@@ -16,6 +16,7 @@ if (isset($_SESSION['user_id'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet" href="style1.css">
+    <link rel="icon" href="image/logo.png" type="image/x-icon">
     <script>
         function showPopup(message) {
             const popup = document.getElementById('error-popup');
