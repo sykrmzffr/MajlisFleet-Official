@@ -12,6 +12,12 @@ include('dbconn.php');
 $user_id = $_SESSION['user_id'];
 $user_type = $_SESSION['user_type']; // Get user type from session
 
+if ($user_type == 'admin') {
+    // Redirect to homepage if user is not an admin
+    header("Location: homepageadmin.php");
+    exit();
+}
+
 // User profile container
 // Fetch user information from the database
 $sql = "SELECT * FROM user WHERE user_id = '$user_id'";

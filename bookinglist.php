@@ -9,6 +9,15 @@ if (!isset($_SESSION['user_id'])) {
 
 include('dbconn.php');
 
+$user_id = $_SESSION['user_id'];
+$user_type = $_SESSION['user_type']; // Get user type from session
+
+if ($user_type == 'admin') {
+    // Redirect to homepage if user is not an admin
+    header("Location: homepageadmin.php");
+    exit();
+}
+
 // Fetch all vehicles along with the driver's full name
 $sql = "
     SELECT vehicles.*, driver.driver_fullname 

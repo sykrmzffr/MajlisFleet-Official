@@ -9,6 +9,15 @@ if (!isset($_SESSION['user_id'])) {
 
 include('dbconn.php');
 
+$user_id = $_SESSION['user_id'];
+$user_type = $_SESSION['user_type']; // Get user type from session
+
+if ($user_type == 'admin') {
+    // Redirect to homepage if user is not an admin
+    header("Location: homepageadmin.php");
+    exit();
+}
+
 // Get the vehicle ID from the query string
 if (isset($_GET['vehicle_id']) && !empty($_GET['vehicle_id'])) {
     $vehicle_id = $_GET['vehicle_id'];

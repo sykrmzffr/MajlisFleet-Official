@@ -9,6 +9,15 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'user') {
 
 include('dbconn.php');
 
+$user_id = $_SESSION['user_id'];
+$user_type = $_SESSION['user_type']; // Get user type from session
+
+if ($user_type == 'admin') {
+    // Redirect to homepage if user is not an admin
+    header("Location: homepageadmin.php");
+    exit();
+}
+
 // Fetch booking details based on booking ID from the query string
 if (isset($_GET['booking_id'])) {
     $booking_id = $_GET['booking_id'];
