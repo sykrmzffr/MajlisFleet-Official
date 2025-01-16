@@ -45,6 +45,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $vehicle_img = $_POST['vehicle_img'];
         $driver_id = $_POST['vehicle_driver'];
 
+        if (empty($vehicle_img)) {
+            $vehicle_img = "https://i.ibb.co/xHMKJR8/noimageavailable.jpg";
+        }
+
         $update_sql = "UPDATE vehicles SET vehicles_type = ?, vehicles_model = ?, vehicles_plate = ?, 
                        vehicles_capacity = ?, vehicles_img = ?, driver_id = ? WHERE vehicles_id = ?";
         $update_stmt = $dbconn->prepare($update_sql);
@@ -221,7 +225,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         </div>
                     </div>
                     <div class="lower-half">
-                        <p><b>Image Link (Optional)</b></p>
+                        <p><b>Image Link (Leave empty if unavailable)</b></p>
                         <input type="text" name="vehicle_img" id="img-link" value="<?php echo htmlspecialchars($vehicle['vehicles_img']); ?>">
                     </div>
                     <div class="button-container">
