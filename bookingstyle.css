@@ -83,6 +83,7 @@ main{
     align-items: center;
     justify-content: center;
     gap: 20px;
+    padding-top: 20px;
 }
 .vehicle-details-container{
     display: flex;
@@ -90,7 +91,7 @@ main{
     align-items: center;
     justify-content: center;
     width: 100%;
-    height: auto;
+    height: 720px;
     border-radius: 50px;
     background-color: white;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -121,10 +122,11 @@ main{
     align-items: center;
     justify-content: center;
     width: 100%;
-    height: auto;
+    height: 720px;
     border-radius: 50px;
     background-color: white;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding-top: 20px;
 }
 .booking-form-container button{
     background-color: #4070f4;
