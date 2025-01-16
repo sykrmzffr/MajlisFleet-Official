@@ -76,7 +76,7 @@ if ($result && mysqli_num_rows($result) > 0) {
         <main>
         <a href="homepage.php"><< Back to Previous Page</a>
             <div class="welcome-text">
-                TEST
+                <h1>Choose Any Vehicles to Start Booking</h1>
             </div>
 
             <section class="list-cars">

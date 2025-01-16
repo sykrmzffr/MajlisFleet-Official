@@ -78,15 +78,9 @@ main{
     padding: 5%;
 }
 .welcome-text{
-    background: grey;
-    height: 15rem;
-    width: 90%;
-    max-width: 25rem;
-    margin-top: 2rem;
-    border-radius: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    margin-top: 30px;
+    text-align: center;
+    color: hsla(216, 50%, 27%, 0.861);
 }
 .list-cars{
     display: flex;
@@ -103,7 +97,7 @@ main{
     align-items: center;
     justify-content: center;
     width: 200px;
-    height: 250px ;
+    height: 280px ;
     background: #fff;
     padding: 1.5rem;
     flex-shrink: 0;
@@ -135,7 +129,7 @@ main{
 }
 
 .card img{
-    width: 90%;
+    height: 150px;
 }
 .list-vans{
     display: flex;
