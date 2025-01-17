@@ -186,7 +186,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <p><b>USER FULLNAME</b></p>
                             <input type="text" name="user_fullname" placeholder="User Fullname" required>
                             <p><b>USER UNIT</b></p>
-                            <select name="user_unit" id="user-unit" required>
+                            <select name="user_unit" id="user-unit" style="width: 80%;" required>
                                 <option value="default">CLICK TO SELECT</option>
                                 <option value="JABATAN KEJURUTERAAN DAN KAWALAN BANGUNAN">JABATAN KEJURUTERAAN DAN KAWALAN BANGUNAN</option>
                                 <option value="JABATAN PERBENDAHARAAN">JABATAN PERBENDAHARAAN</option>

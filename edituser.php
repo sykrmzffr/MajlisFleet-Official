@@ -228,7 +228,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['confirm_delete'])) {
                             <p><b>USER FULLNAME</b></p>
                             <input type="text" name="user_fullname" value="<?php echo htmlspecialchars($user['user_fullname']); ?>">
                             <p><b>USER UNIT</b></p>
-                            <select name="user_unit" id="user-unit">
+                            <select name="user_unit" id="user-unit" style="width: 80%;">
                                 <option value="JABATAN KEJURUTERAAN DAN KAWALAN BANGUNAN" <?php echo $user['user_unit'] === 'JABATAN KEJURUTERAAN DAN KAWALAN BANGUNAN' ? 'selected' : ''; ?>>JABATAN KEJURUTERAAN DAN KAWALAN BANGUNAN</option>
                                 <option value="JABATAN PERBENDAHARAAN" <?php echo $user['user_unit'] === 'JABATAN PERBENDAHARAAN' ? 'selected' : ''; ?>>JABATAN PERBENDAHARAAN</option>
                                 <option value="JABATAN PENILAIAN DAN PENGURUSAN HARTA" <?php echo $user['user_unit'] === 'JABATAN PENILAIAN DAN PENGURUSAN HARTA' ? 'selected' : ''; ?>>JABATAN PENILAIAN DAN PENGURUSAN HARTA</option>
