@@ -5,13 +5,16 @@
 body{
     margin: 0;
     background-color: #e7f2fd;
-    padding-top: 60px; 
+    height: 100vh;   
 }
 .login{
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    height: 100%;
+    padding-bottom: 110px; 
+    padding-top: 110px;
 }
 
 .login-container{
@@ -23,7 +26,6 @@ body{
     justify-content: center;
     align-items: center;
     border-radius: 20px;
-    margin-top: 50px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     overflow: hidden;
 }
