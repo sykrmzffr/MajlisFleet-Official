@@ -210,7 +210,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <input type="text" name="vehicle_plate" value="<?php echo htmlspecialchars($vehicle['vehicles_plate']); ?>" required>
                             <br>
                             <p><b>Choose Driver</b></p>
-                            <select name="vehicle_driver" id="vehicle-driver">
+                            <select name="vehicle_driver" id="vehicle-driver" style="width: 80%;">
                                 <?php
                                 $driver_sql = "SELECT driver_id, driver_fullname FROM driver";
                                 $driver_result = mysqli_query($dbconn, $driver_sql);

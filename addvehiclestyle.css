@@ -57,6 +57,11 @@ a:visited{
     margin: 10px;
 }
 
+#blur-background {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
 
 footer{
     position: relative; /* Remove absolute or fixed positioning */

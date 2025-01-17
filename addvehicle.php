@@ -177,6 +177,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
         
         <main>
+        <a href="javascript:history.back()"><< Back to Previous Page</a>
             <div class="edit-container">
                 <form method="POST">
                     <div class="form-container">
@@ -207,7 +208,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <input type="text" name="vehicle_plate" required>
                                 <br>
                                 <p><b>Choose Driver</b></p>
-                                <select name="vehicle_driver" id="vehicle-driver">
+                                <select name="vehicle_driver" id="vehicle-driver" style="width: 80%;">
                                     <?php
                                     $driver_query = "SELECT driver_id, driver_fullname FROM driver";
                                     $driver_result = $dbconn->query($driver_query);
