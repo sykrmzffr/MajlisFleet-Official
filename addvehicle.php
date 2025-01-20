@@ -235,7 +235,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
     <footer>
-        <p>Footer Content</p>
+        <p>Copyright © 2025 Majlis Daerah Raub. All rights reserved.</p>
     </footer>
 
     <!-- Popup modals outside blur-background -->

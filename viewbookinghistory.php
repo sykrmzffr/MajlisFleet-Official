@@ -146,7 +146,7 @@ if (!$result) {
     </main>
     
     <footer>
-        <p>Footer Content</p>
+        <p>Copyright © 2025 Majlis Daerah Raub. All rights reserved.</p>
     </footer>
 </body>
 </html>

@@ -192,7 +192,7 @@ if (isset($_GET['vehicle_id']) && !empty($_GET['vehicle_id'])) {
         </div>
         
         <footer>
-            <p>Footer Content</p>
+            <p>Copyright © 2025 Majlis Daerah Raub. All rights reserved.</p>
         </footer>
     
 </body>

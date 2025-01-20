@@ -259,7 +259,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </main>
     
         <footer>
-            <p>Footer Content</p>
+            <p>Copyright © 2025 Majlis Daerah Raub. All rights reserved.</p>
         </footer>
     </div>
 

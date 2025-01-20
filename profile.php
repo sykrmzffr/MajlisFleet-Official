@@ -150,7 +150,7 @@ $homepage_link = ($user_type === 'admin') ? 'homepageadmin.php' : 'homepage.php'
         </main>
 
         <footer>
-            <p>Footer Content</p>
+            <p>Copyright © 2025 Majlis Daerah Raub. All rights reserved.</p>
         </footer>
     </div>
 </body>
