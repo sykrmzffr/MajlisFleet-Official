@@ -18,6 +18,77 @@ if ($user_type == 'admin') {
     exit();
 }
 
+// Initialize message variables
+$success_message = "";
+$error_message = "";
+
+// Handle form submission
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if (isset($_POST['submit'])) {
+        $vehicles_id = $_POST['vehicles_id']; // Vehicle ID from the hidden input
+        $booking_datestart = $_POST['booking_datestart'];
+        $booking_dateend = $_POST['booking_dateend'];
+        $booking_timestart = $_POST['booking_timestart'];
+        $booking_timeend = $_POST['booking_timeend'];
+        $booking_destination = mysqli_real_escape_string($dbconn, $_POST['booking_destination']);
+        $booking_purpose = mysqli_real_escape_string($dbconn, $_POST['booking_purpose']);
+
+        // Combine date and time for comparison
+        $start_datetime = $booking_datestart . ' ' . $booking_timestart;
+        $end_datetime = $booking_dateend . ' ' . $booking_timeend;
+        $current_datetime = date('Y-m-d H:i:s');
+
+        // Ensure start date and time are not later than end date and time
+        if (strtotime($start_datetime) >= strtotime($end_datetime)) {
+            $error_message = "Start date and time must be earlier than end date and time.";
+        } elseif (strtotime($start_datetime) < strtotime($current_datetime)) {
+            $error_message = "Start date and time must be later than current date and time.";
+        } else {
+            // Check for booking clashes
+            $clash_sql = "SELECT * FROM booking WHERE vehicles_id = ? AND 
+                          ((? BETWEEN CONCAT(booking_datestart, ' ', booking_timestart) AND CONCAT(booking_dateend, ' ', booking_timeend)) OR 
+                           (? BETWEEN CONCAT(booking_datestart, ' ', booking_timestart) AND CONCAT(booking_dateend, ' ', booking_timeend)) OR 
+                           (CONCAT(booking_datestart, ' ', booking_timestart) BETWEEN ? AND ?) OR 
+                           (CONCAT(booking_dateend, ' ', booking_timeend) BETWEEN ? AND ?))";
+
+            $stmt = $dbconn->prepare($clash_sql);
+            $stmt->bind_param("sssssss", $vehicles_id, $start_datetime, $end_datetime, $start_datetime, $end_datetime, $start_datetime, $end_datetime);
+            $stmt->execute();
+            $clash_result = $stmt->get_result();
+
+            if ($clash_result && $clash_result->num_rows > 0) {
+                $error_message = "Booking time clashes with an existing booking.";
+            } else {
+                // Booking status is set to 'pending'
+                $booking_status = 'Pending';
+
+                // Generate new booking_id
+                $result = mysqli_query($dbconn, "SELECT booking_id FROM booking ORDER BY booking_id DESC LIMIT 1");
+                if ($result && mysqli_num_rows($result) > 0) {
+                    $last_id = mysqli_fetch_assoc($result)['booking_id'];
+                    // Extract the numeric part and increment it
+                    $numeric_part = (int) substr($last_id, 2);
+                    $new_numeric_part = str_pad($numeric_part + 1, 7, '0', STR_PAD_LEFT);
+                    $booking_id = "BK$new_numeric_part";
+                } else {
+                    // If no records exist, start with the first ID
+                    $booking_id = "BK0000001";
+                }
+
+                // Insert data into the `booking` table
+                $sql = "INSERT INTO booking (booking_id, user_id, vehicles_id, booking_datestart, booking_dateend, booking_timestart, booking_timeend, booking_destination, booking_purpose, booking_status) 
+                        VALUES ('$booking_id', '$user_id', '$vehicles_id', '$booking_datestart', '$booking_dateend', '$booking_timestart', '$booking_timeend', '$booking_destination', '$booking_purpose', '$booking_status')";
+
+                if (mysqli_query($dbconn, $sql)) {
+                    $success_message = "Booking submitted successfully.";
+                } else {
+                    $error_message = "Error: " . mysqli_error($dbconn);
+                }
+            }
+        }
+    }
+}
+
 // Get the vehicle ID from the query string
 if (isset($_GET['vehicle_id']) && !empty($_GET['vehicle_id'])) {
     $vehicle_id = $_GET['vehicle_id'];
@@ -63,45 +134,56 @@ if (isset($_GET['vehicle_id']) && !empty($_GET['vehicle_id'])) {
             const currentDateTime = new Date();
 
             if (startDateTime >= endDateTime) {
-                showPopup('Start date and time must be earlier than end date and time.');
+                showPopup('Start date and time must be earlier than end date and time.', false);
                 return false;
             }
 
             if (startDateTime < currentDateTime) {
-                showPopup('Start date and time must be later than current date and time.');
+                showPopup('Start date and time must be later than current date and time.', false);
                 return false;
             }
 
             return true;
         }
 
-        // Check if there is an error message from PHP
+        // Check if there is a message from PHP
         window.onload = function() {
-            const phpError = "<?php echo isset($_GET['error']) ? htmlspecialchars($_GET['error']) : ''; ?>";
-            if (phpError) {
-                showPopup(phpError);
+            const successMessage = "<?php echo $success_message; ?>";
+            const errorMessage = "<?php echo $error_message; ?>";
+            if (successMessage) {
+                showPopup(successMessage, true);
+            } else if (errorMessage) {
+                showPopup(errorMessage, false);
             }
         };
 
-        function showPopup(message) {
-            const popup = document.getElementById('popup');
-            const popupMessage = document.getElementById('popup-message');
+        function showPopup(message, isSuccess) {
+            const popup = document.getElementById(isSuccess ? 'success-popup' : 'error-popup');
+            const popupMessage = document.getElementById(isSuccess ? 'success-popup-message' : 'error-popup-message');
             const overlay = document.getElementById('overlay');
+            const body = document.body;
             popupMessage.textContent = message;
             popup.style.display = 'block';
             overlay.style.display = 'block';
+            body.classList.add('modal-open');
         }
 
-        function closePopup() {
-            const popup = document.getElementById('popup');
+        function closePopup(popupId) {
+            const popup = document.getElementById(popupId);
             const overlay = document.getElementById('overlay');
+            const body = document.body;
             popup.style.display = 'none';
             overlay.style.display = 'none';
+            body.classList.remove('modal-open');
+        }
+
+        function redirectTo(url) {
+            window.location.href = url;
         }
     </script>
     <style>
         /* Modal styles */
-        #popup {
+        .popup {
             display: none;
             position: fixed;
             left: 50%;
@@ -116,10 +198,10 @@ if (isset($_GET['vehicle_id']) && !empty($_GET['vehicle_id'])) {
             text-align: center;
             border-radius: 10px;
         }
-        #popup-message {
+        .popup-message {
             margin-bottom: 20px;
         }
-        #popup button {
+        .popup button {
             padding: 10px;
             margin: 5px;
             background-color: #4070f4;
@@ -127,7 +209,7 @@ if (isset($_GET['vehicle_id']) && !empty($_GET['vehicle_id'])) {
             width: 40%;
             border-radius: 10px;
         }
-        #popup button:hover {
+        .popup button:hover {
             background-color: rgb(49, 70, 187);
             cursor: pointer;
         }
@@ -143,6 +225,15 @@ if (isset($_GET['vehicle_id']) && !empty($_GET['vehicle_id'])) {
             background-color: rgba(0, 0, 0, 0.5);
             z-index: 1000;
             backdrop-filter: blur(5px);
+        }
+
+        /* Background blur and disable styles */
+        .modal-open {
+            overflow: hidden;
+        }
+        .modal-open #blur-background {
+            filter: blur(5px);
+            pointer-events: none;
         }
     </style>
 </head>
@@ -181,7 +272,7 @@ if (isset($_GET['vehicle_id']) && !empty($_GET['vehicle_id'])) {
             </div>
 
             <div class="booking-form-container">
-                <form action="bookingprocess.php" method="POST" onsubmit="return validateBookingForm()">
+                <form action="" method="POST" onsubmit="return validateBookingForm()">
                     <h2><b>Booking Details</b></h2>
                     <p>Date Start</p>
                     <input type="date" name="booking_datestart" required>
@@ -196,16 +287,23 @@ if (isset($_GET['vehicle_id']) && !empty($_GET['vehicle_id'])) {
                     <p>Purpose</p>
                     <input type="text" name="booking_purpose" required style="height: 50px;">
                     <input type="hidden" name="vehicles_id" value="<?php echo htmlspecialchars($vehicle['vehicles_id']); ?>"> <!-- Hidden vehicle ID -->
-                    <button type="submit">SUBMIT</button>
+                    <button type="submit" name="submit">SUBMIT</button>
                 </form>
             </div>
         </div>
     </main>
 
+    <!-- Modal for success messages -->
+    <div id="success-popup" class="popup">
+        <p id="success-popup-message" class="popup-message"></p>
+        <button onclick="redirectTo('bookinghistoryuser.php')">View Booking History</button>
+        <button onclick="redirectTo('homepage.php')">Back to Homepage</button>
+    </div>
+
     <!-- Modal for error messages -->
-    <div id="popup">
-        <p id="popup-message"></p>
-        <button onclick="closePopup()">Try Again</button>
+    <div id="error-popup" class="popup">
+        <p id="error-popup-message" class="popup-message"></p>
+        <button onclick="closePopup('error-popup')" style="background: #f44336">Try Again</button>
     </div>
     
     <footer>
