@@ -80,7 +80,7 @@ if ($result && mysqli_num_rows($result) > 0) {
             </div>
 
             <section class="list-cars">
-                <p>Kereta</p>
+                <p>Cars</p>
                 <div class="card-cars">
                     <?php foreach ($kereta as $car): ?>
                     <div class="card">
