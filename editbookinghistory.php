@@ -107,7 +107,39 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link rel="stylesheet" href="editbookinghistorystyle.css">
     <link rel="icon" href="image/logo.png" type="image/x-icon">
     <script>
-        function showPopup(message) {
+        function validateBookingForm() {
+            const bookingDateStart = new Date(document.querySelector('input[name="booking_datestart"]').value);
+            const bookingTimeStart = document.querySelector('input[name="booking_timestart"]').value;
+            const bookingDateEnd = new Date(document.querySelector('input[name="booking_dateend"]').value);
+            const bookingTimeEnd = document.querySelector('input[name="booking_timeend"]').value;
+
+            const startDateTime = new Date(`${bookingDateStart.toISOString().slice(0, 10)}T${bookingTimeStart}`);
+            const endDateTime = new Date(`${bookingDateEnd.toISOString().slice(0, 10)}T${bookingTimeEnd}`);
+            const currentDateTime = new Date();
+
+            if (startDateTime >= endDateTime) {
+                showErrorPopup('Start date and time must be earlier than end date and time.');
+                return false;
+            }
+
+            if (startDateTime < currentDateTime) {
+                showErrorPopup('Start date and time must be later than current date and time.');
+                return false;
+            }
+
+            return true;
+        }
+
+        function showErrorPopup(message) {
+            const popup = document.getElementById('error-popup');
+            const popupMessage = document.getElementById('error-popup-message');
+            const body = document.body;
+            popupMessage.textContent = message;
+            popup.style.display = 'block';
+            body.classList.add('modal-open');
+        }
+
+        function showSuccessPopup(message) {
             const popup = document.getElementById('success-popup');
             const popupMessage = document.getElementById('success-popup-message');
             const body = document.body;
@@ -116,8 +148,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             body.classList.add('modal-open');
         }
 
-        function closePopup() {
-            const popup = document.getElementById('success-popup');
+        function closePopup(popupId) {
+            const popup = document.getElementById(popupId);
             const body = document.body;
             popup.style.display = 'none';
             body.classList.remove('modal-open');
@@ -130,13 +162,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         window.onload = function() {
             const successMessage = "<?php echo $success_message; ?>";
             if (successMessage) {
-                showPopup(successMessage);
+                showSuccessPopup(successMessage);
             }
         };
     </script>
     <style>
         /* Modal styles */
-        #success-popup {
+        #success-popup, #error-popup {
             display: none;
             position: fixed;
             left: 50%;
@@ -147,17 +179,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             border: 1px solid #ccc;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             z-index: 1000;
+            width: 30%;
+            text-align: center;
+            border-radius: 10px;
         }
-        #success-popup-message {
+        #success-popup-message, #error-popup-message {
             margin-bottom: 20px;
         }
-        #success-popup button {
+        #success-popup button, #error-popup button {
             padding: 10px;
             margin: 5px;
+            background-color: #4070f4;
+            color: #fff;
+            width: 40%;
         }
-        #success-popup button:hover {
+        #error-popup button {
+            background-color: #f44336; /* Red background for the error popup button */
+        }
+        #success-popup button:hover, #error-popup button:hover {
             background-color: rgb(49, 70, 187);
             cursor: pointer;
+        }
+        #error-popup button:hover {
+            background-color: #d32f2f; /* Darker red on hover */
         }
         /* Background blur and disable styles */
         .modal-open {
@@ -189,7 +233,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <main>
             <a href="javascript:history.back()"><< Back to Previous Page</a>
             <div class="edit-container">
-                <form action="" method="POST" class="form-container">
+                <form action="" method="POST" class="form-container" onsubmit="return validateBookingForm()">
                     <p><b>Booking ID</b></p>
                     <input type="text" value="<?php echo htmlspecialchars($booking['booking_id']); ?>" disabled>
                     <br>
@@ -245,6 +289,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <p id="success-popup-message"></p>
         <button onclick="redirectTo('homepageadmin.php')">Go to Homepage</button>
         <button onclick="redirectTo('viewbookinghistory.php')">View Booking History</button>
+    </div>
+
+    <!-- Modal for error messages -->
+    <div id="error-popup">
+        <p id="error-popup-message"></p>
+        <button onclick="closePopup('error-popup')">Try Again</button>
     </div>
 </body>
 </html>
