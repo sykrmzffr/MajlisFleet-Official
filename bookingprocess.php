@@ -41,10 +41,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Check for booking clashes
     $clash_sql = "SELECT * FROM booking WHERE vehicles_id = ? AND 
-                  ((? BETWEEN booking_datestart AND booking_dateend) OR 
-                   (? BETWEEN booking_datestart AND booking_dateend) OR 
-                   (booking_datestart BETWEEN ? AND ?) OR 
-                   (booking_dateend BETWEEN ? AND ?))";
+                  ((? BETWEEN CONCAT(booking_datestart, ' ', booking_timestart) AND CONCAT(booking_dateend, ' ', booking_timeend)) OR 
+                   (? BETWEEN CONCAT(booking_datestart, ' ', booking_timestart) AND CONCAT(booking_dateend, ' ', booking_timeend)) OR 
+                   (CONCAT(booking_datestart, ' ', booking_timestart) BETWEEN ? AND ?) OR 
+                   (CONCAT(booking_dateend, ' ', booking_timeend) BETWEEN ? AND ?))";
 
     $stmt = $dbconn->prepare($clash_sql);
     $stmt->bind_param("sssssss", $vehicles_id, $start_datetime, $end_datetime, $start_datetime, $end_datetime, $start_datetime, $end_datetime);

@@ -75,18 +75,6 @@ if (isset($_GET['vehicle_id']) && !empty($_GET['vehicle_id'])) {
             return true;
         }
 
-        function showPopup(message) {
-            const popup = document.getElementById('popup');
-            const popupMessage = document.getElementById('popup-message');
-            popupMessage.textContent = message;
-            popup.style.display = 'block';
-        }
-
-        function closePopup() {
-            const popup = document.getElementById('popup');
-            popup.style.display = 'none';
-        }
-
         // Check if there is an error message from PHP
         window.onload = function() {
             const phpError = "<?php echo isset($_GET['error']) ? htmlspecialchars($_GET['error']) : ''; ?>";
@@ -94,6 +82,22 @@ if (isset($_GET['vehicle_id']) && !empty($_GET['vehicle_id'])) {
                 showPopup(phpError);
             }
         };
+
+        function showPopup(message) {
+            const popup = document.getElementById('popup');
+            const popupMessage = document.getElementById('popup-message');
+            const overlay = document.getElementById('overlay');
+            popupMessage.textContent = message;
+            popup.style.display = 'block';
+            overlay.style.display = 'block';
+        }
+
+        function closePopup() {
+            const popup = document.getElementById('popup');
+            const overlay = document.getElementById('overlay');
+            popup.style.display = 'none';
+            overlay.style.display = 'none';
+        }
     </script>
     <style>
         /* Modal styles */
@@ -107,7 +111,7 @@ if (isset($_GET['vehicle_id']) && !empty($_GET['vehicle_id'])) {
             background-color: white;
             border: 1px solid #ccc;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
+            z-index: 1001;
             width: 30%;
             text-align: center;
             border-radius: 10px;
@@ -121,17 +125,31 @@ if (isset($_GET['vehicle_id']) && !empty($_GET['vehicle_id'])) {
             background-color: #4070f4;
             color: #fff;
             width: 40%;
+            border-radius: 10px;
         }
         #popup button:hover {
             background-color: rgb(49, 70, 187);
             cursor: pointer;
         }
+
+        /* Overlay styles */
+        #overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
     </style>
 </head>
 <body>
-    
-        <div class="navbar">
-            <div class="nav-items">
+    <div id="overlay"></div>
+    <div class="navbar">
+        <div class="nav-items">
             <div class="nav-logo">
                 <img src="image/logo.png" alt="">
                 <a href="homepage.php">MajlisFleet</a>
@@ -143,27 +161,26 @@ if (isset($_GET['vehicle_id']) && !empty($_GET['vehicle_id'])) {
                 </ul>
             </div>
         </div>
-        </div>
-        
-        <main>
-            <a href="javascript:history.back()"><< Back to Previous Page</a>
-            <div class="booking-container">
-
-                <div class="vehicle-details-container">
-                    <div class="img-vehicle">
-                        <img src="<?php echo $vehicle['vehicles_img']; ?>" alt="Vehicle Image">
-                        <p><?php echo strtoupper($vehicle['vehicles_model']); ?></p> <!-- VEHICLES MODEL -->
-                        <p><?php echo strtoupper($vehicle['vehicles_plate']); ?></p> <!-- VEHICLES PLATE -->
-                        <p>Capacity: <?php echo strtoupper($vehicle['vehicles_capacity']); ?></p> <!-- PASSENGERS CAPACITY -->
-                    </div>
-                    <div class="img-driver">
-                        <h4><b>DRIVER DETAILS</b></h4>
-                        <img src="image/dp.jpg" alt="Driver Image">
-                        <p><?php echo strtoupper($vehicle['driver_fullname']); ?></p>
-                    </div>
+    </div>
+    
+    <main>
+        <a href="bookinglist.php"><< Back to Previous Page</a>
+        <div class="booking-container">
+            <div class="vehicle-details-container">
+                <div class="img-vehicle">
+                    <img src="<?php echo $vehicle['vehicles_img']; ?>" alt="Vehicle Image">
+                    <p><?php echo strtoupper($vehicle['vehicles_model']); ?></p> <!-- VEHICLES MODEL -->
+                    <p><?php echo strtoupper($vehicle['vehicles_plate']); ?></p> <!-- VEHICLES PLATE -->
+                    <p>Capacity: <?php echo strtoupper($vehicle['vehicles_capacity']); ?></p> <!-- PASSENGERS CAPACITY -->
                 </div>
+                <div class="img-driver">
+                    <h4><b>DRIVER DETAILS</b></h4>
+                    <img src="image/dp.jpg" alt="Driver Image">
+                    <p><?php echo strtoupper($vehicle['driver_fullname']); ?></p>
+                </div>
+            </div>
 
-                <div class="booking-form-container">
+            <div class="booking-form-container">
                 <form action="bookingprocess.php" method="POST" onsubmit="return validateBookingForm()">
                     <h2><b>Booking Details</b></h2>
                     <p>Date Start</p>
@@ -181,19 +198,18 @@ if (isset($_GET['vehicle_id']) && !empty($_GET['vehicle_id'])) {
                     <input type="hidden" name="vehicles_id" value="<?php echo htmlspecialchars($vehicle['vehicles_id']); ?>"> <!-- Hidden vehicle ID -->
                     <button type="submit">SUBMIT</button>
                 </form>
-                </div>
             </div>
-        </main>
-
-        <!-- Modal for error messages -->
-        <div id="popup">
-            <p id="popup-message"></p>
-            <button onclick="closePopup()">Close</button>
         </div>
-        
-        <footer>
-            <p>Copyright © 2025 Majlis Daerah Raub. All rights reserved.</p>
-        </footer>
+    </main>
+
+    <!-- Modal for error messages -->
+    <div id="popup">
+        <p id="popup-message"></p>
+        <button onclick="closePopup()">Try Again</button>
+    </div>
     
+    <footer>
+        <p>Copyright © 2025 Majlis Daerah Raub. All rights reserved.</p>
+    </footer>
 </body>
 </html>
