@@ -7,6 +7,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST['password'];
 
     include('dbconn.php');
+    include('update_booking_status.php'); // Include the file with the function
 
     // Validate login for regular users
     $query = "SELECT user_id, user_password, user_type FROM user WHERE user_id = ?";
@@ -23,6 +24,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Success: Store user details in session
             $_SESSION['user_id'] = $user['user_id'];
             $_SESSION['user_type'] = $user['user_type'];
+
+            // Update expired bookings
+            $update_result = updateExpiredBookings($dbconn);
+            echo $update_result; // Optional: For debugging purposes
 
             // Redirect based on user type
             if ($user['user_type'] === 'admin') {
