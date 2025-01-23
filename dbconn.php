@@ -1,4 +1,29 @@
 <?php
+// Check if session is not already started
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Set session timeout duration (in seconds)
+$session_timeout = 900; // 15 minutes
+
+// Check if the session variable for last activity time is set
+if (isset($_SESSION['last_activity'])) {
+    // Calculate the session lifetime
+    $session_lifetime = time() - $_SESSION['last_activity'];
+
+    // Check if the session has expired
+    if ($session_lifetime > $session_timeout) {
+        // Session has expired, destroy the session and log the user out
+        session_unset();
+        session_destroy();
+        header("Location: index.php");
+        exit();
+    }
+}
+
+// Update the last activity time
+$_SESSION['last_activity'] = time();
 
 /* php & mysqldb connection file */
 $user = "root";             // mysqlusername
@@ -33,5 +58,4 @@ function updateExpiredBookings($dbconn) {
 
     $stmt->close();
 }
-
 ?>
