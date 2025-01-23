@@ -101,7 +101,7 @@ if ($result && mysqli_num_rows($result) > 0) {
                 <div class="card-vans">
                     <?php foreach ($van as $v): ?>
                     <div class="card">
-                    <a href="booking.php?vehicle_id=<?php echo $car['vehicles_id']; ?>">
+                    <a href="booking.php?vehicle_id=<?php echo $v['vehicles_id']; ?>">
                             <img src="<?php echo $v['vehicles_img']; ?>" alt="Van Image">
                             <p><?php echo strtoupper ($v['vehicles_model']); ?></p> <!-- VEHICLES MODEL -->
                             <p><?php echo strtoupper ($v['vehicles_plate']); ?></p> <!-- VEHICLES PLATE -->
