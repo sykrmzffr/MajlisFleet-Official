@@ -231,7 +231,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
         
         <main>
-            <a href="javascript:history.back()"><< Back to Previous Page</a>
+            <a href="viewbookinghistory.php"><< Back to Previous Page</a>
             <div class="edit-container">
                 <form action="" method="POST" class="form-container" onsubmit="return validateBookingForm()">
                     <p><b>Booking ID</b></p>
