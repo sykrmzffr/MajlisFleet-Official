@@ -61,35 +61,65 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $booking_destination = $_POST['booking_destination'];
         $booking_purpose = $_POST['booking_purpose'];
 
-        $update_sql = "
-            UPDATE booking 
-            SET 
-                booking_datestart = ?, 
-                booking_dateend = ?, 
-                booking_timestart = ?, 
-                booking_timeend = ?, 
-                booking_destination = ?, 
-                booking_purpose = ?
-            WHERE booking_id = ? AND user_id = ?";
-        $update_stmt = $dbconn->prepare($update_sql);
-        $update_stmt->bind_param(
-            "ssssssss",
-            $booking_datestart,
-            $booking_dateend,
-            $booking_timestart,
-            $booking_timeend,
-            $booking_destination,
-            $booking_purpose,
-            $booking_id,
-            $user_id
-        );
+        // Combine date and time for comparison
+        $start_datetime = $booking_datestart . ' ' . $booking_timestart;
+        $end_datetime = $booking_dateend . ' ' . $booking_timeend;
+        $current_datetime = date('Y-m-d H:i:s');
 
-        if ($update_stmt->execute()) {
-            $success_message = "Booking updated successfully.";
+        // Ensure start date and time are not later than end date and time
+        if (strtotime($start_datetime) >= strtotime($end_datetime)) {
+            $error_message = "Start date and time must be earlier than end date and time.";
+        } elseif (strtotime($start_datetime) < strtotime($current_datetime)) {
+            $error_message = "Start date and time must be later than current date and time.";
         } else {
-            $error_message = "Error updating booking.";
+            // Check for booking clashes
+            $clash_sql = "SELECT * FROM booking WHERE vehicles_id = ? AND booking_id != ? AND 
+                          ((? BETWEEN CONCAT(booking_datestart, ' ', booking_timestart) AND CONCAT(booking_dateend, ' ', booking_timeend)) OR 
+                           (? BETWEEN CONCAT(booking_datestart, ' ', booking_timestart) AND CONCAT(booking_dateend, ' ', booking_timeend)) OR 
+                           (CONCAT(booking_datestart, ' ', booking_timestart) BETWEEN ? AND ?) OR 
+                           (CONCAT(booking_dateend, ' ', booking_timeend) BETWEEN ? AND ?))";
+
+            $stmt = $dbconn->prepare($clash_sql);
+            $stmt->bind_param("ssssssss", $booking['vehicles_id'], $booking_id, $start_datetime, $end_datetime, $start_datetime, $end_datetime, $start_datetime, $end_datetime);
+            $stmt->execute();
+            $clash_result = $stmt->get_result();
+
+            if ($clash_result && $clash_result->num_rows > 0) {
+                $error_message = "Booking time clashes with an existing booking.";
+            } else {
+                // Update booking details
+                $update_sql = "
+                    UPDATE booking 
+                    SET 
+                        booking_datestart = ?, 
+                        booking_dateend = ?, 
+                        booking_timestart = ?, 
+                        booking_timeend = ?, 
+                        booking_destination = ?, 
+                        booking_purpose = ?
+                    WHERE booking_id = ? AND user_id = ?";
+                $update_stmt = $dbconn->prepare($update_sql);
+                $update_stmt->bind_param(
+                    "ssssssss",
+                    $booking_datestart,
+                    $booking_dateend,
+                    $booking_timestart,
+                    $booking_timeend,
+                    $booking_destination,
+                    $booking_purpose,
+                    $booking_id,
+                    $user_id
+                );
+
+                if ($update_stmt->execute()) {
+                    $success_message = "Booking updated successfully.";
+                } else {
+                    $error_message = "Error updating booking.";
+                }
+            }
         }
-    } elseif (isset($_POST['delete'])) {
+    } elseif (isset($_POST['confirm_delete'])) {
+        // Directly delete the booking without checking for clashes, date, and time errors
         $delete_sql = "DELETE FROM booking WHERE booking_id = ? AND user_id = ?";
         $delete_stmt = $dbconn->prepare($delete_sql);
         $delete_stmt->bind_param("ss", $booking_id, $user_id);
@@ -116,11 +146,50 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link rel="stylesheet" href="editbookinguserstyle.css">
     <link rel="icon" href="image/logo.png" type="image/x-icon">
     <script>
-        function showPopup(message, isSuccess) {
-            const popup = document.getElementById(isSuccess ? 'success-popup' : 'error-popup');
-            const popupMessage = document.getElementById(isSuccess ? 'success-popup-message' : 'error-popup-message');
+        function validateBookingForm() {
+            const bookingDateStart = new Date(document.querySelector('input[name="booking_datestart"]').value);
+            const bookingTimeStart = document.querySelector('input[name="booking_timestart"]').value;
+            const bookingDateEnd = new Date(document.querySelector('input[name="booking_dateend"]').value);
+            const bookingTimeEnd = document.querySelector('input[name="booking_timeend"]').value;
+
+            const startDateTime = new Date(`${bookingDateStart.toISOString().slice(0, 10)}T${bookingTimeStart}`);
+            const endDateTime = new Date(`${bookingDateEnd.toISOString().slice(0, 10)}T${bookingTimeEnd}`);
+            const currentDateTime = new Date();
+
+            if (startDateTime >= endDateTime) {
+                showErrorPopup('Start date and time must be earlier than end date and time.');
+                return false;
+            }
+
+            if (startDateTime < currentDateTime) {
+                showErrorPopup('Start date and time must be later than current date and time.');
+                return false;
+            }
+
+            return true;
+        }
+
+        function showErrorPopup(message) {
+            const popup = document.getElementById('error-popup');
+            const popupMessage = document.getElementById('error-popup-message');
             const body = document.body;
             popupMessage.textContent = message;
+            popup.style.display = 'block';
+            body.classList.add('modal-open');
+        }
+
+        function showSuccessPopup(message) {
+            const popup = document.getElementById('success-popup');
+            const popupMessage = document.getElementById('success-popup-message');
+            const body = document.body;
+            popupMessage.textContent = message;
+            popup.style.display = 'block';
+            body.classList.add('modal-open');
+        }
+
+        function showDeletePopup() {
+            const popup = document.getElementById('delete-popup');
+            const body = document.body;
             popup.style.display = 'block';
             body.classList.add('modal-open');
         }
@@ -132,32 +201,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             body.classList.remove('modal-open');
         }
 
-        function confirmDeletion(event) {
-            event.preventDefault();
-            const deletePopup = document.getElementById('delete-popup');
-            const body = document.body;
-            deletePopup.style.display = 'block';
-            body.classList.add('modal-open');
-        }
-
-        function cancelDeletion() {
-            const deletePopup = document.getElementById('delete-popup');
-            const body = document.body;
-            deletePopup.style.display = 'none';
-            body.classList.remove('modal-open');
-        }
-
         function redirectTo(url) {
             window.location.href = url;
+        }
+
+        function confirmDelete() {
+            const deleteForm = document.getElementById('delete-form');
+            deleteForm.submit();
         }
 
         window.onload = function() {
             const successMessage = "<?php echo $success_message; ?>";
             const errorMessage = "<?php echo $error_message; ?>";
             if (successMessage) {
-                showPopup(successMessage, true);
+                showSuccessPopup(successMessage);
             } else if (errorMessage) {
-                showPopup(errorMessage, false);
+                showErrorPopup(errorMessage);
             }
         };
     </script>
@@ -187,10 +246,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             background-color: #4070f4;
             color: #fff;
             width: 40%;
+            border-radius: 10px;
         }
         .popup button:hover {
             background-color: rgb(49, 70, 187);
             cursor: pointer;
+        }
+        .cancel-button {
+            background-color: #f44336; /* Red background for the cancel button */
+        }
+        .cancel-button:hover {
+            background-color: #d32f2f; /* Darker red on hover */
+        }
+        #error-popup button {
+            background-color: #f44336; /* Red background for the cancel button */
+        }
+        #error-popup button:hover {
+            background-color: #d32f2f; /* Darker red on hover */
         }
         /* Background blur and disable styles */
         .modal-open {
@@ -222,7 +294,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <main>
             <a href="bookinghistoryuser.php"><< Back to Previous Page</a>
             <div class="edit-container">
-                <form action="" method="POST" class="form-container">
+                <form action="" method="POST" class="form-container" onsubmit="return validateBookingForm()">
                     <p><b>Booking ID</b></p>
                     <input type="text" value="<?php echo htmlspecialchars($booking['booking_id']); ?>" disabled>
                     <br>
@@ -252,8 +324,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <br>
                     <div class="button-container">
                         <button type="submit" name="update" id="update">UPDATE</button>
-                        <button type="submit" name="delete" id="delete" onclick="return confirm('Are you sure you want to delete this booking?');">DELETE</button>
+                        <button type="button" name="delete" id="delete" onclick="showDeletePopup()">DELETE</button>
                     </div>
+                </form>
+                <form id="delete-form" action="" method="POST">
+                    <input type="hidden" name="confirm_delete" value="1">
                 </form>
             </div>
         </main>
@@ -279,10 +354,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <!-- Modal for delete confirmation -->
     <div id="delete-popup" class="popup">
         <p class="popup-message">Are you sure you want to delete this booking?</p>
-        <form method="POST">
-            <button type="submit" name="confirm_delete">Yes, Delete</button>
-            <button type="button" onclick="cancelDeletion()">No, Cancel</button>
-        </form>
+        <button onclick="confirmDelete()">Yes, Delete</button>
+        <button class="cancel-button" onclick="closePopup('delete-popup')">No, Cancel</button>
     </div>
 </body>
 </html>
