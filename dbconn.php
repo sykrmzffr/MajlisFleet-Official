@@ -41,11 +41,11 @@ function updateExpiredBookings($dbconn) {
     // Get the current date and time
     $current_date = date('Y-m-d H:i:s');
 
-    // Update the status of bookings whose end date has passed and are not already marked as "Expired"
+    // Update the status of bookings whose end date has passed and are not already marked as "Expired" and are currently "Pending"
     $update_sql = "
         UPDATE booking 
         SET booking_status = 'Expired' 
-        WHERE booking_dateend < ? AND booking_status != 'Expired'
+        WHERE booking_dateend < ? AND booking_status = 'Pending'
     ";
     $stmt = $dbconn->prepare($update_sql);
     $stmt->bind_param("s", $current_date);
