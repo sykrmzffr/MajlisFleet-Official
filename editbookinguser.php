@@ -264,6 +264,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         #error-popup button:hover {
             background-color: #d32f2f; /* Darker red on hover */
         }
+        #delete-popup .cancel-button {
+            background-color: #f44336; /* Red background for the cancel button */
+        }
+        #delete-popup .cancel-button:hover {
+            background-color: #d32f2f; /* Darker red on hover */
+        }
         /* Background blur and disable styles */
         .modal-open {
             overflow: hidden;
