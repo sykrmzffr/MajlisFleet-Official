@@ -127,6 +127,8 @@ $result = $stmt->get_result();
                                             echo '#f44040'; // Red for Rejected
                                         } elseif ($row['booking_status'] === 'Approved') {
                                             echo '#097969'; // Green for Approved
+                                        } elseif ($row['booking_status'] === 'Expired') {
+                                            echo '##000000'; // Black for Expired
                                         } else {
                                             echo 'grey'; // Grey for Pending
                                         }
