@@ -43,7 +43,6 @@ if ($dbconn->connect_error) {
 function updateExpiredBookings($dbconn) {
     // Get the current date and time
     $current_datetime = date('Y-m-d H:i:s');
-    echo "Current datetime: $current_datetime<br>";
 
     // Update the status of bookings whose end date and time have passed and are currently "Pending"
     $update_sql = "
@@ -51,7 +50,6 @@ function updateExpiredBookings($dbconn) {
         SET booking_status = 'Expired' 
         WHERE CONCAT(booking_dateend, ' ', booking_timeend) < ? AND booking_status = 'Pending'
     ";
-    echo "SQL query: $update_sql<br>";
 
     $stmt = $dbconn->prepare($update_sql);
     if (!$stmt) {
@@ -61,7 +59,7 @@ function updateExpiredBookings($dbconn) {
     $stmt->bind_param("s", $current_datetime);
 
     if ($stmt->execute()) {
-        echo "Booking statuses updated successfully.<br>";
+        
     } else {
         echo "Error updating booking statuses: " . $stmt->error . "<br>";
     }
