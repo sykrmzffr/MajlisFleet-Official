@@ -136,6 +136,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             background-color: rgb(49, 70, 187);
             cursor: pointer;
         }
+        #error-popup button {
+            background-color: #f44336;
+        }
+        #error-popup button:hover {
+            background-color: rgb(187, 49, 49);
+        }
         /* Background blur and disable styles */
         .modal-open {
             overflow: hidden;
