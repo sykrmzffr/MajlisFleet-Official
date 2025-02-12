@@ -34,9 +34,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $vehicle_plate = strtoupper(trim($_POST['vehicle_plate']));
     $vehicle_capacity = strtoupper(trim($_POST['vehicle_capacity']));
     $driver_id = strtoupper(trim($_POST['vehicle_driver']));
-    $vehicle_img = trim($_POST['vehicle_img']);
 
-    if (empty($vehicle_img)) {
+    // Handle file upload
+    if (isset($_FILES['vehicle_img']) && $_FILES['vehicle_img']['error'] === UPLOAD_ERR_OK) {
+        $file_tmp_path = $_FILES['vehicle_img']['tmp_name'];
+        $file_name = $_FILES['vehicle_img']['name'];
+        $file_size = $_FILES['vehicle_img']['size'];
+        $file_type = $_FILES['vehicle_img']['type'];
+        $file_name_cmps = explode(".", $file_name);
+        $file_extension = strtolower(end($file_name_cmps));
+
+        $allowedfileExtensions = array('jpg', 'gif', 'png');
+        if (in_array($file_extension, $allowedfileExtensions)) {
+            $new_file_name = $vehicle_id . '.' . $file_extension;
+            $uploadFileDir = './vehiclesimages/';
+            $dest_path = $uploadFileDir . $new_file_name;
+
+            if (move_uploaded_file($file_tmp_path, $dest_path)) {
+                $vehicle_img = $dest_path;
+            } else {
+                $error_message = "Error moving the uploaded file.";
+            }
+        } else {
+            $error_message = "Upload failed. Allowed file types: " . implode(',', $allowedfileExtensions);
+        }
+    } else {
         $vehicle_img = "https://i.ibb.co/xHMKJR8/noimageavailable.jpg";
     }
 
@@ -185,7 +207,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <main>
         <a href="viewvehicles.php"><< Back to Previous Page</a>
             <div class="edit-container">
-                <form method="POST">
+                <form method="POST" enctype="multipart/form-data">
                     <div class="form-container">
                         <div class="upper-half">
                             <div class="upper-left">
@@ -228,8 +250,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
                         </div>
                         <div class="lower-half">
-                            <p><b>Image Link (Optional)</b></p>
-                            <input type="text" name="vehicle_img" id="img-link">
+                            <p><b>Upload Vehicle Image (Optional)</b></p>
+                            <input type="file" name="vehicle_img" id="vehicle-img">
                         </div>
                         <div class="button-container">
                             <button type="submit" id="add">ADD</button>

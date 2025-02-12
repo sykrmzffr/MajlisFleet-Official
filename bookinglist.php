@@ -43,10 +43,6 @@ if ($result && mysqli_num_rows($result) > 0) {
 }
 ?>
 
-
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -89,7 +85,6 @@ if ($result && mysqli_num_rows($result) > 0) {
                             <p><?php echo strtoupper ($car['vehicles_model']); ?></p> <!-- VEHICLES MODEL -->
                             <p><?php echo strtoupper ($car['vehicles_plate']); ?></p> <!-- VEHICLES PLATE -->
                             <p><?php echo strtoupper($car['driver_fullname']); ?></p> <!-- DRIVER -->
-
                         </a>
                     </div>
                     <?php endforeach; ?>
@@ -119,5 +114,3 @@ if ($result && mysqli_num_rows($result) > 0) {
     </div>
 </body>
 </html>
-
-
