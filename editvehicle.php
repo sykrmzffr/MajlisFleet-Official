@@ -42,11 +42,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $vehicle_model = $_POST['vehicle_model'];
         $vehicle_plate = $_POST['vehicle_plate'];
         $vehicle_capacity = $_POST['vehicle_capacity'];
-        $vehicle_img = $_POST['vehicle_img'];
         $driver_id = $_POST['vehicle_driver'];
 
-        if (empty($vehicle_img)) {
-            $vehicle_img = "https://i.ibb.co/xHMKJR8/noimageavailable.jpg";
+        // Handle file upload
+        $vehicle_img = $vehicle['vehicles_img']; // Default to existing image path
+        if (isset($_FILES['vehicle_img']) && $_FILES['vehicle_img']['error'] === UPLOAD_ERR_OK) {
+            $file_tmp_path = $_FILES['vehicle_img']['tmp_name'];
+            $file_name = $_FILES['vehicle_img']['name'];
+            $file_size = $_FILES['vehicle_img']['size'];
+            $file_type = $_FILES['vehicle_img']['type'];
+            $file_name_cmps = explode(".", $file_name);
+            $file_extension = strtolower(end($file_name_cmps));
+
+            $allowedfileExtensions = array('jpg', 'gif', 'png');
+            if (in_array($file_extension, $allowedfileExtensions)) {
+                $new_file_name = $vehicle_id . '.' . $file_extension;
+                $uploadFileDir = './vehiclesimages/';
+                $dest_path = $uploadFileDir . $new_file_name;
+
+                if (move_uploaded_file($file_tmp_path, $dest_path)) {
+                    $vehicle_img = $dest_path;
+                } else {
+                    $error_message = "Error moving the uploaded file.";
+                }
+            } else {
+                $error_message = "Upload failed. Allowed file types: " . implode(',', $allowedfileExtensions);
+            }
+        } elseif (empty($vehicle_img)) {
+            $vehicle_img = "./vehiclesimages/noimageavailable.jpg"; // Default image path if no image is provided
         }
 
         $update_sql = "UPDATE vehicles SET vehicles_type = ?, vehicles_model = ?, vehicles_plate = ?, 
@@ -182,7 +205,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <main>
             <a href="viewvehicles.php"><< Back to Previous Page</a>
             <div class="edit-container">
-                <form action="" method="POST" class="form-container">
+                <form action="" method="POST" enctype="multipart/form-data" class="form-container">
                     <div class="upper-half">
                         <div class="upper-left">
                             <p><b>Vehicle ID</b></p>
@@ -225,8 +248,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         </div>
                     </div>
                     <div class="lower-half">
-                        <p><b>Image Link (Leave empty if unavailable)</b></p>
-                        <input type="text" name="vehicle_img" id="img-link" value="<?php echo htmlspecialchars($vehicle['vehicles_img']); ?>">
+                        <p><b>Upload Vehicle Image (Optional)</b></p>
+                        <input type="file" name="vehicle_img" id="vehicle-img">
                     </div>
                     <div class="button-container">
                         <button type="submit" name="update" id="update">UPDATE</button>
