@@ -36,6 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $driver_id = strtoupper(trim($_POST['vehicle_driver']));
 
     // Handle file upload
+    $vehicle_img = "./vehiclesimages/noimageavailable.jpg"; // Default image path
     if (isset($_FILES['vehicle_img']) && $_FILES['vehicle_img']['error'] === UPLOAD_ERR_OK) {
         $file_tmp_path = $_FILES['vehicle_img']['tmp_name'];
         $file_name = $_FILES['vehicle_img']['name'];
@@ -58,8 +59,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $error_message = "Upload failed. Allowed file types: " . implode(',', $allowedfileExtensions);
         }
-    } else {
-        $vehicle_img = "https://i.ibb.co/xHMKJR8/noimageavailable.jpg";
     }
 
     // Check if the vehicle plate number already exists
