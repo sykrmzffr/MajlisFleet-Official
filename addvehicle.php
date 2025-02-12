@@ -34,6 +34,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $vehicle_plate = strtoupper(trim($_POST['vehicle_plate']));
     $vehicle_capacity = strtoupper(trim($_POST['vehicle_capacity']));
     $driver_id = strtoupper(trim($_POST['vehicle_driver']));
+    $vehicle_status = strtoupper(trim($_POST['vehicle_status']));
+    $vehicle_remarks = trim($_POST['vehicle_remarks']);
 
     // Handle file upload
     $vehicle_img = "./vehiclesimages/noimageavailable.jpg"; // Default image path
@@ -74,19 +76,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Insert the new vehicle into the database
         $stmt = $dbconn->prepare("
             INSERT INTO vehicles 
-            (vehicles_id, vehicles_type, vehicles_model, vehicles_plate, vehicles_capacity, driver_id, vehicles_img) 
-            VALUES (?, ?, ?, ?, ?, ?, ?)
+            (vehicles_id, vehicles_type, vehicles_model, vehicles_plate, vehicles_capacity, driver_id, vehicles_img, vehicles_status, vehicles_remarks) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         ");
 
         $stmt->bind_param(
-            "sssssss", 
+            "sssssssss", 
             $vehicle_id, 
             $vehicle_type, 
             $vehicle_model, 
             $vehicle_plate, 
             $vehicle_capacity, 
             $driver_id, 
-            $vehicle_img
+            $vehicle_img,
+            $vehicle_status,
+            $vehicle_remarks
         );
 
         if ($stmt->execute()) {
@@ -217,16 +221,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <input type="text" name="vehicle_model" required>
                                 <br>
                                 <p><b>Capacity</b></p>
-                                <select name="vehicle_capacity" id="vehicle-capacity">
+                                <select name="vehicle_capacity" id="vehicle-capacity" required>
+                                    <option value="" disabled selected>Please Select</option>
                                     <?php for ($i = 1; $i <= 12; $i++): ?>
                                         <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
                                     <?php endfor; ?>
                                 </select>
                                 <br>
+                                <p><b>Status</b></p>
+                                <select name="vehicle_status" id="vehicle-status" required>
+                                    <option value="" disabled selected>Please Select</option>
+                                    <option value="DATO' YDP">DATO' YDP</option>
+                                    <option value="SETIAUSAHA">SETIAUSAHA</option>
+                                    <option value="" disabled>--- --- ---</option>
+                                    <option value="JKKB">JKKB</option>
+                                    <option value="BUKIT FRASER">BUKIT FRASER</option>
+                                    <option value="PENGUATKUASA">PENGUATKUASA</option>
+                                    <option value="LANDSKAP">LANDSKAP</option>
+                                    <option value="KESIHATAN">KESIHATAN</option>
+                                    <option value="PENTADBIRAN">PENTADBIRAN</option>
+                                    <option value="PENILAIAN">PENILAIAN</option>
+                                    <option value="TLK">TLK</option>
+                                    <option value="Others (Include in remarks)">Others (Include in remarks)</option>
+                                </select>
+                                <br>
                             </div>
                             <div class="upper-right">
                                 <p><b>Vehicle Type</b></p>
-                                <select name="vehicle_type" id="vehicle-type">
+                                <select name="vehicle_type" id="vehicle-type" required>
+                                    <option value="" disabled selected>Please Select</option>
                                     <option value="CAR">Car</option>
                                     <option value="VAN">Van</option>
                                 </select>
@@ -235,7 +258,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <input type="text" name="vehicle_plate" required>
                                 <br>
                                 <p><b>Choose Driver</b></p>
-                                <select name="vehicle_driver" id="vehicle-driver" style="width: 80%;">
+                                <select name="vehicle_driver" id="vehicle-driver" style="width: 80%;" required>
+                                    <option value="" disabled selected>Please Select</option>
                                     <?php
                                     $driver_query = "SELECT driver_id, driver_fullname FROM driver";
                                     $driver_result = $dbconn->query($driver_query);
@@ -251,6 +275,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <div class="lower-half">
                             <p><b>Upload Vehicle Image (Optional)</b></p>
                             <input type="file" name="vehicle_img" id="vehicle-img">
+                            <br>
+                            <p><b>Remarks</b></p>
+                            <textarea name="vehicle_remarks" id="vehicle-remarks" rows="4" cols="50" style="width: 80%;"></textarea>
                         </div>
                         <div class="button-container">
                             <button type="submit" id="add">ADD</button>

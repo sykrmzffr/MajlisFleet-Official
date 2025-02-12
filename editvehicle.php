@@ -10,7 +10,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'admin') {
 include('dbconn.php');
 
 // Fetch vehicle details based on vehicle ID from the query string
-if (isset($_GET['vehicle_id'])) { // Ensure this matches the parameter name in the URL
+if (isset($_GET['vehicle_id'])) {
     $vehicle_id = $_GET['vehicle_id'];
 
     $sql = "SELECT vehicles.*, driver.driver_fullname FROM vehicles
@@ -38,11 +38,13 @@ $success_message = "";
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['update'])) {
-        $vehicle_type = $_POST['vehicle_type'];
-        $vehicle_model = $_POST['vehicle_model'];
-        $vehicle_plate = $_POST['vehicle_plate'];
-        $vehicle_capacity = $_POST['vehicle_capacity'];
-        $driver_id = $_POST['vehicle_driver'];
+        $vehicle_type = strtoupper(trim($_POST['vehicle_type']));
+        $vehicle_model = strtoupper(trim($_POST['vehicle_model']));
+        $vehicle_plate = strtoupper(trim($_POST['vehicle_plate']));
+        $vehicle_capacity = strtoupper(trim($_POST['vehicle_capacity']));
+        $driver_id = strtoupper(trim($_POST['vehicle_driver']));
+        $vehicle_status = strtoupper(trim($_POST['vehicle_status']));
+        $vehicle_remarks = trim($_POST['vehicle_remarks']);
 
         // Handle file upload
         $vehicle_img = $vehicle['vehicles_img']; // Default to existing image path
@@ -73,16 +75,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         $update_sql = "UPDATE vehicles SET vehicles_type = ?, vehicles_model = ?, vehicles_plate = ?, 
-                       vehicles_capacity = ?, vehicles_img = ?, driver_id = ? WHERE vehicles_id = ?";
+                       vehicles_capacity = ?, vehicles_img = ?, driver_id = ?, vehicles_status = ?, vehicles_remarks = ? WHERE vehicles_id = ?";
         $update_stmt = $dbconn->prepare($update_sql);
         $update_stmt->bind_param(
-            "sssssss",
+            "sssssssss",
             $vehicle_type,
             $vehicle_model,
             $vehicle_plate,
             $vehicle_capacity,
             $vehicle_img,
             $driver_id,
+            $vehicle_status,
+            $vehicle_remarks,
             $vehicle_id
         );
 
@@ -221,6 +225,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <?php endfor; ?>
                             </select>
                             <br>
+                            <p><b>Status</b></p>
+                            <select name="vehicle_status" id="vehicle-status">
+                                <option value="JKKB" <?php echo $vehicle['vehicles_status'] === 'JKKB' ? 'selected' : ''; ?>>JKKB</option>
+                                <option value="BUKIT FRASER" <?php echo $vehicle['vehicles_status'] === 'BUKIT FRASER' ? 'selected' : ''; ?>>BUKIT FRASER</option>
+                                <option value="OTHERS" <?php echo $vehicle['vehicles_status'] === 'OTHERS' ? 'selected' : ''; ?>>OTHERS (Include in remarks)</option>
+                            </select>
+                            <br>
                         </div>
                         <div class="upper-right">
                             <p><b>Vehicle Type</b></p>
@@ -250,6 +261,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <div class="lower-half">
                         <p><b>Upload Vehicle Image (Optional)</b></p>
                         <input type="file" name="vehicle_img" id="vehicle-img">
+                        <br>
+                        <p><b>Remarks</b></p>
+                        <textarea name="vehicle_remarks" id="vehicle-remarks" rows="4" cols="50"><?php echo htmlspecialchars($vehicle['vehicles_remarks']); ?></textarea>
                     </div>
                     <div class="button-container">
                         <button type="submit" name="update" id="update">UPDATE</button>
