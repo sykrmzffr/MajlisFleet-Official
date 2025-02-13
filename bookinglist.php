@@ -26,15 +26,38 @@ $sql = "
 ";
 $result = mysqli_query($dbconn, $sql);
 
-$kereta = [];
-$van = [];
+$passenger_vehicles = [];
+$light_duty_vehicles = [];
+$heavy_duty_vehicles = [];
+$agricultural_vehicles = [];
+$two_wheeled_vehicles = [];
 
 if ($result && mysqli_num_rows($result) > 0) {
     while ($row = mysqli_fetch_assoc($result)) {
-        if ($row['vehicles_type'] === 'CAR') {
-            $kereta[] = $row;
-        } elseif ($row['vehicles_type'] === 'VAN') {
-            $van[] = $row;
+        switch ($row['vehicles_type']) {
+            case 'SEDAN CAR':
+            case 'EXECUTIVE CAR':
+            case 'MPV':
+                $passenger_vehicles[] = $row;
+                break;
+            case 'VAN':
+            case 'PICK-UP TRUCK':
+                $light_duty_vehicles[] = $row;
+                break;
+            case '4WD':
+            case 'LORRY':
+            case 'LORRY DOUBLE CAB':
+            case 'LORRY TANK':
+            case 'LORRY SKYLIFT':
+                $heavy_duty_vehicles[] = $row;
+                break;
+            case 'TRACTOR':
+            case 'BACKHOE':
+                $agricultural_vehicles[] = $row;
+                break;
+            case 'MOTORCYCLE':
+                $two_wheeled_vehicles[] = $row;
+                break;
         }
     }
 } else {
@@ -75,35 +98,118 @@ if ($result && mysqli_num_rows($result) > 0) {
                 <h1>Choose Any Vehicles to Start Booking</h1>
             </div>
 
-            <section class="list-cars">
-                <p>Cars</p>
-                <div class="card-cars">
-                    <?php foreach ($kereta as $car): ?>
-                    <div class="card">
-                        <a href="booking.php?vehicle_id=<?php echo $car['vehicles_id']; ?>">
-                            <img src="<?php echo $car['vehicles_img']; ?>" alt="Car Image">
-                            <p><?php echo strtoupper ($car['vehicles_model']); ?></p> <!-- VEHICLES MODEL -->
-                            <p><?php echo strtoupper ($car['vehicles_plate']); ?></p> <!-- VEHICLES PLATE -->
-                            <p><?php echo strtoupper($car['driver_fullname']); ?></p> <!-- DRIVER -->
-                        </a>
-                    </div>
-                    <?php endforeach; ?>
+            <!-- Passenger Vehicles -->
+            <section class="list-vehicles">
+                <p>Passenger Vehicles</p>
+                <div class="card-container">
+                    <?php if (!empty($passenger_vehicles)): ?>
+                        <?php foreach ($passenger_vehicles as $vehicle): ?>
+                        <div class="card">
+                            <a href="booking.php?vehicle_id=<?php echo $vehicle['vehicles_id']; ?>">
+                                <img src="<?php echo $vehicle['vehicles_img']; ?>" alt="Vehicle Image">
+                                <p><?php echo strtoupper($vehicle['vehicles_model']); ?></p> <!-- VEHICLES MODEL -->
+                                <p><?php echo strtoupper($vehicle['vehicles_plate']); ?></p> <!-- VEHICLES PLATE -->
+                                <p><?php echo strtoupper($vehicle['driver_fullname']); ?></p> <!-- DRIVER -->
+                            </a>
+                        </div>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <div class="null-text">
+                            <p>No vehicle available yet!</p>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </section>
-            
-            <section class="list-vans">
-                <p>Van</p>
-                <div class="card-vans">
-                    <?php foreach ($van as $v): ?>
-                    <div class="card">
-                    <a href="booking.php?vehicle_id=<?php echo $v['vehicles_id']; ?>">
-                            <img src="<?php echo $v['vehicles_img']; ?>" alt="Van Image">
-                            <p><?php echo strtoupper ($v['vehicles_model']); ?></p> <!-- VEHICLES MODEL -->
-                            <p><?php echo strtoupper ($v['vehicles_plate']); ?></p> <!-- VEHICLES PLATE -->
-                            <p><?php echo strtoupper($v['driver_fullname']); ?></p> <!-- DRIVER -->
-                        </a>
-                    </div>
-                    <?php endforeach; ?>
+
+            <!-- Light-Duty Vehicles -->
+            <section class="list-vehicles">
+                <p>Light-Duty Vehicles</p>
+                <div class="card-container">
+                    <?php if (!empty($light_duty_vehicles)): ?>
+                        <?php foreach ($light_duty_vehicles as $vehicle): ?>
+                        <div class="card">
+                            <a href="booking.php?vehicle_id=<?php echo $vehicle['vehicles_id']; ?>">
+                                <img src="<?php echo $vehicle['vehicles_img']; ?>" alt="Vehicle Image">
+                                <p><?php echo strtoupper($vehicle['vehicles_model']); ?></p> <!-- VEHICLES MODEL -->
+                                <p><?php echo strtoupper($vehicle['vehicles_plate']); ?></p> <!-- VEHICLES PLATE -->
+                                <p><?php echo strtoupper($vehicle['driver_fullname']); ?></p> <!-- DRIVER -->
+                            </a>
+                        </div>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <div class="null-text">
+                            <p>No vehicle available yet!</p>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </section>
+
+            <!-- Heavy-Duty Vehicles -->
+            <section class="list-vehicles">
+                <p>Heavy-Duty Vehicles</p>
+                <div class="card-container">
+                    <?php if (!empty($heavy_duty_vehicles)): ?>
+                        <?php foreach ($heavy_duty_vehicles as $vehicle): ?>
+                        <div class="card">
+                            <a href="booking.php?vehicle_id=<?php echo $vehicle['vehicles_id']; ?>">
+                                <img src="<?php echo $vehicle['vehicles_img']; ?>" alt="Vehicle Image">
+                                <p><?php echo strtoupper($vehicle['vehicles_model']); ?></p> <!-- VEHICLES MODEL -->
+                                <p><?php echo strtoupper($vehicle['vehicles_plate']); ?></p> <!-- VEHICLES PLATE -->
+                                <p><?php echo strtoupper($vehicle['driver_fullname']); ?></p> <!-- DRIVER -->
+                            </a>
+                        </div>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <div class="null-text">
+                            <p>No vehicle available yet!</p>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </section>
+
+            <!-- Agricultural & Construction Vehicles -->
+            <section class="list-vehicles">
+                <p>Agricultural & Construction Vehicles</p>
+                <div class="card-container">
+                    <?php if (!empty($agricultural_vehicles)): ?>
+                        <?php foreach ($agricultural_vehicles as $vehicle): ?>
+                        <div class="card">
+                            <a href="booking.php?vehicle_id=<?php echo $vehicle['vehicles_id']; ?>">
+                                <img src="<?php echo $vehicle['vehicles_img']; ?>" alt="Vehicle Image">
+                                <p><?php echo strtoupper($vehicle['vehicles_model']); ?></p> <!-- VEHICLES MODEL -->
+                                <p><?php echo strtoupper($vehicle['vehicles_plate']); ?></p> <!-- VEHICLES PLATE -->
+                                <p><?php echo strtoupper($vehicle['driver_fullname']); ?></p> <!-- DRIVER -->
+                            </a>
+                        </div>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <div class="null-text">
+                            <p>No vehicle available yet!</p>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </section>
+
+            <!-- Two-Wheeled Vehicles -->
+            <section class="list-vehicles">
+                <p>Two-Wheeled Vehicles</p>
+                <div class="card-container">
+                    <?php if (!empty($two_wheeled_vehicles)): ?>
+                        <?php foreach ($two_wheeled_vehicles as $vehicle): ?>
+                        <div class="card">
+                            <a href="booking.php?vehicle_id=<?php echo $vehicle['vehicles_id']; ?>">
+                                <img src="<?php echo $vehicle['vehicles_img']; ?>" alt="Vehicle Image">
+                                <p><?php echo strtoupper($vehicle['vehicles_model']); ?></p> <!-- VEHICLES MODEL -->
+                                <p><?php echo strtoupper($vehicle['vehicles_plate']); ?></p> <!-- VEHICLES PLATE -->
+                                <p><?php echo strtoupper($vehicle['driver_fullname']); ?></p> <!-- DRIVER -->
+                            </a>
+                        </div>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <div class="null-text">
+                            <p>No vehicle available yet!</p>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </section>
         </main>
