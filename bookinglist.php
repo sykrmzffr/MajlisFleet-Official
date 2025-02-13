@@ -100,7 +100,7 @@ if ($result && mysqli_num_rows($result) > 0) {
 
             <!-- Passenger Vehicles -->
             <section class="list-vehicles">
-                <p>Passenger Vehicles</p>
+                <h3>Passenger Vehicles</h3>
                 <div class="card-container">
                     <?php if (!empty($passenger_vehicles)): ?>
                         <?php foreach ($passenger_vehicles as $vehicle): ?>
@@ -123,7 +123,7 @@ if ($result && mysqli_num_rows($result) > 0) {
 
             <!-- Light-Duty Vehicles -->
             <section class="list-vehicles">
-                <p>Light-Duty Vehicles</p>
+                <h3>Light-Duty Vehicles</h3>
                 <div class="card-container">
                     <?php if (!empty($light_duty_vehicles)): ?>
                         <?php foreach ($light_duty_vehicles as $vehicle): ?>
@@ -146,7 +146,7 @@ if ($result && mysqli_num_rows($result) > 0) {
 
             <!-- Heavy-Duty Vehicles -->
             <section class="list-vehicles">
-                <p>Heavy-Duty Vehicles</p>
+                <h3>Heavy-Duty Vehicles</h3>
                 <div class="card-container">
                     <?php if (!empty($heavy_duty_vehicles)): ?>
                         <?php foreach ($heavy_duty_vehicles as $vehicle): ?>
@@ -169,7 +169,7 @@ if ($result && mysqli_num_rows($result) > 0) {
 
             <!-- Agricultural & Construction Vehicles -->
             <section class="list-vehicles">
-                <p>Agricultural & Construction Vehicles</p>
+                <h3>Agricultural & Construction Vehicles</h3>
                 <div class="card-container">
                     <?php if (!empty($agricultural_vehicles)): ?>
                         <?php foreach ($agricultural_vehicles as $vehicle): ?>
@@ -192,7 +192,7 @@ if ($result && mysqli_num_rows($result) > 0) {
 
             <!-- Two-Wheeled Vehicles -->
             <section class="list-vehicles">
-                <p>Two-Wheeled Vehicles</p>
+                <h3>Two-Wheeled Vehicles</h3>
                 <div class="card-container">
                     <?php if (!empty($two_wheeled_vehicles)): ?>
                         <?php foreach ($two_wheeled_vehicles as $vehicle): ?>

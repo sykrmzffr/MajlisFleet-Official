@@ -95,8 +95,8 @@ main{
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 200px;
-    height: 280px ;
+    width: 150px;
+    height: 230px ;
     background: #fff;
     padding: 1.5rem;
     flex-shrink: 0;
@@ -128,7 +128,7 @@ main{
 }
 
 .card img{
-    height: 150px;
+    height: 100px;
 }
 .null-text{
     width: 100%;
