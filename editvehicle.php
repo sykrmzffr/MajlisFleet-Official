@@ -227,17 +227,49 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <br>
                             <p><b>Status</b></p>
                             <select name="vehicle_status" id="vehicle-status" style="width: 80%;" required>
+                                <option value="" disabled selected>Please Select</option>
+                                <option value="DATO' YDP" <?php echo $vehicle['vehicles_status'] === "DATO' YDP" ? 'selected' : ''; ?>>DATO' YDP</option>
+                                <option value="SETIAUSAHA" <?php echo $vehicle['vehicles_status'] === 'SETIAUSAHA' ? 'selected' : ''; ?>>SETIAUSAHA</option>
+                                <option value="" disabled>--- --- ---</option>
                                 <option value="JKKB" <?php echo $vehicle['vehicles_status'] === 'JKKB' ? 'selected' : ''; ?>>JKKB</option>
                                 <option value="BUKIT FRASER" <?php echo $vehicle['vehicles_status'] === 'BUKIT FRASER' ? 'selected' : ''; ?>>BUKIT FRASER</option>
-                                <option value="OTHERS" <?php echo $vehicle['vehicles_status'] === 'OTHERS' ? 'selected' : ''; ?>>OTHERS (Include in remarks)</option>
+                                <option value="PENGUATKUASA" <?php echo $vehicle['vehicles_status'] === 'PENGUATKUASA' ? 'selected' : ''; ?>>PENGUATKUASA</option>
+                                <option value="LANDSKAP" <?php echo $vehicle['vehicles_status'] === 'LANDSKAP' ? 'selected' : ''; ?>>LANDSKAP</option>
+                                <option value="KESIHATAN" <?php echo $vehicle['vehicles_status'] === 'KESIHATAN' ? 'selected' : ''; ?>>KESIHATAN</option>
+                                <option value="PENTADBIRAN" <?php echo $vehicle['vehicles_status'] === 'PENTADBIRAN' ? 'selected' : ''; ?>>PENTADBIRAN</option>
+                                <option value="PENILAIAN" <?php echo $vehicle['vehicles_status'] === 'PENILAIAN' ? 'selected' : ''; ?>>PENILAIAN</option>
+                                <option value="TLK" <?php echo $vehicle['vehicles_status'] === 'TLK' ? 'selected' : ''; ?>>TLK</option>
+                                <option value="Others (Include in remarks)" <?php echo $vehicle['vehicles_status'] === 'Others (Include in remarks)' ? 'selected' : ''; ?>>Others (Include in remarks)</option>
                             </select>
                             <br>
                         </div>
                         <div class="upper-right">
                             <p><b>Vehicle Type</b></p>
                             <select name="vehicle_type" id="vehicle-type" style="width: 80%;" required>
-                                <option value="CAR" <?php echo $vehicle['vehicles_type'] === 'CAR' ? 'selected' : ''; ?>>Car</option>
-                                <option value="VAN" <?php echo $vehicle['vehicles_type'] === 'VAN' ? 'selected' : ''; ?>>Van</option>
+                                <option value="" disabled selected>Please Select</option>
+                                <optgroup label="Passenger Vehicles">
+                                    <option value="SEDAN CAR" <?php echo $vehicle['vehicles_type'] === 'SEDAN CAR' ? 'selected' : ''; ?>>Sedan</option>
+                                    <option value="EXECUTIVE CAR" <?php echo $vehicle['vehicles_type'] === 'EXECUTIVE CAR' ? 'selected' : ''; ?>>Executive Car</option>
+                                    <option value="MPV" <?php echo $vehicle['vehicles_type'] === 'MPV' ? 'selected' : ''; ?>>Multi-Purpose Vehicle (MPV)</option>
+                                </optgroup>
+                                <optgroup label="Light-Duty Vehicles">
+                                    <option value="VAN" <?php echo $vehicle['vehicles_type'] === 'VAN' ? 'selected' : ''; ?>>Van</option>
+                                    <option value="PICK-UP TRUCK" <?php echo $vehicle['vehicles_type'] === 'PICK-UP TRUCK' ? 'selected' : ''; ?>>Pickup Truck</option>
+                                </optgroup>
+                                <optgroup label="Heavy-Duty Vehicles">
+                                    <option value="4WD" <?php echo $vehicle['vehicles_type'] === '4WD' ? 'selected' : ''; ?>>Four-Wheel Drive (4WD)</option>
+                                    <option value="LORRY" <?php echo $vehicle['vehicles_type'] === 'LORRY' ? 'selected' : ''; ?>>Lorry</option>
+                                    <option value="LORRY DOUBLE CAB" <?php echo $vehicle['vehicles_type'] === 'LORRY DOUBLE CAB' ? 'selected' : ''; ?>>Lorry Double Cab</option>
+                                    <option value="LORRY TANK" <?php echo $vehicle['vehicles_type'] === 'LORRY TANK' ? 'selected' : ''; ?>>Lorry Tank</option>
+                                    <option value="LORRY SKYLIFT" <?php echo $vehicle['vehicles_type'] === 'LORRY SKYLIFT' ? 'selected' : ''; ?>>Lorry Skylift</option>
+                                </optgroup>
+                                <optgroup label="Agricultural & Construction Vehicles">
+                                    <option value="TRACTOR" <?php echo $vehicle['vehicles_type'] === 'TRACTOR' ? 'selected' : ''; ?>>Tractor</option>
+                                    <option value="BACKHOE" <?php echo $vehicle['vehicles_type'] === 'BACKHOE' ? 'selected' : ''; ?>>Excavator/Loader</option>
+                                </optgroup>
+                                <optgroup label="Two-Wheeled Vehicles">
+                                    <option value="MOTORCYCLE" <?php echo $vehicle['vehicles_type'] === 'MOTORCYCLE' ? 'selected' : ''; ?>>Motorcycle</option>
+                                </optgroup>
                             </select>
                             <br>
                             <p><b>Plate Number</b></p>

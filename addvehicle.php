@@ -250,8 +250,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <p><b>Vehicle Type</b></p>
                                 <select name="vehicle_type" id="vehicle-type" style="width: 80%;" required>
                                     <option value="" disabled selected>Please Select</option>
-                                    <option value="CAR">Car</option>
-                                    <option value="VAN">Van</option>
+                                    <optgroup label="Passenger Vehicles">
+                                        <option value="SEDAN CAR">Sedan</option>
+                                        <option value="EXECUTIVE CAR">Executive Car</option>
+                                        <option value="MPV">Multi-Purpose Vehicle (MPV)</option>
+                                    </optgroup>
+                                    <optgroup label="Light-Duty Vehicles">
+                                        <option value="VAN">Van</option>
+                                        <option value="PICK-UP TRUCK">Pickup Truck</option>
+                                    </optgroup>
+                                    <optgroup label="Heavy-Duty Vehicles">
+                                        <option value="4WD">Four-Wheel Drive (4WD)</option>
+                                        <option value="LORRY">Lorry</option>
+                                        <option value="LORRY DOUBLE CAB">Lorry Double Cab</option>
+                                        <option value="LORRY TANK">Lorry Tank</option>
+                                        <option value="LORRY SKYLIFT">Lorry Skylift</option>
+                                    </optgroup>
+                                    <optgroup label="Agricultural & Construction Vehicles">
+                                        <option value="TRACTOR">Tractor</option>
+                                        <option value="BACKHOE">Excavator/Loader</option>
+                                    </optgroup>
+                                    <optgroup label="Two-Wheeled Vehicles">
+                                        <option value="MOTORCYCLE">Motorcycle</option>
+                                    </optgroup>
                                 </select>
                                 <br>
                                 <p><b>Plate Number</b></p>
