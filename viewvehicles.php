@@ -29,6 +29,7 @@ $query = "
         vehicles.vehicles_model, 
         vehicles.vehicles_plate, 
         vehicles.vehicles_capacity, 
+        vehicles.vehicles_status,
         driver.driver_fullname AS driver_name 
     FROM vehicles 
     LEFT JOIN driver ON vehicles.driver_id = driver.driver_id 
@@ -79,11 +80,11 @@ if (!$result) {
             <div class="list-table">
                 <table>
                     <tr id="row-first">
-                        <th style="width:15%">Vehicle ID</th>
-                        <th style="width:20%">Type</th>
-                        <th style="width:20%">Model</th>
+                        <th style="width:12%">Vehicle ID</th>
                         <th style="width:15%">Plate</th>
-                        <th style="width:10%">Capacity</th>
+                        <th style="width:20%">Model</th>
+                        <th style="width:10%">Type</th>
+                        <th style="width:15%">Status</th>
                         <th style="width:20%">Driver Name</th>
                         <th style="width:10%">Action</th>
                     </tr>
@@ -91,10 +92,10 @@ if (!$result) {
                         <?php while ($row = $result->fetch_assoc()): ?>
                             <tr>
                                 <td><?php echo htmlspecialchars($row['vehicles_id']); ?></td>
-                                <td><?php echo htmlspecialchars($row['vehicles_type']); ?></td>
-                                <td><?php echo htmlspecialchars($row['vehicles_model']); ?></td>
                                 <td><?php echo htmlspecialchars($row['vehicles_plate']); ?></td>
-                                <td><?php echo htmlspecialchars($row['vehicles_capacity']); ?></td>
+                                <td><?php echo htmlspecialchars($row['vehicles_model']); ?></td>
+                                <td><?php echo htmlspecialchars($row['vehicles_type']); ?></td>
+                                <td><?php echo htmlspecialchars($row['vehicles_status']); ?></td>
                                 <td><?php echo htmlspecialchars($row['driver_name'] ?? 'No Driver Assigned'); ?></td>
                                 <td>
                                     <a href="editvehicle.php?vehicle_id=<?php echo urlencode($row['vehicles_id']); ?>">

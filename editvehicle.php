@@ -219,14 +219,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <input type="text" name="vehicle_model" value="<?php echo htmlspecialchars($vehicle['vehicles_model']); ?>" required>
                             <br>
                             <p><b>Capacity</b></p>
-                            <select name="vehicle_capacity" id="vehicle-capacity">
+                            <select name="vehicle_capacity" id="vehicle-capacity" style="width: 80%;" required>
                                 <?php for ($i = 1; $i <= 12; $i++): ?>
                                     <option value="<?php echo $i; ?>" <?php echo $vehicle['vehicles_capacity'] == $i ? 'selected' : ''; ?>><?php echo $i; ?></option>
                                 <?php endfor; ?>
                             </select>
                             <br>
                             <p><b>Status</b></p>
-                            <select name="vehicle_status" id="vehicle-status">
+                            <select name="vehicle_status" id="vehicle-status" style="width: 80%;" required>
                                 <option value="JKKB" <?php echo $vehicle['vehicles_status'] === 'JKKB' ? 'selected' : ''; ?>>JKKB</option>
                                 <option value="BUKIT FRASER" <?php echo $vehicle['vehicles_status'] === 'BUKIT FRASER' ? 'selected' : ''; ?>>BUKIT FRASER</option>
                                 <option value="OTHERS" <?php echo $vehicle['vehicles_status'] === 'OTHERS' ? 'selected' : ''; ?>>OTHERS (Include in remarks)</option>
@@ -235,7 +235,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         </div>
                         <div class="upper-right">
                             <p><b>Vehicle Type</b></p>
-                            <select name="vehicle_type" id="vehicle-type">
+                            <select name="vehicle_type" id="vehicle-type" style="width: 80%;" required>
                                 <option value="CAR" <?php echo $vehicle['vehicles_type'] === 'CAR' ? 'selected' : ''; ?>>Car</option>
                                 <option value="VAN" <?php echo $vehicle['vehicles_type'] === 'VAN' ? 'selected' : ''; ?>>Van</option>
                             </select>
@@ -244,7 +244,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <input type="text" name="vehicle_plate" value="<?php echo htmlspecialchars($vehicle['vehicles_plate']); ?>" required>
                             <br>
                             <p><b>Choose Driver</b></p>
-                            <select name="vehicle_driver" id="vehicle-driver" style="width: 80%;">
+                            <select name="vehicle_driver" id="vehicle-driver" style="width: 80%;" required>
                                 <?php
                                 $driver_sql = "SELECT driver_id, driver_fullname FROM driver";
                                 $driver_result = mysqli_query($dbconn, $driver_sql);
@@ -263,7 +263,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <input type="file" name="vehicle_img" id="vehicle-img">
                         <br>
                         <p><b>Remarks</b></p>
-                        <textarea name="vehicle_remarks" id="vehicle-remarks" rows="4" cols="50"><?php echo htmlspecialchars($vehicle['vehicles_remarks']); ?></textarea>
+                        <textarea name="vehicle_remarks" id="vehicle-remarks" rows="4" cols="50" style="width: 80%;"><?php echo htmlspecialchars($vehicle['vehicles_remarks']); ?></textarea>
                     </div>
                     <div class="button-container">
                         <button type="submit" name="update" id="update">UPDATE</button>

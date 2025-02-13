@@ -221,7 +221,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <input type="text" name="vehicle_model" required>
                                 <br>
                                 <p><b>Capacity</b></p>
-                                <select name="vehicle_capacity" id="vehicle-capacity" required>
+                                <select name="vehicle_capacity" id="vehicle-capacity" style="width: 80%;" required>
                                     <option value="" disabled selected>Please Select</option>
                                     <?php for ($i = 1; $i <= 12; $i++): ?>
                                         <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
@@ -229,7 +229,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 </select>
                                 <br>
                                 <p><b>Status</b></p>
-                                <select name="vehicle_status" id="vehicle-status" required>
+                                <select name="vehicle_status" id="vehicle-status" style="width: 80%;" required>
                                     <option value="" disabled selected>Please Select</option>
                                     <option value="DATO' YDP">DATO' YDP</option>
                                     <option value="SETIAUSAHA">SETIAUSAHA</option>
@@ -248,7 +248,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
                             <div class="upper-right">
                                 <p><b>Vehicle Type</b></p>
-                                <select name="vehicle_type" id="vehicle-type" required>
+                                <select name="vehicle_type" id="vehicle-type" style="width: 80%;" required>
                                     <option value="" disabled selected>Please Select</option>
                                     <option value="CAR">Car</option>
                                     <option value="VAN">Van</option>
