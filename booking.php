@@ -283,9 +283,9 @@ if (isset($_GET['vehicle_id']) && !empty($_GET['vehicle_id'])) {
                     <p>Time End</p>
                     <input type="time" name="booking_timeend" required>
                     <p>Destination</p>
-                    <input type="text" name="booking_destination" required style="height: 50px;">
+                    <input type="text" name="booking_destination" required style="height: 50px; width: auto;">
                     <p>Purpose</p>
-                    <input type="text" name="booking_purpose" required style="height: 50px;">
+                    <input type="text" name="booking_purpose" required style="height: 50px; width: auto;">
                     <input type="hidden" name="vehicles_id" value="<?php echo htmlspecialchars($vehicle['vehicles_id']); ?>"> <!-- Hidden vehicle ID -->
                     <button type="submit" name="submit">SUBMIT</button>
                 </form>

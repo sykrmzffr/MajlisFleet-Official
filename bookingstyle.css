@@ -84,6 +84,7 @@ main{
     justify-content: center;
     gap: 20px;
     padding-top: 20px;
+    width: 70%;
 }
 .vehicle-details-container{
     display: flex;
