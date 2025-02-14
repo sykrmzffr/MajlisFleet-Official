@@ -17,7 +17,8 @@ if (isset($_GET['search-bar']) && !empty($_GET['search-bar'])) {
         WHERE vehicles.vehicles_id LIKE '$search_term' 
         OR vehicles.vehicles_type LIKE '$search_term' 
         OR vehicles.vehicles_model LIKE '$search_term' 
-        OR vehicles.vehicles_plate LIKE '$search_term' 
+        OR vehicles.vehicles_plate LIKE '$search_term'
+        OR vehicles.vehicles_status LIKE '$search_term' 
         OR driver.driver_fullname LIKE '$search_term'";
 }
 
