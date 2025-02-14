@@ -20,12 +20,27 @@ if (isset($_GET['search-bar']) && !empty($_GET['search-bar'])) {
         OR user_unit LIKE '$search_term'";
 }
 
-// Fetch all users or filtered users
-$query = "SELECT * FROM user $search_query ORDER BY user_id DESC";
+// Handle sorting functionality
+$sort_column = isset($_GET['sort_column']) ? $_GET['sort_column'] : 'user_id';
+$sort_order = isset($_GET['sort_order']) && $_GET['sort_order'] === 'ASC' ? 'ASC' : 'DESC';
+
+// Fetch all users or filtered users with sorting
+$query = "SELECT * FROM user $search_query ORDER BY $sort_column $sort_order";
 $result = $dbconn->query($query);
 
 if (!$result) {
     die("Query failed: " . $dbconn->error);
+}
+
+// Toggle sort order for next click
+$next_sort_order = $sort_order === 'ASC' ? 'DESC' : 'ASC';
+
+// Function to get the appropriate sort icon
+function get_sort_icon($column, $sort_column, $sort_order) {
+    if ($column === $sort_column) {
+        return $sort_order === 'ASC' ? '▲' : '▼';
+    }
+    return '⇅'; // Default icon indicating sortable
 }
 ?>
 
@@ -69,11 +84,26 @@ if (!$result) {
             <div class="list-table">
                 <table>
                     <tr id="row-first">
-                        <th style="width:15%">User ID</th>
-                        <th style="width:35%">Full Name</th>
-                        
-                        <th style="width:15%">User Type</th>
-                        <th style="width:25%">Unit</th>
+                        <th style="width:15%">
+                            <a href="?sort_column=user_id&sort_order=<?php echo $next_sort_order; ?>">
+                                User ID <?php echo get_sort_icon('user_id', $sort_column, $sort_order); ?>
+                            </a>
+                        </th>
+                        <th style="width:35%">
+                            <a href="?sort_column=user_fullname&sort_order=<?php echo $next_sort_order; ?>">
+                                Full Name <?php echo get_sort_icon('user_fullname', $sort_column, $sort_order); ?>
+                            </a>
+                        </th>
+                        <th style="width:15%">
+                            <a href="?sort_column=user_type&sort_order=<?php echo $next_sort_order; ?>">
+                                User Type <?php echo get_sort_icon('user_type', $sort_column, $sort_order); ?>
+                            </a>
+                        </th>
+                        <th style="width:25%">
+                            <a href="?sort_column=user_unit&sort_order=<?php echo $next_sort_order; ?>">
+                                Unit <?php echo get_sort_icon('user_unit', $sort_column, $sort_order); ?>
+                            </a>
+                        </th>
                         <th style="width:10%">Action</th>
                     </tr>
                     <?php if ($result->num_rows > 0): ?>
@@ -81,7 +111,6 @@ if (!$result) {
                             <tr>
                                 <td><?php echo htmlspecialchars($row['user_id']); ?></td>
                                 <td><?php echo htmlspecialchars($row['user_fullname']); ?></td>
-                                
                                 <td><?php echo htmlspecialchars($row['user_type']); ?></td>
                                 <td><?php echo htmlspecialchars($row['user_unit']); ?></td>
                                 <td>
@@ -93,7 +122,7 @@ if (!$result) {
                         <?php endwhile; ?>
                     <?php else: ?>
                         <tr>
-                            <td colspan="6">No users found.</td>
+                            <td colspan="5">No users found.</td>
                         </tr>
                     <?php endif; ?>
                 </table>
@@ -102,7 +131,7 @@ if (!$result) {
     </main>
     
     <footer>
-        <p>Copyright © 2025 Majlis Daerah Raub. All rights reserved.</p>
+        <p>&copy; 2025 Majlis Daerah Raub. All rights reserved.</p>
     </footer>
 </body>
 </html>
