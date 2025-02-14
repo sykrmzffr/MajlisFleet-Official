@@ -282,7 +282,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <select name="vehicle_driver" id="vehicle-driver" style="width: 80%;" required>
                                     <option value="" disabled selected>Please Select</option>
                                     <?php
-                                    $driver_query = "SELECT driver_id, driver_fullname FROM driver";
+                                    // Fetch drivers ordered by driver_fullname in descending order
+                                    $driver_query = "SELECT driver_id, driver_fullname FROM driver ORDER BY driver_fullname ASC";
                                     $driver_result = $dbconn->query($driver_query);
                                     while ($driver_row = $driver_result->fetch_assoc()) {
                                         echo "<option value=\"" . htmlspecialchars($driver_row['driver_id']) . "\">" . 

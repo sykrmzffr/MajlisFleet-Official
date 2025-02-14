@@ -21,7 +21,11 @@ if (isset($_GET['search-bar']) && !empty($_GET['search-bar'])) {
         OR driver.driver_fullname LIKE '$search_term'";
 }
 
-// Fetch vehicles with driver names and optional search filtering
+// Handle sorting functionality
+$sort_column = isset($_GET['sort_column']) ? $_GET['sort_column'] : 'vehicles_id';
+$sort_order = isset($_GET['sort_order']) && $_GET['sort_order'] === 'ASC' ? 'ASC' : 'DESC';
+
+// Fetch vehicles with driver names and optional search filtering and sorting
 $query = "
     SELECT 
         vehicles.vehicles_id, 
@@ -34,11 +38,22 @@ $query = "
     FROM vehicles 
     LEFT JOIN driver ON vehicles.driver_id = driver.driver_id 
     $search_query 
-    ORDER BY vehicles.vehicles_id DESC";
+    ORDER BY $sort_column $sort_order";
 $result = $dbconn->query($query);
 
 if (!$result) {
     die("Query failed: " . $dbconn->error);
+}
+
+// Toggle sort order for next click
+$next_sort_order = $sort_order === 'ASC' ? 'DESC' : 'ASC';
+
+// Function to get the appropriate sort icon
+function get_sort_icon($column, $sort_column, $sort_order) {
+    if ($column === $sort_column) {
+        return $sort_order === 'ASC' ? '▲' : '▼';
+    }
+    return '⇅'; // Default icon indicating sortable
 }
 ?>
 
@@ -80,12 +95,36 @@ if (!$result) {
             <div class="list-table">
                 <table>
                     <tr id="row-first">
-                        <th style="width:12%">Vehicle ID</th>
-                        <th style="width:15%">Plate</th>
-                        <th style="width:20%">Model</th>
-                        <th style="width:10%">Type</th>
-                        <th style="width:15%">Status</th>
-                        <th style="width:20%">Driver Name</th>
+                        <th style="width:15%">
+                            <a href="?sort_column=vehicles_id&sort_order=<?php echo $next_sort_order; ?>">
+                                Vehicle ID <?php echo get_sort_icon('vehicles_id', $sort_column, $sort_order); ?>
+                            </a>
+                        </th>
+                        <th style="width:15%">
+                            <a href="?sort_column=vehicles_plate&sort_order=<?php echo $next_sort_order; ?>">
+                                Plate <?php echo get_sort_icon('vehicles_plate', $sort_column, $sort_order); ?>
+                            </a>
+                        </th>
+                        <th style="width:20%">
+                            <a href="?sort_column=vehicles_model&sort_order=<?php echo $next_sort_order; ?>">
+                                Model <?php echo get_sort_icon('vehicles_model', $sort_column, $sort_order); ?>
+                            </a>
+                        </th>
+                        <th style="width:10%">
+                            <a href="?sort_column=vehicles_type&sort_order=<?php echo $next_sort_order; ?>">
+                                Type <?php echo get_sort_icon('vehicles_type', $sort_column, $sort_order); ?>
+                            </a>
+                        </th>
+                        <th style="width:15%">
+                            <a href="?sort_column=vehicles_status&sort_order=<?php echo $next_sort_order; ?>">
+                                Status <?php echo get_sort_icon('vehicles_status', $sort_column, $sort_order); ?>
+                            </a>
+                        </th>
+                        <th style="width:20%">
+                            <a href="?sort_column=driver_name&sort_order=<?php echo $next_sort_order; ?>">
+                                Driver Name <?php echo get_sort_icon('driver_name', $sort_column, $sort_order); ?>
+                            </a>
+                        </th>
                         <th style="width:10%">Action</th>
                     </tr>
                     <?php if ($result->num_rows > 0): ?>
@@ -115,7 +154,7 @@ if (!$result) {
     </main>
     
     <footer>
-        <p>Copyright © 2025 Majlis Daerah Raub. All rights reserved.</p>
+        <p>&copy; 2025 Majlis Daerah Raub. All rights reserved.</p>
     </footer>
 </body>
 </html>

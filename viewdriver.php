@@ -16,12 +16,27 @@ if (isset($_GET['search-bar']) && !empty($_GET['search-bar'])) {
     $search_query = "WHERE driver_id LIKE '$search_term' OR driver_fullname LIKE '$search_term'";
 }
 
-// Fetch drivers from the database with optional search filtering
-$query = "SELECT driver_id, driver_fullname FROM driver $search_query ORDER BY driver_id DESC";
+// Handle sorting functionality
+$sort_column = isset($_GET['sort_column']) ? $_GET['sort_column'] : 'driver_id';
+$sort_order = isset($_GET['sort_order']) && $_GET['sort_order'] === 'ASC' ? 'ASC' : 'DESC';
+
+// Fetch drivers from the database with optional search filtering and sorting
+$query = "SELECT driver_id, driver_fullname FROM driver $search_query ORDER BY $sort_column $sort_order";
 $result = $dbconn->query($query);
 
 if (!$result) {
     die("Error fetching drivers: " . $dbconn->error);
+}
+
+// Toggle sort order for next click
+$next_sort_order = $sort_order === 'ASC' ? 'DESC' : 'ASC';
+
+// Function to get the appropriate sort icon
+function get_sort_icon($column, $sort_column, $sort_order) {
+    if ($column === $sort_column) {
+        return $sort_order === 'ASC' ? '▲' : '▼';
+    }
+    return '⇅'; // Default icon indicating sortable
 }
 ?>
 
@@ -63,8 +78,16 @@ if (!$result) {
             <div class="list-table">
                 <table>
                     <tr id="row-first">
-                        <th style="width:15%">Driver ID</th>
-                        <th style="width:20%">Driver Name</th>
+                        <th style="width:15%">
+                            <a href="?sort_column=driver_id&sort_order=<?php echo $next_sort_order; ?>">
+                                Driver ID <?php echo get_sort_icon('driver_id', $sort_column, $sort_order); ?>
+                            </a>
+                        </th>
+                        <th style="width:20%">
+                            <a href="?sort_column=driver_fullname&sort_order=<?php echo $next_sort_order; ?>">
+                                Driver Name <?php echo get_sort_icon('driver_fullname', $sort_column, $sort_order); ?>
+                            </a>
+                        </th>
                         <th style="width:10%">Action</th>
                     </tr>
                     <?php if ($result->num_rows > 0): ?>
