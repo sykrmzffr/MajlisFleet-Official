@@ -59,6 +59,10 @@ if ($result && mysqli_num_rows($result) > 0) {
     
     <main>
 
+        <div class="welcome-text">
+            <h1>Welcome, <?php echo $row['user_fullname']; ?>!</h1>
+        </div>
+
         <div class="list-pages">
             <div class="card-pages">
                 <div class="card">
