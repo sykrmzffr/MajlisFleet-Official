@@ -96,7 +96,7 @@ main{
     border-radius: 50px;
     background-color: white;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    padding-top: 20px;
+    padding: 20px;
 }
 .img-vehicle{
     display: flex;
@@ -127,7 +127,7 @@ main{
     border-radius: 50px;
     background-color: white;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    padding-top: 20px;
+    padding: 20px;
 }
 .booking-form-container button{
     background-color: #4070f4;
