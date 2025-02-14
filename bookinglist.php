@@ -18,11 +18,19 @@ if ($user_type == 'admin') {
     exit();
 }
 
-// Fetch all vehicles along with the driver's full name
+// Handle search functionality
+$search_query = "";
+if (isset($_GET['search-bar']) && !empty($_GET['search-bar'])) {
+    $search_term = "%" . $dbconn->real_escape_string($_GET['search-bar']) . "%";
+    $search_query = "AND (vehicles.vehicles_model LIKE '$search_term' OR vehicles.vehicles_plate LIKE '$search_term' OR vehicles.vehicles_type LIKE '$search_term')";
+}
+
+// Fetch all vehicles
 $sql = "
     SELECT vehicles.*, driver.driver_fullname 
     FROM vehicles
     LEFT JOIN driver ON vehicles.driver_id = driver.driver_id
+    WHERE 1=1 $search_query
 ";
 $result = mysqli_query($dbconn, $sql);
 
@@ -98,6 +106,13 @@ if ($result && mysqli_num_rows($result) > 0) {
                 <h1>Choose Any Vehicles to Start Booking</h1>
             </div>
 
+            <div class="view-btn">
+                <form method="GET" action="" style="display: inline;">
+                    <input type="text" name="search-bar" placeholder="Search by Model, Plate, or Type" value="<?php echo isset($_GET['search-bar']) ? htmlspecialchars($_GET['search-bar']) : ''; ?>">
+                    <button type="submit">Search</button>
+                </form>
+            </div>
+
             <!-- Passenger Vehicles -->
             <section class="list-vehicles">
                 <h3>Passenger Vehicles</h3>
@@ -109,7 +124,7 @@ if ($result && mysqli_num_rows($result) > 0) {
                                 <img src="<?php echo $vehicle['vehicles_img']; ?>" alt="Vehicle Image">
                                 <p><?php echo strtoupper($vehicle['vehicles_model']); ?></p> <!-- VEHICLES MODEL -->
                                 <p><?php echo strtoupper($vehicle['vehicles_plate']); ?></p> <!-- VEHICLES PLATE -->
-                                <p><?php echo strtoupper($vehicle['driver_fullname']); ?></p> <!-- DRIVER -->
+                                <p><?php echo strtoupper($vehicle['vehicles_type']); ?></p> <!-- VEHICLES TYPE -->
                             </a>
                         </div>
                         <?php endforeach; ?>
@@ -132,7 +147,7 @@ if ($result && mysqli_num_rows($result) > 0) {
                                 <img src="<?php echo $vehicle['vehicles_img']; ?>" alt="Vehicle Image">
                                 <p><?php echo strtoupper($vehicle['vehicles_model']); ?></p> <!-- VEHICLES MODEL -->
                                 <p><?php echo strtoupper($vehicle['vehicles_plate']); ?></p> <!-- VEHICLES PLATE -->
-                                <p><?php echo strtoupper($vehicle['driver_fullname']); ?></p> <!-- DRIVER -->
+                                <p><?php echo strtoupper($vehicle['vehicles_type']); ?></p> <!-- VEHICLES TYPE -->
                             </a>
                         </div>
                         <?php endforeach; ?>
@@ -155,7 +170,7 @@ if ($result && mysqli_num_rows($result) > 0) {
                                 <img src="<?php echo $vehicle['vehicles_img']; ?>" alt="Vehicle Image">
                                 <p><?php echo strtoupper($vehicle['vehicles_model']); ?></p> <!-- VEHICLES MODEL -->
                                 <p><?php echo strtoupper($vehicle['vehicles_plate']); ?></p> <!-- VEHICLES PLATE -->
-                                <p><?php echo strtoupper($vehicle['driver_fullname']); ?></p> <!-- DRIVER -->
+                                <p><?php echo strtoupper($vehicle['vehicles_type']); ?></p> <!-- VEHICLES TYPE -->
                             </a>
                         </div>
                         <?php endforeach; ?>
@@ -178,7 +193,7 @@ if ($result && mysqli_num_rows($result) > 0) {
                                 <img src="<?php echo $vehicle['vehicles_img']; ?>" alt="Vehicle Image">
                                 <p><?php echo strtoupper($vehicle['vehicles_model']); ?></p> <!-- VEHICLES MODEL -->
                                 <p><?php echo strtoupper($vehicle['vehicles_plate']); ?></p> <!-- VEHICLES PLATE -->
-                                <p><?php echo strtoupper($vehicle['driver_fullname']); ?></p> <!-- DRIVER -->
+                                <p><?php echo strtoupper($vehicle['vehicles_type']); ?></p> <!-- VEHICLES TYPE -->
                             </a>
                         </div>
                         <?php endforeach; ?>
@@ -201,7 +216,7 @@ if ($result && mysqli_num_rows($result) > 0) {
                                 <img src="<?php echo $vehicle['vehicles_img']; ?>" alt="Vehicle Image">
                                 <p><?php echo strtoupper($vehicle['vehicles_model']); ?></p> <!-- VEHICLES MODEL -->
                                 <p><?php echo strtoupper($vehicle['vehicles_plate']); ?></p> <!-- VEHICLES PLATE -->
-                                <p><?php echo strtoupper($vehicle['driver_fullname']); ?></p> <!-- DRIVER -->
+                                <p><?php echo strtoupper($vehicle['vehicles_type']); ?></p> <!-- VEHICLES TYPE -->
                             </a>
                         </div>
                         <?php endforeach; ?>
@@ -215,7 +230,7 @@ if ($result && mysqli_num_rows($result) > 0) {
         </main>
         
         <footer>
-            <p>Copyright © 2025 Majlis Daerah Raub. All rights reserved.</p>
+            <p>&copy; 2025 Majlis Daerah Raub. All rights reserved.</p>
         </footer>
     </div>
 </body>

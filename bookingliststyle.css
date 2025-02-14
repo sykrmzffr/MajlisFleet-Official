@@ -14,6 +14,7 @@ body{
 }
 a{
     text-decoration: none;
+    color: #0000EE;
 }
 a:hover{
     text-decoration: underline;
@@ -80,6 +81,27 @@ main{
     margin-top: 30px;
     text-align: center;
     color: hsla(216, 50%, 27%, 0.861);
+}
+.view-btn {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.view-btn input[type="text"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+.view-btn button {
+    padding: 10px 20px;
+    background-color: #4070f4;
+    border: none;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.view-btn button:hover {
+    background-color: #3050d4;
 }
 .list-vehicles{
     display: flex;
