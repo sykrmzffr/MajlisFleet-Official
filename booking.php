@@ -262,7 +262,8 @@ if (isset($_GET['vehicle_id']) && !empty($_GET['vehicle_id'])) {
                     <img src="<?php echo $vehicle['vehicles_img']; ?>" alt="Vehicle Image">
                     <p><?php echo strtoupper($vehicle['vehicles_model']); ?></p> <!-- VEHICLES MODEL -->
                     <p><?php echo strtoupper($vehicle['vehicles_plate']); ?></p> <!-- VEHICLES PLATE -->
-                    <p>Capacity: <?php echo strtoupper($vehicle['vehicles_capacity']); ?></p> <!-- PASSENGERS CAPACITY -->
+                    <p><?php echo strtoupper($vehicle['vehicles_type']); ?></p> <!-- VEHICLES TYPE -->
+                    <p><?php echo strtoupper($vehicle['vehicles_capacity']); ?> PASSENGERS</p> <!-- PASSENGERS CAPACITY -->
                 </div>
                 <div class="img-driver">
                     <h4><b>DRIVER DETAILS</b></h4>
@@ -307,7 +308,7 @@ if (isset($_GET['vehicle_id']) && !empty($_GET['vehicle_id'])) {
     </div>
     
     <footer>
-        <p>Copyright © 2025 Majlis Daerah Raub. All rights reserved.</p>
+        <p>&copy; 2025 Majlis Daerah Raub. All rights reserved.</p>
     </footer>
 </body>
 </html>
