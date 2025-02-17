@@ -95,10 +95,9 @@ if (!$result) {
                         <th style="width:15%">Vehicle</th>
                         <th style="width:10%">Date Start</th>
                         <th style="width:10%">Date End</th>
-                        <th style="width:10%">Time Start</th>
-                        <th style="width:10%">Time End</th>
+                       
                         <th style="width:15%">Destination</th>
-                        <th style="width:15%">Purpose</th>
+                        
                         <th style="width:10%">Status</th>
                         <th style="width:15%">Time Created</th>
                         <th style="width:10%">Action</th>
@@ -111,10 +110,9 @@ if (!$result) {
                                 <td><?php echo htmlspecialchars($row['vehicle_model'] . " (" . $row['vehicle_plate'] . ")"); ?></td>
                                 <td><?php echo htmlspecialchars($row['booking_datestart']); ?></td>
                                 <td><?php echo htmlspecialchars($row['booking_dateend']); ?></td>
-                                <td><?php echo htmlspecialchars($row['booking_timestart']); ?></td>
-                                <td><?php echo htmlspecialchars($row['booking_timeend']); ?></td>
+                                
                                 <td><?php echo htmlspecialchars($row['booking_destination']); ?></td>
-                                <td><?php echo htmlspecialchars($row['booking_purpose']); ?></td>
+                                
                                 <td style="color: 
                                     <?php 
                                         if ($row['booking_status'] === 'Rejected') {
@@ -133,7 +131,7 @@ if (!$result) {
                                 <td>
                                         <?php if ($row['booking_status'] !== 'Expired'): ?>
                                             <a href="editbookinghistory.php?booking_id=<?php echo $row['booking_id']; ?>">
-                                                <button>Edit</button>
+                                                <button>View</button>
                                             </a>
                                         <?php endif; ?>
                                 </td>
