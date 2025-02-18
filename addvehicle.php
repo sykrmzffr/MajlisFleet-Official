@@ -195,7 +195,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </script>
 </head>
 <body>
-    <div id="blur-background">
+    <div id="blur-background" class="content">
         <div class="navbar">
             <div class="nav-items">
                 <div class="nav-logo">

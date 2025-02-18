@@ -7,10 +7,10 @@ html, body {
     margin: 0; /* Remove default margin */
 }
 body{
-    margin: 0;
-    background-color: #e7f2fd;
     display: flex; /* Enables flexbox on the body */
     flex-direction: column; /* Stacks child elements vertically */
+    min-height: 100vh; /* Ensures the body takes at least the full viewport height */
+    background-color: #e7f2fd;
 }
 a{
     text-decoration: none;
@@ -60,11 +60,10 @@ a:visited{
 #blur-background {
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    flex-grow: 1;
 }
 
 footer{
-    position: relative; /* Remove absolute or fixed positioning */
     width: 100%; /* Ensure footer spans the full width */
     background:grey;
     background-color: hsla(216, 50%, 27%, 0.861);
@@ -72,7 +71,7 @@ footer{
     border-top: 1px solid #e0e0e0;
     padding-top: 1rem;
     padding-bottom: 1rem;
-    margin-top: 2rem;
+    margin-top: auto; /* Push the footer to the bottom */
 }
 main{
     flex-grow: 1; /* Allows the main content to stretch and fill available space */
