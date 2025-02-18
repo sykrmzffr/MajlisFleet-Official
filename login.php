@@ -8,6 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     include('dbconn.php');
     include('update_booking_status.php'); // Include the file with the function
+    include('logger.php'); // Include the logger file
 
     // Validate login for regular users
     $query = "SELECT user_id, user_password, user_type FROM user WHERE user_id = ?";
@@ -29,6 +30,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $update_result = updateExpiredBookings($dbconn);
             echo $update_result; // Optional: For debugging purposes
 
+            // Log the successful login attempt
+            log_event($dbconn, 'LOGIN SUCCESS', $user['user_id'], 'User logged in successfully', 'user', $user['user_id']);
+
             // Redirect based on user type
             if ($user['user_type'] === 'admin') {
                 header("Location: homepageadmin.php");
@@ -38,11 +42,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit();
         } else {
             echo "Password verification failed!"; // Debugging line
+
+            // Log the failed login attempt
+            log_event($dbconn, 'LOGIN FAILURE', $id, 'Incorrect password', 'user', $id);
+
             // Incorrect password
             header("Location: index.php?error=Incorrect%20password");
             exit();
         }
     } else {
+        // Log the failed login attempt
+        log_event($dbconn, 'LOGIN FAILURE', $id, 'User ID not found', 'user', $id);
+
         // User not found
         header("Location: index.php?error=User%20ID%20not%20found");
         exit();
