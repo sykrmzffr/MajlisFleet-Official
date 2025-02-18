@@ -8,6 +8,7 @@ if ($_SESSION['user_type'] !== 'admin') {
 }
 
 include('dbconn.php');
+include('logger.php'); // Include the logger file
 
 // Get driver_id from the URL
 if (!isset($_GET['driver_id'])) {
@@ -35,12 +36,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['update'])) {
         $driver_fullname = trim($_POST['driver_fullname']);
 
+        // Track changes for logging
+        $changes = [];
+        if ($driver['driver_fullname'] != $driver_fullname) {
+            $changes[] = "Full Name from '{$driver['driver_fullname']}' to '$driver_fullname'";
+        }
+
         // Update driver details in the database
         $update_query = "UPDATE driver SET driver_fullname = ? WHERE driver_id = ?";
         $update_stmt = $dbconn->prepare($update_query);
         $update_stmt->bind_param("ss", $driver_fullname, $driver_id);
 
         if ($update_stmt->execute()) {
+            // Log the driver update with detailed changes
+            if (!empty($changes)) {
+                $description = 'Updated driver: ' . implode(', ', $changes);
+                log_event($dbconn, 'UPDATE', $_SESSION['user_id'], $description, 'driver', $driver_id);
+            }
+
             echo "<script>
                     alert('Driver updated successfully!');
                     window.location.href = 'viewdriver.php';
@@ -57,6 +70,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $delete_stmt->bind_param("s", $driver_id);
 
         if ($delete_stmt->execute()) {
+            // Log the driver deletion with full name
+            log_event($dbconn, 'DELETE', $_SESSION['user_id'], "Deleted driver '{$driver['driver_fullname']}'", 'driver', $driver_id);
+
             echo "<script>
                     alert('Driver deleted successfully!');
                     window.location.href = 'viewdriver.php';
@@ -116,7 +132,7 @@ $dbconn->close();
     </main>
     
     <footer>
-        <p>Copyright © 2025 Majlis Daerah Raub. All rights reserved.</p>
+        <p>&copy; 2025 Majlis Daerah Raub. All rights reserved.</p>
     </footer>
 </body>
 </html>

@@ -8,6 +8,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'admin') {
 }
 
 include('dbconn.php');
+include('logger.php'); // Include the logger file
 
 // Fetch vehicle details based on vehicle ID from the query string
 if (isset($_GET['vehicle_id'])) {
@@ -74,6 +75,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $vehicle_img = "./vehiclesimages/noimageavailable.jpg"; // Default image path if no image is provided
         }
 
+        // Track changes for logging
+        $changes = [];
+        if ($vehicle['vehicles_type'] != $vehicle_type) {
+            $changes[] = "Type from '{$vehicle['vehicles_type']}' to '$vehicle_type'";
+        }
+        if ($vehicle['vehicles_model'] != $vehicle_model) {
+            $changes[] = "Model from '{$vehicle['vehicles_model']}' to '$vehicle_model'";
+        }
+        if ($vehicle['vehicles_plate'] != $vehicle_plate) {
+            $changes[] = "Plate from '{$vehicle['vehicles_plate']}' to '$vehicle_plate'";
+        }
+        if ($vehicle['vehicles_capacity'] != $vehicle_capacity) {
+            $changes[] = "Capacity from '{$vehicle['vehicles_capacity']}' to '$vehicle_capacity'";
+        }
+        if ($vehicle['driver_id'] != $driver_id) {
+            $changes[] = "Driver from '{$vehicle['driver_id']}' to '$driver_id'";
+        }
+        if ($vehicle['vehicles_status'] != $vehicle_status) {
+            $changes[] = "Status from '{$vehicle['vehicles_status']}' to '$vehicle_status'";
+        }
+        if ($vehicle['vehicles_remarks'] != $vehicle_remarks) {
+            $changes[] = "Remarks from '{$vehicle['vehicles_remarks']}' to '$vehicle_remarks'";
+        }
+        if ($vehicle['vehicles_img'] != $vehicle_img) {
+            $changes[] = "Image updated";
+        }
+
         $update_sql = "UPDATE vehicles SET vehicles_type = ?, vehicles_model = ?, vehicles_plate = ?, 
                        vehicles_capacity = ?, vehicles_img = ?, driver_id = ?, vehicles_status = ?, vehicles_remarks = ? WHERE vehicles_id = ?";
         $update_stmt = $dbconn->prepare($update_sql);
@@ -91,6 +119,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         );
 
         if ($update_stmt->execute()) {
+            // Log the vehicle update with detailed changes
+            if (!empty($changes)) {
+                $description = 'Updated vehicle: ' . implode(', ', $changes);
+                log_event($dbconn, 'UPDATE', $_SESSION['user_id'], $description, 'vehicle', $vehicle_id);
+            }
+
             $success_message = "Vehicle updated successfully.";
         } else {
             echo "Error updating vehicle.";
@@ -101,6 +135,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $delete_stmt->bind_param("s", $vehicle_id);
 
         if ($delete_stmt->execute()) {
+            // Log the vehicle deletion with vehicle model and plate
+            log_event($dbconn, 'DELETE', $_SESSION['user_id'], "Deleted vehicle '{$vehicle['vehicles_model']} ({$vehicle['vehicles_plate']})'", 'vehicle', $vehicle_id);
+
             $success_message = "Vehicle deleted successfully.";
             header("Location: viewvehicles.php?success=" . urlencode($success_message));
             exit();
@@ -306,15 +343,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </main>
     
         <footer>
-            <p>Copyright © 2025 Majlis Daerah Raub. All rights reserved.</p>
-        </footer>
-    </div>
+            <p>&copy; 2025 Majlis Daerah Raub. All rights reserved.</p>
+    </footer>
+</div>
 
-    <!-- Modal for success messages -->
-    <div id="success-popup">
-        <p id="success-popup-message"></p>
-        <button onclick="redirectTo('viewvehicles.php')">View Vehicles</button>
-        <button onclick="redirectTo('homepageadmin.php')">Go to Homepage</button>
-    </div>
+<!-- Modal for success messages -->
+<div id="success-popup">
+    <p id="success-popup-message"></p>
+    <button onclick="redirectTo('viewvehicles.php')">View Vehicles</button>
+    <button onclick="redirectTo('homepageadmin.php')">Go to Homepage</button>
+</div>
 </body>
 </html>

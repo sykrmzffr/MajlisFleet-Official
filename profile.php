@@ -8,6 +8,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 include('dbconn.php');
+include('logger.php'); // Include the logger file
 
 $user_id = $_SESSION['user_id'];
 $user_type = $_SESSION['user_type']; // Assuming user_type is stored in session
@@ -37,6 +38,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $update_sql = "UPDATE user SET user_password = '$hashed_password' WHERE user_id = '$user_id'";
         
         if (mysqli_query($dbconn, $update_sql)) {
+            // Log the password update
+            log_event($dbconn, 'UPDATE', $_SESSION['user_id'], "Updated password for user '{$row['user_fullname']}'", 'user', $user_id);
+
             // Use JavaScript to show the alert and redirect after OK is clicked
             echo "<script>
                     alert('Password updated successfully!');
@@ -150,7 +154,7 @@ $homepage_link = ($user_type === 'admin') ? 'homepageadmin.php' : 'homepage.php'
         </main>
 
         <footer>
-            <p>Copyright © 2025 Majlis Daerah Raub. All rights reserved.</p>
+            <p>&copy; 2025 Majlis Daerah Raub. All rights reserved.</p>
         </footer>
     </div>
 </body>

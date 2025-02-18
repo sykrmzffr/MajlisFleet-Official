@@ -8,6 +8,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'admin') {
 }
 
 include('dbconn.php');
+include('logger.php'); // Include the logger file
 
 // Fetch user details to pre-fill the form
 $user_id = $_GET['user_id'] ?? null;
@@ -40,12 +41,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update'])) {
     $new_unit = $_POST['user_unit'];
     $new_password = $_POST['user_password'];
 
+    // Track changes for logging
+    $changes = [];
+    if ($user['user_fullname'] != $new_fullname) {
+        $changes[] = "Full Name from '{$user['user_fullname']}' to '$new_fullname'";
+    }
+    if ($user['user_type'] != $new_type) {
+        $changes[] = "Type from '{$user['user_type']}' to '$new_type'";
+    }
+    if ($user['user_unit'] != $new_unit) {
+        $changes[] = "Unit from '{$user['user_unit']}' to '$new_unit'";
+    }
+
     // Update the user's basic details
     $update_query = "UPDATE user SET user_fullname = ?, user_type = ?, user_unit = ? WHERE user_id = ?";
     $update_stmt = $dbconn->prepare($update_query);
     $update_stmt->bind_param("ssss", $new_fullname, $new_type, $new_unit, $user_id);
 
     if ($update_stmt->execute()) {
+        if (!empty($changes)) {
+            $description = 'Updated user: ' . implode(', ', $changes);
+            log_event($dbconn, 'UPDATE', $_SESSION['user_id'], $description, 'user', $user_id);
+        }
         $success_message = "User details updated successfully.";
     } else {
         $error_message = "Failed to update user details.";
@@ -59,6 +76,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update'])) {
         $password_update_stmt->bind_param("ss", $hashed_password, $user_id);
 
         if ($password_update_stmt->execute()) {
+            $description = 'Updated password for user: ' . $user_id;
+            log_event($dbconn, 'UPDATE', $_SESSION['user_id'], $description, 'user', $user_id);
             $success_message .= " Password updated successfully.";
         } else {
             $error_message = "Failed to update password.";
@@ -73,6 +92,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['confirm_delete'])) {
     $delete_stmt->bind_param("s", $user_id);
 
     if ($delete_stmt->execute()) {
+        // Log the user deletion with full name
+        log_event($dbconn, 'DELETE', $_SESSION['user_id'], "Deleted user '{$user['user_fullname']}'", 'user', $user_id);
+
         $success_message = "User deleted successfully.";
         header("Location: viewuser.php?success=" . urlencode($success_message));
         exit();
