@@ -87,6 +87,12 @@ if ($result && mysqli_num_rows($result) > 0) {
                         <button>Click Here!</button>
                     </a>
                 </div>
+                <div class="card">
+                    <h3>View System Logs History</h3>
+                    <a href="viewloghistory.php">
+                        <button>Click Here!</button>
+                    </a>
+                </div>
             </div>
         </div>
 
