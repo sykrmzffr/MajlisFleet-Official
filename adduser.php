@@ -8,6 +8,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'admin') {
 }
 
 include('dbconn.php');
+include('logger.php'); // Include the logger file
 
 // Generate the next USER ID
 $query = "SELECT MAX(user_id) AS max_id FROM user";
@@ -47,12 +48,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bind_param("sssss", $new_user_id, $hashed_password, $user_type, $user_fullname, $user_unit);
 
         if ($stmt->execute()) {
+            // Log the addition of the new user/admin
+            $description = $user_type === 'admin' ? 'Added a new admin' : 'Added a new user';
+            log_event($dbconn, 'CREATE', $_SESSION['user_id'], $description, 'user', $new_user_id);
+
             $success_message = "User added successfully.";
         } else {
             $error_message = "Failed to add user.";
         }
+
+        $stmt->close();
     }
 }
+
+$dbconn->close();
 ?>
 
 <!DOCTYPE html>

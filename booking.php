@@ -8,12 +8,13 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 include('dbconn.php');
+include('logger.php'); // Include the logger file
 
 $user_id = $_SESSION['user_id'];
 $user_type = $_SESSION['user_type']; // Get user type from session
 
 if ($user_type == 'admin') {
-    // Redirect to homepage if user is not an admin
+    // Redirect to homepage if user is an admin
     header("Location: homepageadmin.php");
     exit();
 }
@@ -80,6 +81,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         VALUES ('$booking_id', '$user_id', '$vehicles_id', '$booking_datestart', '$booking_dateend', '$booking_timestart', '$booking_timeend', '$booking_destination', '$booking_purpose', '$booking_status')";
 
                 if (mysqli_query($dbconn, $sql)) {
+                    // Log the booking creation
+                    log_event($dbconn, 'CREATE', $user_id, 'Created a new booking', 'booking', $booking_id);
+
                     $success_message = "Booking submitted successfully.";
                 } else {
                     $error_message = "Error: " . mysqli_error($dbconn);

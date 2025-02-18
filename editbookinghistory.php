@@ -8,6 +8,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'admin') {
 }
 
 include('dbconn.php');
+include('logger.php'); // Include the logger file
 
 // Fetch booking details based on booking ID from the query string
 if (isset($_GET['booking_id'])) {
@@ -80,6 +81,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if ($clash_result && $clash_result->num_rows > 0) {
                 $error_message = "Booking time clashes with an existing booking.";
             } else {
+                // Track changes for logging
+                $changes = [];
+                if ($booking['booking_datestart'] != $booking_datestart) {
+                    $changes[] = "Date Start from '{$booking['booking_datestart']}' to '$booking_datestart'";
+                }
+                if ($booking['booking_dateend'] != $booking_dateend) {
+                    $changes[] = "Date End from '{$booking['booking_dateend']}' to '$booking_dateend'";
+                }
+                if ($booking['booking_timestart'] != $booking_timestart) {
+                    $changes[] = "Time Start from '{$booking['booking_timestart']}' to '$booking_timestart'";
+                }
+                if ($booking['booking_timeend'] != $booking_timeend) {
+                    $changes[] = "Time End from '{$booking['booking_timeend']}' to '$booking_timeend'";
+                }
+                if ($booking['booking_destination'] != $booking_destination) {
+                    $changes[] = "Destination from '{$booking['booking_destination']}' to '$booking_destination'";
+                }
+                if ($booking['booking_purpose'] != $booking_purpose) {
+                    $changes[] = "Purpose from '{$booking['booking_purpose']}' to '$booking_purpose'";
+                }
+                if ($booking['booking_status'] != $booking_status) {
+                    $changes[] = "Status from '{$booking['booking_status']}' to '$booking_status'";
+                }
+
                 // Update booking details
                 $update_sql = "
                     UPDATE booking 
@@ -106,6 +131,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 );
 
                 if ($update_stmt->execute()) {
+                    // Log the booking update with detailed changes
+                    if (!empty($changes)) {
+                        $description = 'Updated booking: ' . implode(', ', $changes);
+                        log_event($dbconn, 'UPDATE', $_SESSION['user_id'], $description, 'booking', $booking_id);
+                    }
+
                     $success_message = "Booking updated successfully.";
                 } else {
                     $error_message = "Error updating booking.";
@@ -119,6 +150,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $delete_stmt->bind_param("s", $booking_id);
 
         if ($delete_stmt->execute()) {
+            // Log the booking deletion
+            log_event($dbconn, 'DELETE', $_SESSION['user_id'], 'Deleted booking', 'booking', $booking_id);
+
             $success_message = "Booking deleted successfully.";
             header("Location: viewbookinghistory.php?success=" . urlencode($success_message));
             exit();

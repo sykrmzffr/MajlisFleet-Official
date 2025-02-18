@@ -7,6 +7,7 @@ if ($_SESSION['user_type'] !== 'admin') {
 }
 
 include('dbconn.php');
+include('logger.php'); // Include the logger file
 
 // Generate next vehicle ID
 $query = "SELECT MAX(vehicles_id) AS max_id FROM vehicles";
@@ -94,6 +95,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         );
 
         if ($stmt->execute()) {
+            // Log the addition of the new vehicle
+            log_event($dbconn, 'CREATE', $_SESSION['user_id'], 'Added a new vehicle', 'vehicle', $vehicle_id);
+
             $success_message = "Vehicle added successfully!";
         } else {
             $error_message = "Error adding vehicle: " . $stmt->error;

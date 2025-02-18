@@ -8,6 +8,7 @@ if ($_SESSION['user_type'] !== 'admin') {
 }
 
 include('dbconn.php');
+include('logger.php'); // Include the logger file
 
 // Generate a new driver_id
 $query = "SELECT driver_id FROM driver ORDER BY driver_id DESC LIMIT 1";
@@ -34,6 +35,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->bind_param("ss", $new_id, $driver_fullname);
 
     if ($stmt->execute()) {
+        // Log the addition of the new driver
+        log_event($dbconn, 'CREATE', $_SESSION['user_id'], 'Added a new driver', 'driver', $new_id);
+
         echo "<script>
                 alert('Driver added successfully!');
                 window.location.href = 'viewdriver.php';
